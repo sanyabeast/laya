@@ -1,4 +1,4 @@
 {
-	"clean-color" : "#000",
-	"background" : "#efedeb"
+	"generic-text-color" : "#000",
+	"app-background" : "#efedeb"
 }

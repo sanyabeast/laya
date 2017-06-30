@@ -9,7 +9,7 @@ define([
 	return {
 		l18n : JSON.parse(l18nJSON),
 		layouts : JSON.parse(layoutsJSON),
-		skinsJSON : JSON.parse(skinsJSON)
+		skins : JSON.parse(skinsJSON)
 	};
 
 });

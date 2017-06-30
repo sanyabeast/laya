@@ -1,22 +1,56 @@
 "use strict";
 define([
 		"Laya/Laya",
-		"base"
-	], function(laya, base){
+		"base",
+		"file!../res/layouts.css"
+	], function(laya, base, layoutsCSS){
 
 	var App = function(resData){
-		this.load(resData);
+		laya.setBase(base);
+		this.loader.load(resData);
+		laya.css.setup(layoutsCSS);
+		this.dom = laya.make("~res.layouts::app", {
+			
+		});
+
+		document.body.addChild(this.dom);
 
 	};
 
 	App.prototype = {
-		load : function(resData){
-			for (var k in resData){
-				for (var m in resData[k].content){
-					base(m, resData[k].content[m]);
+		loader : {
+			load : function(resData){
+				for (var k in resData){
+					this[k](resData[k].content);
+				}
+			},
+			layouts : function(data){
+				for (var k in data){
+					base(k, data[k]);
+				}
+			},
+			skins : function(data){
+				var keys;
+				for (var k in data){
+					keys = JSON.parse(data[k]);
+					for (var m in keys){
+						base(k + "::" + m, keys[m]);
+					}
+
+				}
+			},
+			l18n : function(data){
+				var keys;
+				for (var k in data){
+					keys = JSON.parse(data[k]);
+					for (var m in keys){
+						base(k + "::" + m, keys[m]);
+					}
+
 				}
 			}
-		}
+		},
+		
 	};
 
 	return App;

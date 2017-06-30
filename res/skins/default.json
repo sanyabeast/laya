@@ -1,4 +1,5 @@
 {
-	"clean-color" : "#fff",
-	"background" : "#121416"
+	"generic-text-color" : "#fff",
+	"app-background" : "#121416",
+	"left-menu-background" : "#eeeeee"
 }

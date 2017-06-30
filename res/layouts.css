@@ -1,0 +1,29 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+#app {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	background: {{~res.skins.default::app-background}};
+}
+
+#content-wrapper {
+	width: 100%;
+	height: 100%;
+}
+
+#left-menu-wrapper {
+	width: 400px;
+	height: 100%;
+}
+
+#left-menu {
+	height: 100%;
+	width: 100%;
+	left: 0;
+	background: {{~res.skins.default::left-menu-background}}
+}
