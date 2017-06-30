@@ -37,7 +37,7 @@ define(function(){
 
 			this.addProp(Node, "on", {
 				value : function(options){
-
+					var _this = this;
 					var eventName = options.eventName;
 					var callback = options.callback;
 					var context = options.context;
@@ -45,12 +45,12 @@ define(function(){
 					var capture = options.capture || false;
 
 					if (context){
-						var handler = function(){
-							callback.apply(context, arguments);
+						var handler = function(evt){
+							callback.apply(context, evt, _this);
 						};
 					} else {
 						var handler = function(evt){
-							callback(evt);
+							callback(evt, _this);
 						};
 					}
 
