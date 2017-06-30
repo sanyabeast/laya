@@ -1,7 +1,7 @@
 {
     "content": {
-        "res.skins.custom": "{\r\n\t\"generic-text-color\" : \"#000\",\r\n\t\"app-background\" : \"#efedeb\"\r\n}",
-        "res.skins.default": "{\r\n\t\"generic-text-color\" : \"#fff\",\r\n\t\"app-background\" : \"#121416\",\r\n\t\"left-menu-background\" : \"#eeeeee\"\r\n}"
+        "res.skins.default": "{\r\n\t\"generic-text-color\" : \"#fff\",\r\n\t\"app-background\" : \"#121416\",\r\n\t\"left-menu-background\" : \"#eeeeee\"\r\n}",
+        "res.skins.custom": "{\r\n\t\"generic-text-color\" : \"#000\",\r\n\t\"app-background\" : \"#efedeb\"\r\n}"
     },
     "size": 212,
     "total": 2

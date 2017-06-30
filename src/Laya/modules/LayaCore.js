@@ -17,10 +17,10 @@ define(function(){
 		},
 		init : function(){
 			this.util = new this.Util(this);
+			this.util.patchNative();
 			this.wrappers = new this.Wrappers(this);
 			this.css = new this.CSS(this);
 			this.attributesProcessors = new this.AttrProcessor(this);
-			this.util.patchNative();
 			this._attrTplGetter = this._attrTplGetter.bind(this);
 		},
 		commands : ["#", "~", "@"],

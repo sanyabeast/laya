@@ -1,0 +1,5 @@
+<div class="name">
+	<p class="artist">@artist</p>
+	<p class="dash"> — </p>
+	<p class="title">@title</p>
+</div>

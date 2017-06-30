@@ -16,7 +16,7 @@ define(function(){
 			}
 		},
 		"list" : function(node){
-			node.additem = this.methods.additem.bind(this, node);
+			node.addItem = this.methods.additem.bind(this, node);
 		}
 	};
 

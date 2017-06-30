@@ -1,0 +1,8 @@
+<div class="app player">
+	<div class="playlist-holder">
+		#res.layouts.player::playlist
+	</div>
+	<div class="controls-holder">
+		#res.layouts.player::controls
+	</div>
+</div>

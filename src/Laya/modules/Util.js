@@ -68,6 +68,7 @@ define(function(){
 
 			this.addProp(Node, "select", {
 				value : function(selector, noCache, callback, context){
+					console.log(2);
 					this.selectorCache = this.selectorCache || {};
 					var result = this.selectorCache[selector];
 

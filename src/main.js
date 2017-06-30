@@ -11,12 +11,12 @@
 	requirejs([
 		"base", 
 		"Laya/Laya",
-		"App",
+		"Player",
 		"../res/index"
-	], function(base, laya, App, resData){
+	], function(base, laya, Player, resData){
 		window.base = base;
 		window.laya = laya;
-		window.app = new App(resData);
+		window.player = new Player(resData);
 	});
 
 })();

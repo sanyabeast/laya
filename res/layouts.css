@@ -1,29 +1,80 @@
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 8px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 2px;
+    background: rgb(153, 153, 153);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgb(153, 153, 153); 
+}
+
+
 html, body {
 	width: 100%;
 	height: 100%;
 	margin: 0;
+	font-family: sans-serif;
 }
 
-#app {
-	width: 100%;
-	height: 100%;
+ul {
+	list-style: none;
+    padding: 16px;
+    margin: 0;
+}
+
+.app.player {
 	display: flex;
-	background: {{~res.skins.default::app-background}};
-}
-
-#content-wrapper {
+	flex-direction: column;
 	width: 100%;
 	height: 100%;
 }
 
-#left-menu-wrapper {
-	width: 400px;
-	height: 100%;
+.playlist-holder {
+	width: 100%;
+	height: 80%;
+	background: #131111;
+	overflow: auto;
 }
 
-#left-menu {
-	height: 100%;
+.controls-holder {
 	width: 100%;
-	left: 0;
-	background: {{~res.skins.default::left-menu-background}}
+    height: 20%;
+    background: #fff;
+    box-shadow: -5px -16px 31px 0px rgba(0, 0, 0, 0.7);
+}
+
+.playlist li {
+	background: #2f3945;
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+}
+
+.playlist li .name {
+	display: flex;
+	color: white;
+	font-size: 16px;
+}
+
+.playlist li p {
+	margin-top: 0;
+    margin-bottom: 0;
+}
+
+.playlist li .dash {
+	margin: auto 8px;
 }
