@@ -5,25 +5,27 @@ define(function(){
 	};
 
 	AttributesProcessor.prototype = {
-		"data-type" : function(el, value){
-			this.wrappers[value](el);
+		processors : {
+			"data-type" : function(el, value){
+				this.laya.wrappers[value](el);
+			},
+			"data-replace" : function(el, value){
+				el.parentNode.replaceChild(value, el);
+			},
+			"data-on-*" : function(el, value, name){
+				var eventName = name.replace("data-on-", "");
+				el.on({
+					eventName : eventName,
+					callback : value,
+				});
+			}
 		},
-		"data-replace" : function(el, value){
-			el.parentNode.replaceChild(value, el);
+		make : function(prcs, element, value, name){
+			this.processors[prcs].call(this, element, value, name);
 		},
-		"data-on-*" : function(el, value, name){
-			var eventName = name.replace("data-on-", "");
-			el.on({
-				eventName : eventName,
-				callback : value,
-			});
-		}
-	};
-
-	Object.defineProperty(AttributesProcessor.prototype, "getProcessorName", {
-		value : function(name){
+		getProcessorName : function(name){
 			var util = this.laya.util;
-			var keys = util.keys(AttributesProcessor.prototype);
+			var keys = util.keys(this.processors);
 
 			for (var a = 0, l = keys.length, match; a < l; a++){
 				match = name.match(new RegExp(keys[a]));
@@ -31,7 +33,7 @@ define(function(){
 			}
 
 		}
-	})
+	};
 
 	return AttributesProcessor;
 

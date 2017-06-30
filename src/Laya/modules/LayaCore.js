@@ -178,7 +178,7 @@ define(function(){
 			var prcs  = this.attributesProcessors.getProcessorName(name);
 
 			if (prcs){
-				this.attributesProcessors[prcs].call(this, element, value, name);
+				this.attributesProcessors.make(prcs, element, value, name);
 			} else {
 				element.setAttribute(name, value);
 			}

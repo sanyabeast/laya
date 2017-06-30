@@ -37,7 +37,6 @@ define(function(){
 
 			this.addProp(Node, "on", {
 				value : function(options){
-					var _this = this;
 					var eventName = options.eventName;
 					var callback = options.callback;
 					var context = options.context;
