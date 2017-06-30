@@ -15,10 +15,15 @@
         "requirejs-text": "latest"
 	},
 	"devDependencies": {
+		"gulp": "latest",
+        "gulp-requirejs-optimize": "latest",
+        "gulp-util": "latest",
+        "gulp-rename": "latest",
         "fs-readdir-recursive": "latest",
         "fs-extra": "latest",
         "jsonfile": "latest",
         "colors": "latest",
+        "minimist": "latest",
         "directory-tree": "latest"
     }
 }

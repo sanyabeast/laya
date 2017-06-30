@@ -1,6 +1,6 @@
 "use strict";
 define([
-		"Laya/Laya",
+		"Laya/laya",
 		"base",
 		"file!../res/layouts.css"
 	], function(laya, base, layoutsCSS){
@@ -10,7 +10,7 @@ define([
 		this.loader.load(resData);
 		laya.css.setup(layoutsCSS);
 		this.dom = laya.make("~res.layouts::app", {
-			
+
 		});
 
 		document.body.addChild(this.dom);

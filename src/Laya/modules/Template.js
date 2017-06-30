@@ -1,5 +1,5 @@
 "use strict";
-define(["./Util"], function(Util){
+define(["laya/modules/Util"], function(Util){
 
 	var util = new Util();
 
