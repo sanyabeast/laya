@@ -1,0 +1,8 @@
+{
+    "content": {
+        "res.skins.custom": "{\r\n\t\"clean-color\" : \"#000\",\r\n\t\"background\" : \"#efedeb\"\r\n}",
+        "res.skins.default": "{\r\n\t\"clean-color\" : \"#fff\",\r\n\t\"background\" : \"#121416\"\r\n}"
+    },
+    "size": 114,
+    "total": 2
+}

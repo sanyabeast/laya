@@ -1,0 +1,7 @@
+{
+    "content": {
+        "res.layouts::app": "<div id=\"app\"></div>"
+    },
+    "size": 20,
+    "total": 1
+}
