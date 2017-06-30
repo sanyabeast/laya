@@ -1,6 +1,6 @@
 <div class="app player">
 	<div class="playlist-holder">
-		#res.layouts.player::playlist
+		<div data-replace="#res.layouts.player::playlist"></div>
 	</div>
 	<div class="controls-holder">
 		#res.layouts.player::controls
