@@ -71,17 +71,20 @@ define([
 		document.body.addChild(this.dom);
 
 		this.dom.select(".playlist .list", true, function(node){
-			
+
 			console.log(node);
 
 			for (var a = 0; a < 50; a++){
 				node.addItem({
 					artist : randFromArr(randNames),
-					title : randFromArr(randNames)
+					title : randFromArr(randNames),
+					onitemclick : function(){
+						console.log(arguments);
+					}
 				});
 			}
 
-		});	
+		});
 
 	};
 
@@ -118,7 +121,7 @@ define([
 				}
 			}
 		},
-		
+
 	};
 
 	return App;

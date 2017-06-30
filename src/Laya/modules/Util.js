@@ -40,13 +40,21 @@ define(function(){
 
 					var eventName = options.eventName;
 					var callback = options.callback;
-					var context = options.context || window;
+					var context = options.context;
 					var name = options.name || _this.randString();
 					var capture = options.capture || false;
 
-					var handler = function(){
-						callback.apply(context, arguments);
-					};
+					if (context){
+						var handler = function(){
+							callback.apply(context, arguments);
+						};
+					} else {
+						var handler = function(evt){
+							callback(evt);
+						};
+					}
+
+
 
 					this.addEventListener(eventName, handler, capture);
 
@@ -68,7 +76,6 @@ define(function(){
 
 			this.addProp(Node, "select", {
 				value : function(selector, noCache, callback, context){
-					console.log(2);
 					this.selectorCache = this.selectorCache || {};
 					var result = this.selectorCache[selector];
 
@@ -92,6 +99,9 @@ define(function(){
 		},
 		eachArr : function(arr, callback, context){
 
+		},
+		keys : function(obj){
+			return Object.keys(obj);
 		},
 		patchProto : function(C, Laya){
 			C.prototype.Laya = Laya;

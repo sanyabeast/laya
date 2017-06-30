@@ -1,4 +1,4 @@
-<div class="name">
+<div class="name" data-on-click="@onitemclick">
 	<p class="artist">@artist</p>
 	<p class="dash"> — </p>
 	<p class="title">@title</p>

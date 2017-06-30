@@ -111,7 +111,7 @@ define(function(){
 					} else if (children[a].nodeType == 1){
 						this.fillStep(children[a], userData);
 					}
-					
+
 				}
 			}
 
@@ -175,11 +175,12 @@ define(function(){
 			var value = this.getValue(rawvalue, userData);
 			var name  = attr.name;
 			var type  = this.valueType(rawvalue);
+			var prcs  = this.attributesProcessors.getProcessorName(name);
 
-			if (this.attributesProcessors[name]){
-				this.attributesProcessors[name].call(this, element, value);
+			if (prcs){
+				this.attributesProcessors[prcs].call(this, element, value, name);
 			} else {
-				element.setAttribute(name, value);				
+				element.setAttribute(name, value);
 			}
 
 			if (type == "~" && attr._changeListener != true){
@@ -199,7 +200,7 @@ define(function(){
 			return result;;
 
 		},
-		_onTextNodeValueChanged : function(value){ 
+		_onTextNodeValueChanged : function(value){
 			this.nodeValue = value;
 		}
 	};

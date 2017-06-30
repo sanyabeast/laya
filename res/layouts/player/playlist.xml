@@ -1,5 +1,3 @@
 <div class="playlist">
-	<ul data-type="list" class="list" data-item-layout="~res.layouts.player::playlist-item">
-		
-	</ul>
+	<ul data-type="list" class="list" data-item-layout="~res.layouts.player::playlist-item"></ul>
 </div>
