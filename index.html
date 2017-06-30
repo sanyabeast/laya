@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>laya</title>
+</head>
+<body>
+	<script data-main="src/main" src="node_modules/requirejs/require.js"></script>
+</body>
+</html>
