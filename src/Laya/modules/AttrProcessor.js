@@ -24,6 +24,15 @@ define([
 					eventName : eventName,
 					callback : value,
 				});
+			},
+			"data-value-linked" : function(el, path){
+				el.on({
+					eventName : "input",
+					callback : function(){
+						var value = el.value;
+						base.set(path, value);
+					}
+				});
 			}
 		},
 	};

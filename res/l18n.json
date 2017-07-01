@@ -1,7 +1,7 @@
 {
     "content": {
-        "res.l18n::eng.json": "{\r\n\t\"hello-world\" : \"Hello World!\"\r\n}",
-        "res.l18n::rus.json": "{\r\n\t\"hello-world\" : \"Привет, мир!\"\r\n}"
+        "res.l18n.eng": "{\r\n\t\"hello-world\" : \"Hello World!\"\r\n}",
+        "res.l18n.rus": "{\r\n\t\"hello-world\" : \"Привет, мир!\"\r\n}"
     },
     "size": 92,
     "total": 2

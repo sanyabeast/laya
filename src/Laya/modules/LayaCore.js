@@ -32,8 +32,6 @@ define(function(){
 			this.attrProcessor = new this.AttrProcessor(this);
 			this.tagProcessor = new this.TagProcessor(this);
 
-			console.log(this);
-
 			this._attrTplGetter = this._attrTplGetter.bind(this);
 		},
 		commands : ["#", "~", "@"],
@@ -109,11 +107,9 @@ define(function(){
 				for (var a = 0; a < children.length; a++){
 					if (children[a].nodeType == 3){
 						text = this.util.superTrim(children[a].nodeValue);
-						console.log(type, text);
 
 						type = this.typeof(text);
 
-						console.log(type);
 
 						do {
 							if (type == "~"){

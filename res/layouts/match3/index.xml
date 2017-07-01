@@ -1,3 +1,8 @@
 <div class="app player">
 	#res.layouts.match3::game-field
+	<input
+		type="text"
+		data-value-linked="res.strings::input-value"
+	>
+	<p>~res.strings::input-value</p>
 </div>
