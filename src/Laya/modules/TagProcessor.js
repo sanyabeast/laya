@@ -12,7 +12,7 @@ define([
   TagProcessor.prototype = {
     processors : {
       "p" : function(){
-        console.log(arguments);
+        //console.log(arguments);
       }
     },
   };

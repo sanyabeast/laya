@@ -56,11 +56,11 @@ define(function(){
 			},
 		},
 		make : function(data, userData){
-			var html = this.getValue(data);
+			var html = this.pickValue(data);
 			var dom = this.util.HTML2DOM(html);
 
 			for (var a = 0, l = dom.childNodes.length; a < l; a++){
-				dom.replaceChild(this.fill(dom.childNodes[a], userData), dom.childNodes[a]);
+				dom.replaceChild(this.process(dom.childNodes[a], userData), dom.childNodes[a]);
 			}
 
 			if (dom.childNodes.length == 1){
@@ -70,27 +70,30 @@ define(function(){
 			return dom;
 
 		},
-		fill : function(dom, userData){
+		process : function(dom, userData){
 			if (!dom){
 				return dom;
 			}
 
-			return this.fillStep(dom, userData);
+			return this.processIteration(dom, userData);
 		},
-		fillStep : function(dom, userData){
+		processIteration : function(dom, userData){
 			var attrs = dom.attributes;
 			var name;
 			var text;
 			var type;
 			var linked = false;
+			var tagProcessor;
+			var tagName = dom.tagName ? dom.tagName.toLowerCase() : null;
 
+			/*attributes processing*/
 			if (attrs){
 				for (var a = 0, l = attrs.length; a < l; a++){
 					this.setAttribute(dom, attrs[a], userData);
 				}
 			}
 
-
+			/*children iterating*/
 			if (dom.childNodes){
 
 				for (var b = 0, children = []; b < dom.childNodes.length; b++){
@@ -101,11 +104,11 @@ define(function(){
 					if (children[a].nodeType == 3){
 						text = this.util.superTrim(children[a].nodeValue);
 
-						type = this.valueType(text);
+						type = this.typeof(text);
 
 						do {
-							text = this.getValue(text, userData);
-							type = this.valueType(text);
+							text = this.pickValue(text, userData);
+							type = this.typeof(text);
 							if (type == "~"){
 								linked = text;
 							}
@@ -122,16 +125,24 @@ define(function(){
 						}
 
 					} else if (children[a].nodeType == 1){
-						this.fillStep(children[a], userData);
+						this.processIteration(children[a], userData);
 					}
 
+				}
+			}
+
+			/*tag processing*/
+			if (tagName){
+				tagProcessor = this.tagProcessor.getProcessorName(tagName);
+				if (tagProcessor){
+					this.tagProcessor.process(tagProcessor, dom, tagName);
 				}
 			}
 
 			return dom;
 
 		},
-		valueType : function(data){
+		typeof : function(data){
 			if (typeof data != "string"){
 				return  data;
 			}
@@ -144,15 +155,15 @@ define(function(){
 				return null;
 			}
 		},
-		getValue : function(data, userData){
-			var type = this.valueType(data);
+		pickValue : function(data, userData){
+			var type = this.typeof(data);
 
 			switch(type){
 				case "~":
-					return this.getValueByLink(data.split(type)[1]);
+					return this.pickValueByLink(data.split(type)[1]);
 				break;
 				case "@":
-					return this.getUsrValue(data.split(type)[1], userData);
+					return this.pickUserValue(data.split(type)[1], userData);
 				break;
 				case "#":
 					return this.make("~" + data.split(type)[1], userData);
@@ -163,10 +174,10 @@ define(function(){
 				break;
 			}
 		},
-		getValueByLink : function(path){
+		pickValueByLink : function(path){
 			return this.base.get(path);
 		},
-		getUsrValue : function(name, src){
+		pickUserValue : function(name, src){
 			if (!name || !src){
 				this.console.warn("User`s value is not provided for `" + name + "`", src);
 				return null;
@@ -185,10 +196,10 @@ define(function(){
 				rawvalue = this.Template.fast(rawvalue, userData, this._attrTplGetter);
 			}
 
-			var value = this.getValue(rawvalue, userData);
+			var value = this.pickValue(rawvalue, userData);
 
 			var name  = attr.name;
-			var type  = this.valueType(rawvalue);
+			var type  = this.typeof(rawvalue);
 			var processorName  = this.attrProcessor.getProcessorName(name);
 
 			if (processorName){
@@ -203,12 +214,12 @@ define(function(){
 			}
 		},
 		_attrTplGetter : function(data, userData){
-			var type = this.valueType(data);
+			var type = this.typeof(data);
 			var result = data;
 
 			do {
-				result = this.getValue(result, userData);
-				type = this.valueType(result);
+				result = this.pickValue(result, userData);
+				type = this.typeof(result);
 			} while (this.commands.indexOf(type) > -1)
 
 			return result;;

@@ -21,7 +21,7 @@ define(function(){
 			var styleElement = document.createElement("style");
 			styleElement.id = "laya-styles";
 		  	styleElement.type = "text/css";
-		 	
+
 		 	var head = document.getElementsByTagName("head");
 
 		 	if (head && head[0]){
@@ -33,8 +33,8 @@ define(function(){
 		update : function(){
 			var _this = this;
 			this.put(this.template.make(this.settings, function(data, userData){
-				var type  = _this.laya.valueType(data);
-				var value = _this.laya.getValue(data, userData);
+				var type  = _this.laya.typeof(data);
+				var value = _this.laya.pickValue(data, userData);
 
 				if (type == "~"){
 					base.on(data.split(type)[1], "change", _this.update);
