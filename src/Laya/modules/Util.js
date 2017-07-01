@@ -145,6 +145,18 @@ define(function(){
 		},
 		randString : function(prefix, postfix){
 			return (prefix||"") + Math.random().toString(36).substring(7) + (postfix||"");
+		},
+		assign : function(a, b){
+			return Object.assign(a, b);
+		},
+		extend : function(Dad, Son){
+			var Result = function(){
+				Dad.apply(this, arguments);
+				Son.apply(this.arguments);
+			};
+
+			Result = this.assign(Son.prototype, Dad.prototype);
+			return Result;
 		}
 	};
 

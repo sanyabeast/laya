@@ -1,13 +1,22 @@
 "use strict";
 define(function(){
 
-	var Laya = function(Laya, AttrProcessor, CSS, Template, Util, Wrappers){
+	var laya;
+
+	var Laya = function(Laya, AttrProcessor, CSS, Template, Util, Wrappers, TagProcessor){
+		if (laya){
+			return laya;
+		}
+
+		laya = this;
+
 		this.Laya = Laya;
 		this.AttrProcessor = AttrProcessor;
 		this.CSS = CSS;
 		this.Template = Template;
 		this.Util = Util;
 		this.Wrappers = Wrappers;
+		this.TagProcessor = TagProcessor;
 	};
 
 	Laya.prototype = {
@@ -20,7 +29,11 @@ define(function(){
 			this.util.patchNative();
 			this.wrappers = new this.Wrappers(this);
 			this.css = new this.CSS(this);
-			this.AttrProcessor = new this.AttrProcessor(this);
+			this.attrProcessor = new this.AttrProcessor(this);
+			this.tagProcessor = new this.TagProcessor(this);
+
+			console.log(this);
+
 			this._attrTplGetter = this._attrTplGetter.bind(this);
 		},
 		commands : ["#", "~", "@"],
@@ -176,10 +189,10 @@ define(function(){
 
 			var name  = attr.name;
 			var type  = this.valueType(rawvalue);
-			var prcs  = this.AttrProcessor.getProcessorName(name);
+			var processorName  = this.attrProcessor.getProcessorName(name);
 
-			if (prcs){
-				this.AttrProcessor.make(prcs, element, value, name);
+			if (processorName){
+				this.attrProcessor.process(processorName, element, value, name);
 			} else {
 				element.setAttribute(name, value);
 			}

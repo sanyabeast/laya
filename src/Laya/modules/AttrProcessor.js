@@ -1,10 +1,16 @@
 "use strict";
-define(function(){
-	var AttributesProcessor = function(laya){
+define([
+		"./Super/Processor",
+		"./Util"
+], function(Processor, Util){
+
+	var util = new Util();
+
+	var AttrProcessor = function(laya){
 		this.laya = laya;
 	};
 
-	AttributesProcessor.prototype = {
+	AttrProcessor.prototype = {
 		processors : {
 			"data-type" : function(el, value){
 				this.laya.wrappers[value](el);
@@ -20,21 +26,10 @@ define(function(){
 				});
 			}
 		},
-		make : function(prcs, element, value, name){
-			this.processors[prcs].call(this, element, value, name);
-		},
-		getProcessorName : function(name){
-			var util = this.laya.util;
-			var keys = util.keys(this.processors);
-
-			for (var a = 0, l = keys.length, match; a < l; a++){
-				match = name.match(new RegExp(keys[a]));
-				if (match) return keys[a];
-			}
-
-		}
 	};
 
-	return AttributesProcessor;
+	util.extend(Processor, AttrProcessor);
+
+	return AttrProcessor;
 
 });
