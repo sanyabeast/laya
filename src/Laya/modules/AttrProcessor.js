@@ -12,8 +12,8 @@ define(function(){
 			"data-replace" : function(el, value){
 				el.parentNode.replaceChild(value, el);
 			},
-			"data-on-*" : function(el, value, name){
-				var eventName = name.replace("data-on-", "");
+			"data-on:*" : function(el, value, name){
+				var eventName = name.replace("data-on:", "");
 				el.on({
 					eventName : eventName,
 					callback : value,

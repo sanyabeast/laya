@@ -2,23 +2,23 @@
 ::-webkit-scrollbar {
     width: 8px;
 }
- 
+
 /* Track */
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 2px;
-    background: rgb(153, 153, 153);
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  -webkit-border-radius: 10px;
+  border-radius: 2px;
+  background: rgb(153, 153, 153);
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }
 ::-webkit-scrollbar-thumb:window-inactive {
-	background: rgb(153, 153, 153); 
+	background: rgb(153, 153, 153);
 }
 
 
@@ -31,8 +31,8 @@ html, body {
 
 ul {
 	list-style: none;
-    padding: 16px;
-    margin: 0;
+  padding: 16px;
+  margin: 0;
 }
 
 .app.player {
@@ -45,34 +45,35 @@ ul {
 .playlist-holder {
 	width: 100%;
 	height: 80%;
-	background: #131111;
+	background: {{~res.skins.current::playlist-bg}};
 	overflow: auto;
 }
 
 .controls-holder {
 	width: 100%;
-    height: 20%;
-    background: #fff;
-    box-shadow: -5px -16px 31px 0px rgba(0, 0, 0, 0.7);
+  height: 20%;
+  background: {{~res.skins.current::controls-bg}};
+  box-shadow: -5px -5px 10px 0px rgb(88, 88, 88);
 }
 
 .playlist li {
-	background: #2f3945;
+	  background: {{~res.skins.current::playlist-item-bg}};
     padding: 16px;
     border-radius: 4px;
     margin-bottom: 8px;
     box-sizing: border-box;
+    border: 1px solid {{~res.skins.current::light-border-color}};
 }
 
-.playlist li .name {
+.playlist li.name {
 	display: flex;
-	color: white;
+	color: {{~res.skins.current::generic-text-color}};
 	font-size: 16px;
 }
 
 .playlist li p {
 	margin-top: 0;
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .playlist li .dash {

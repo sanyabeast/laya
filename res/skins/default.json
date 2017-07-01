@@ -1,5 +1,9 @@
 {
-	"generic-text-color" : "#fff",
+	"generic-text-color" : "#000000",
 	"app-background" : "#121416",
-	"left-menu-background" : "#eeeeee"
+	"left-menu-background" : "#eeeeee",
+	"playlist-bg" : "#ebebeb",
+	"playlist-item-bg" : "#ffffff",
+	"light-border-color" : "#e3e3e3",
+	"controls-bg" : "#ffffff"
 }

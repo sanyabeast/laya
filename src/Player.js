@@ -64,6 +64,9 @@ define([
 		laya.setBase(base);
 		this.loader.load(resData);
 		laya.css.setup(layoutsCSS);
+
+		this.skin = "default";
+
 		this.dom = laya.make("~res.layouts.player::index", {
 
 		});
@@ -121,7 +124,19 @@ define([
 				}
 			}
 		},
+		set skin(name){
+			var skinpath = base.path("res.skins." + name);
+			for (var k in skinpath){
+				base("res.skins.current::" + k, skinpath[k].value);
+			}
+		},
+		set lang(name){
+			var langpath = base.path("res.l18n." + name);
 
+			for (var k in langpath){
+				base("res.l18n.current::" + k, langpath[k].value);
+			}
+		}
 	};
 
 	return App;

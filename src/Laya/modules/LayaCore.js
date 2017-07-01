@@ -173,6 +173,7 @@ define(function(){
 			}
 
 			var value = this.getValue(rawvalue, userData);
+
 			var name  = attr.name;
 			var type  = this.valueType(rawvalue);
 			var prcs  = this.attributesProcessors.getProcessorName(name);
