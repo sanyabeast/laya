@@ -57,6 +57,12 @@ define(function(){
 		},
 		make : function(data, userData){
 			var html = this.pickValue(data);
+
+			if (!html){
+				this.console.error("Laya: no layout-description specified", data, userData);
+				return null;
+			}
+
 			var dom = this.util.HTML2DOM(html);
 
 			for (var a = 0, l = dom.childNodes.length; a < l; a++){
@@ -103,21 +109,25 @@ define(function(){
 				for (var a = 0; a < children.length; a++){
 					if (children[a].nodeType == 3){
 						text = this.util.superTrim(children[a].nodeValue);
+						console.log(type, text);
 
 						type = this.typeof(text);
 
+						console.log(type);
+
 						do {
-							text = this.pickValue(text, userData);
-							type = this.typeof(text);
 							if (type == "~"){
 								linked = text;
 							}
 
+							text = this.pickValue(text, userData);
+							type = this.typeof(text);
 						} while (this.commands.indexOf(type) > -1)
 
 						if (text instanceof window.Node){
 							dom.replaceChild(text, children[a]);
 						} else {
+							//console.log(text, children[a].nodeValue, linked);
 							children[a].nodeValue = text;
 							if (linked){
 								base.on(linked.split("~")[1], "change", this._onTextNodeValueChanged.bind(children[a]))
