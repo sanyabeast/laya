@@ -53,16 +53,21 @@ ul {
 	width: 100%;
   height: 20%;
   background: {{~res.skins.current::controls-bg}};
-  box-shadow: -5px -5px 10px 0px rgb(88, 88, 88);
+  box-shadow: -5px 0px 10px 0px rgb(88, 88, 88);
 }
 
 .playlist li {
-	  background: {{~res.skins.current::playlist-item-bg}};
     padding: 16px;
     border-radius: 4px;
     margin-bottom: 8px;
     box-sizing: border-box;
+    transition: 0.2s background;
+    background: {{~res.skins.current::playlist-item-bg}};
     border: 1px solid {{~res.skins.current::light-border-color}};
+}
+
+.playlist li:hover {
+  background: {{~res.skins.current::playlist-item-bg-hover}}
 }
 
 .playlist li.name {

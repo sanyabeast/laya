@@ -5,5 +5,6 @@
 	"playlist-bg" : "#ebebeb",
 	"playlist-item-bg" : "#ffffff",
 	"light-border-color" : "#e3e3e3",
-	"controls-bg" : "#ffffff"
+	"controls-bg" : "#ffffff",
+	"playlist-item-bg-hover" : "#e3e3e3"
 }

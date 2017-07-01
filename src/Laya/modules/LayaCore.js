@@ -20,7 +20,7 @@ define(function(){
 			this.util.patchNative();
 			this.wrappers = new this.Wrappers(this);
 			this.css = new this.CSS(this);
-			this.attributesProcessors = new this.AttrProcessor(this);
+			this.AttrProcessor = new this.AttrProcessor(this);
 			this._attrTplGetter = this._attrTplGetter.bind(this);
 		},
 		commands : ["#", "~", "@"],
@@ -176,10 +176,10 @@ define(function(){
 
 			var name  = attr.name;
 			var type  = this.valueType(rawvalue);
-			var prcs  = this.attributesProcessors.getProcessorName(name);
+			var prcs  = this.AttrProcessor.getProcessorName(name);
 
 			if (prcs){
-				this.attributesProcessors.make(prcs, element, value, name);
+				this.AttrProcessor.make(prcs, element, value, name);
 			} else {
 				element.setAttribute(name, value);
 			}
