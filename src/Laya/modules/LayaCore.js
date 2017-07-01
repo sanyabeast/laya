@@ -169,7 +169,6 @@ define(function(){
 					return this.make("~" + data.split(type)[1], userData);
 				break;
 				default:
-					//this.console.warn("Raw value alert", data, userData);
 					return data;
 				break;
 			}
