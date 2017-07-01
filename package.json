@@ -1,6 +1,9 @@
 {
 	"version" : "0.1.1",
 	"name" : "laya",
+	"scripts" : {
+		"watchres" : "node node_modules/dirwatch/watch.js \"res/layouts, res/skins, res/l18n\" \"node util/res.js\""
+	},
 	"author" : {
 		"name" : "Alex Gaivoronski",
 		"email" : "a.gvrnsk@gmail.com"
@@ -11,8 +14,9 @@
 	},
 	"dependencies" : {
 		"base": "git://github.com/sanyabeast/basejs.git",
+		"dirwatch": "git://github.com/sanyabeast/dirwatch.git",
 		"requirejs": "latest",
-        "requirejs-text": "latest"
+    "requirejs-text": "latest"
 	},
 	"devDependencies": {
 		"gulp": "latest",
