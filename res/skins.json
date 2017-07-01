@@ -1,7 +1,7 @@
 {
     "content": {
-        "res.skins.default": "{\r\n\t\"generic-text-color\" : \"#000000\",\r\n\t\"app-background\" : \"#121416\",\r\n\t\"left-menu-background\" : \"#eeeeee\",\r\n\t\"playlist-bg\" : \"#ebebeb\",\r\n\t\"playlist-item-bg\" : \"#ffffff\",\r\n\t\"light-border-color\" : \"#e3e3e3\",\r\n\t\"controls-bg\" : \"#ffffff\",\r\n\t\"playlist-item-bg-hover\" : \"#e3e3e3\"\r\n}\r\n",
-        "res.skins.custom": "{\r\n\t\"generic-text-color\" : \"#fff\",\r\n\t\"app-background\" : \"#121416\",\r\n\t\"left-menu-background\" : \"#eeeeef\"\r\n}\r\n"
+        "res.skins::custom.json": "{\r\n\t\"generic-text-color\" : \"#fff\",\r\n\t\"app-background\" : \"#121416\",\r\n\t\"left-menu-background\" : \"#eeeeef\"\r\n}\r\n",
+        "res.skins::default.json": "{\r\n\t\"generic-text-color\" : \"#000000\",\r\n\t\"app-background\" : \"#121416\",\r\n\t\"left-menu-background\" : \"#eeeeee\",\r\n\t\"playlist-bg\" : \"#ebebeb\",\r\n\t\"playlist-item-bg\" : \"#ffffff\",\r\n\t\"light-border-color\" : \"#e3e3e3\",\r\n\t\"controls-bg\" : \"#ffffff\",\r\n\t\"playlist-item-bg-hover\" : \"#e3e3e3\"\r\n}\r\n"
     },
     "size": 558,
     "total": 2

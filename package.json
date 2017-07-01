@@ -2,7 +2,8 @@
 	"version" : "0.1.1",
 	"name" : "laya",
 	"scripts" : {
-		"watchres" : "node node_modules/dirwatch/watch.js \"res/layouts, res/skins, res/l18n\" \"node util/res.js\""
+		"watchres" : "node node_modules/dirwatch/watch.js \"res/layouts, res/skins, res/l18n\" \"npm run reslist\"",
+		"reslist" : "node node_modules/reslist/reslist.js \"util/reslist.config.json\""
 	},
 	"author" : {
 		"name" : "Alex Gaivoronski",
@@ -15,6 +16,7 @@
 	"dependencies" : {
 		"base": "git://github.com/sanyabeast/basejs.git",
 		"dirwatch": "git://github.com/sanyabeast/dirwatch.git",
+		"reslist": "git://github.com/sanyabeast/reslist.git",
 		"requirejs": "latest",
     "requirejs-text": "latest"
 	},
@@ -28,7 +30,6 @@
         "jsonfile": "latest",
         "colors": "latest",
         "minimist": "latest",
-        "directory-tree": "latest",
-				"chokidar" : "latest"
+        "directory-tree": "latest"
     }
 }

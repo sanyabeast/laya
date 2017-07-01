@@ -1,0 +1,26 @@
+{
+  "dirSeparator" : ".",
+  "filePrefix" : "::",
+  "tasks" : {
+    "res/layouts" : {
+      "outputJSON" : "res/layouts.json",
+      "extensions" : ["xml"],
+      "readFile" : "true",
+    	"extensionInName" : "false"
+    },
+    "res/skins" : {
+      "outputJSON" : "res/skins.json",
+      "extensions" : ["json"],
+      "readFile" : "true",
+    	"noName" : "true",
+    	"extensionInName" : "false"
+    },
+    "res/l18n" : {
+      "outputJSON" : "res/l18n.json",
+      "extensions" : ["json"],
+      "readFile" : "true",
+    	"noName" : "true",
+    	"extensionInName" : "false"
+    }
+  }
+}
