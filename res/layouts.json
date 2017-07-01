@@ -1,10 +1,13 @@
 {
     "content": {
+        "res.layouts.match3::game-field": "<div id=\"game-field\">\r\n    #res.layouts.match3::gem\r\n</div>\r\n",
+        "res.layouts.match3::gem": "<div class=\"gem\"></div>\r\n",
+        "res.layouts.match3::index": "<div class=\"app player\">\r\n\t#res.layouts.match3::game-field\r\n</div>\r\n",
         "res.layouts.player::controls": "<div class=\"controls\"></div>",
         "res.layouts.player::index": "<div class=\"app player\">\r\n\t<div class=\"playlist-holder\">\r\n\t\t<div data-replace=\"#res.layouts.player::playlist\"></div>\r\n\t</div>\r\n\t<div class=\"controls-holder\">\r\n\t\t#res.layouts.player::controls\r\n\t</div>\r\n</div>",
         "res.layouts.player::playlist-item": "<li class=\"name\" data-on:click=\"@onitemclick\">\r\n\t<p class=\"artist\">@artist</p>\r\n\t<p class=\"dash\"> — </p>\r\n\t<p class=\"title\">@title</p>\r\n</li>\r\n",
         "res.layouts.player::playlist": "<div class=\"playlist\">\r\n\t<ul data-type=\"list\" class=\"list\" data-item-layout=\"~res.layouts.player::playlist-item\"></ul>\r\n</div>\r\n"
     },
-    "size": 512,
-    "total": 4
+    "size": 716,
+    "total": 7
 }

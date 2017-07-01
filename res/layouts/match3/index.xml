@@ -1,0 +1,3 @@
+<div class="app player">
+	#res.layouts.match3::game-field
+</div>

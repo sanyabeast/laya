@@ -9,14 +9,16 @@
 	});
 
 	requirejs([
-		"base", 
+		"base",
 		"Laya/Laya",
-		"Player",
+		"examples/Player",
+		"examples/Match3",
 		"../res/index"
-	], function(base, laya, Player, resData){
+	], function(base, laya, Player, Match3, resData){
 		window.base = base;
 		window.laya = laya;
-		window.player = new Player(resData);
+		//window.player = new Player(resData);
+		window.match3 = new Match3(resData);
 	});
 
 })();
