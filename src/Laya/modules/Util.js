@@ -126,6 +126,7 @@ define(function(){
 			return result;
 		},
 		HTML2DOM : function(html){
+			html = this.superTrim(html);
 			var temp = document.createElement("div");
 			var node;
 			temp.innerHTML = html;
