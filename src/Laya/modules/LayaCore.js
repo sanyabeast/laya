@@ -228,7 +228,7 @@ define(function(){
 				type = this.typeof(result);
 			} while (this.commands.indexOf(type) > -1)
 
-			return result;;
+			return result || "";
 
 		},
 		_onTextNodeValueChanged : function(value){

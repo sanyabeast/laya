@@ -1,27 +1,29 @@
 {
-	"version" : "0.1.3",
-	"name" : "laya",
-	"scripts" : {
-		"watchres" : "node node_modules/dirwatch/watch.js \"res/layouts, res/skins, res/l18n\" \"npm run reslist\"",
-		"reslist" : "node node_modules/reslist/reslist.js \"util/reslist.config.json\""
-	},
-	"author" : {
-		"name" : "Alex Gaivoronski",
-		"email" : "a.gvrnsk@gmail.com"
-	},
-	"repository" : {
-	  	"type" : "git",
-	  	"url" : "https://github.com/sanyabeast/laya.git"
-	},
-	"dependencies" : {
-		"base": "git://github.com/sanyabeast/basejs.git",
-		"dirwatch": "git://github.com/sanyabeast/dirwatch.git",
-		"reslist": "git://github.com/sanyabeast/reslist.git",
-		"requirejs": "latest",
-    "requirejs-text": "latest"
-	},
-	"devDependencies": {
-		"gulp": "latest",
+    "version": "0.1.7-a",
+    "name": "laya",
+    "scripts": {
+        "watchres": "node node_modules/dirwatch/watch.js \"res/layouts, res/skins, res/l18n\" \"npm run reslist\"",
+        "reslist": "node node_modules/reslist/reslist.js \"util/reslist.config.json\"",
+        "increase": "node node_modules/vpplus/vpplus.js increase-build"
+    },
+    "author": {
+        "name": "Alex Gaivoronski",
+        "email": "a.gvrnsk@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sanyabeast/laya.git"
+    },
+    "dependencies": {
+        "base": "git://github.com/sanyabeast/basejs.git",
+        "dirwatch": "git://github.com/sanyabeast/dirwatch.git",
+        "reslist": "git://github.com/sanyabeast/reslist.git",
+        "vpplus": "git://github.com/sanyabeast/vpplus.git",
+        "requirejs": "latest",
+        "requirejs-text": "latest"
+    },
+    "devDependencies": {
+        "gulp": "latest",
         "gulp-requirejs-optimize": "latest",
         "gulp-util": "latest",
         "gulp-rename": "latest",
