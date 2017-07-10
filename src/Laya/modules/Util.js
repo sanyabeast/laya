@@ -11,6 +11,14 @@ define(function(){
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
 
+			this.addProp(Node, "setMultipleStyles", {
+				value : function(style){
+					for (var k in style){
+						this.style[k] = style[k];
+					}
+				}
+			});
+
 			this.addProp(Node, "setStyle", {
 				value : function(name, value){
 					this.style[name] = value;
