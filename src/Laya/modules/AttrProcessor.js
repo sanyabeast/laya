@@ -16,6 +16,7 @@ define([
 				this.laya.wrappers[value](el);
 			},
 			"data-replace" : function(el, value){
+				util.copyAttrs(el, value);
 				el.parentNode.replaceChild(value, el);
 			},
 			"data-on:*" : function(el, value, name){

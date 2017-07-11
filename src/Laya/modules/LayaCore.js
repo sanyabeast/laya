@@ -218,6 +218,8 @@ define(function(){
 				attr._changeListener = true;
 				base.on(rawvalue.split("~")[1], "change", this.setAttribute.bind(this, element, attr, userData));
 			}
+
+			return element;
 		},
 		_attrTplGetter : function(data, userData){
 			var type = this.typeof(data);

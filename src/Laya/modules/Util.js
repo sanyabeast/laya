@@ -11,11 +11,22 @@ define(function(){
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
 
+			this.addProp(Node, "additem", {
+				value : function(data){
+					var itemData = this.getAttribute("data-item-layout");
+					var content = _this.laya.make("~" + itemData, data);
+					this.appendChild(content);
+					return this;
+				}
+			});
+
 			this.addProp(Node, "setMultipleStyles", {
 				value : function(style){
 					for (var k in style){
 						this.style[k] = style[k];
 					}
+
+					return this;
 				}
 			});
 
@@ -45,6 +56,7 @@ define(function(){
 
 			this.addProp(Node, "on", {
 				value : function(options){
+					var _node = this;
 					var eventName = options.eventName;
 					var callback = options.callback;
 					var context = options.context;
@@ -53,11 +65,11 @@ define(function(){
 
 					if (context){
 						var handler = function(evt){
-							callback.apply(context, evt, _this);
+							callback.apply(context, evt, _node);
 						};
 					} else {
 						var handler = function(evt){
-							callback(evt, _this);
+							callback(evt, _node);
 						};
 					}
 
@@ -106,6 +118,15 @@ define(function(){
 		},
 		eachArr : function(arr, callback, context){
 
+		},
+		copyAttrs : function(source, target){
+			if (source.attributes){
+				for (var a = 0; a < source.attributes.length; a++){
+					target.setAttribute(source.attributes[a].name, source.attributes[a].value);
+				}
+			}
+
+			return this;
 		},
 		keys : function(obj){
 			return Object.keys(obj);
