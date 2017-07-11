@@ -16,11 +16,21 @@
 		"examples/GoodRead",
 		"../res/index"
 	], function(base, laya, Player, Match3, GoodRead, resData){
+
 		window.base = base;
 		window.laya = laya;
-		//window.player = new Player(resData);
-		//window.match3 = new Match3(resData);
-		window.goodread = new GoodRead(resData);
+
+		switch(window.example){
+			case "goodread":
+				window.goodread = new GoodRead(resData);
+			break;
+			case "match3":
+				window.match3 = new Match3(resData);
+			break;
+			default:
+				window.player = new Player(resData);
+			break;
+		}
 	});
 
 })();
