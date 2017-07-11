@@ -209,7 +209,7 @@ define(function(){
 			var processorName  = this.attrProcessor.getProcessorName(name);
 
 			if (processorName){
-				this.attrProcessor.process(processorName, element, value, name);
+				this.attrProcessor.process(processorName, element, value, name, userData);
 			} else {
 				element.setAttribute(name, value);
 			}

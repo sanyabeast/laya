@@ -6,8 +6,8 @@ define(function(){
   };
 
   Processor.prototype = {
-    process : function(processorName, element, attrValue, attrName){
-			this.processors[processorName].call(this, element, attrValue, attrName);
+    process : function(processorName, element, attrValue, attrName, userData){
+			this.processors[processorName].call(this, element, attrValue, attrName, userData);
       return element;
 		},
 		getProcessorName : function(name){

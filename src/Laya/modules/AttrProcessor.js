@@ -15,9 +15,13 @@ define([
 			"data-type" : function(el, value){
 				this.laya.wrappers[value](el);
 			},
-			"data-replace" : function(el, value){
-				util.copyAttrs(el, value);
-				el.parentNode.replaceChild(value, el);
+			"data-replace" : function(el, value, name, userData){
+				if (value instanceof Node){
+					el.setAttribute("data-replace", "");
+					util.copyAttrs(el, value);
+					value = this.laya.process(value, userData);
+					el.parentNode.replaceChild(value, el);
+				}
 			},
 			"data-on:*" : function(el, value, name){
 				var eventName = name.replace("data-on:", "");
