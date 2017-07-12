@@ -120,7 +120,6 @@ define(function(){
 
 		},
 		copyAttrs : function(source, target){
-			console.dir(target);
 			if (source.attributes){
 				for (var a = 0; a < source.attributes.length; a++){
 					target.setAttribute(source.attributes[a].name, source.attributes[a].value);

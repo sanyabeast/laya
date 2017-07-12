@@ -25,7 +25,7 @@ define([
 					util.copyAttrs(el, value);
 					value = this.laya.process(value, userData);
 					el.parentNode.replaceChild(value, el);
-				} 
+				}
 			},
 			"data-on:*" : function(el, value, name){
 				var eventName = name.replace("data-on:", "");
@@ -35,7 +35,20 @@ define([
 				});
 			},
 			"data-on:clickoutside" : function(el, value, name){
-				console.log(el, value, name);
+				if (typeof value != "function"){
+						console.warn("Laya: no callback specified", el, value, name);
+						return;
+				}
+
+				document.on({
+					eventName : "mousedown",
+					callback : value
+				});
+
+				el.on({
+					eventName : "mousedown",
+					callback : function(evt){evt.stopPropagation()}
+				})
 			},
 			"data-value-linked" : function(el, path){
 				el.on({
