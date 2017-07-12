@@ -48,7 +48,7 @@ define([
 				el.on({
 					eventName : "mousedown",
 					callback : function(evt){evt.stopPropagation()}
-				})
+				});
 			},
 			"data-value-linked" : function(el, path){
 				el.on({

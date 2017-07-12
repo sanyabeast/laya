@@ -11,6 +11,29 @@ define(function(){
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
 
+			this.addProp(Node, "sortBy", {
+				value : function(comp, desc){
+					var buff = [];
+
+					for (var a = 0, l = this.children.length; a < l; a++){
+						buff.push(this.children[a]);
+					}
+
+					for (var a = 0, l = buff.length; a < l; a++){
+						this.removeChild(buff[a]);
+					}
+
+					buff = _this.sortBy(buff, comp, desc);
+
+					for (var a = 0, l = buff.length; a < l; a++){
+						this.addChild(buff[a]);
+					}
+
+					return this;
+
+				}
+			});
+
 			this.addProp(Node, "addItem", {
 				value : function(data){
 					var itemData = this.getAttribute("data-item-layout");
@@ -115,6 +138,34 @@ define(function(){
 
 
 
+		},
+		sortBy : function(arr, comp, desc){
+			var shuffles = 0;
+			var length = arr.length;
+
+			do {
+
+				shuffles = 0;
+
+				for (var a = 0, rule; a < length - 1; a++){
+					rule = (desc === true) ? (comp(arr[a]) < comp(arr[a + 1])) : (comp(arr[a]) > comp(arr[a + 1]));
+
+					if (rule){
+						shuffles++;
+						this.arrSwap(arr, a, a + 1);
+					}
+				}
+
+			} while (shuffles > 0)
+
+			return arr;
+
+		},
+		arrSwap : function(arr, i1, i2){
+			var buff = arr[i1];
+			arr[i1] = arr[i2];
+			arr[i2] = buff;
+			return arr;
 		},
 		eachArr : function(arr, callback, context){
 
