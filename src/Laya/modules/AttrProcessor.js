@@ -25,9 +25,7 @@ define([
 					util.copyAttrs(el, value);
 					value = this.laya.process(value, userData);
 					el.parentNode.replaceChild(value, el);
-				} else {
-					console.warn("Laya: replacing data is not Node", value, el);
-				}
+				} 
 			},
 			"data-on:*" : function(el, value, name){
 				var eventName = name.replace("data-on:", "");
@@ -35,6 +33,9 @@ define([
 					eventName : eventName,
 					callback : value,
 				});
+			},
+			"data-on:clickoutside" : function(el, value, name){
+				console.log(el, value, name);
 			},
 			"data-value-linked" : function(el, path){
 				el.on({

@@ -13,11 +13,18 @@ define(function(){
 		getProcessorName : function(name){
 			var util = this.laya.util;
 			var keys = util.keys(this.processors);
+      var result;
 
 			for (var a = 0, l = keys.length, match; a < l; a++){
 				match = name.match(new RegExp(keys[a]));
-				if (match) return keys[a];
+				if (match){
+          if (!result || keys[a].length > result.length){
+            result = keys[a];
+          }
+        }
 			}
+
+      return result;
 
 		}
   };
