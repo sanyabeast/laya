@@ -57,7 +57,7 @@ define(function(){
 			var html = this.pickValue(data);
 
 			if (!html){
-				this.console.error("Laya: no layout-description specified", data, userData);
+				this.console.error("Laya: no layout-description specified", data, userData, html);
 				return null;
 			}
 
@@ -202,10 +202,16 @@ define(function(){
 				rawvalue = this.Template.fast(rawvalue, userData, this._attrTplGetter);
 			}
 
-			var value = this.pickValue(rawvalue, userData);
+			/*picking*/
+			var type = this.typeof(rawvalue);
+			var value = rawvalue;
+
+			do {
+				value = this.pickValue(value, userData);
+				type = this.typeof(value);
+			} while (this.commands.indexOf(type) > -1)
 
 			var name  = attr.name;
-			var type  = this.typeof(rawvalue);
 			var processorName  = this.attrProcessor.getProcessorName(name);
 
 			if (processorName){

@@ -13,7 +13,11 @@ define([
 	AttrProcessor.prototype = {
 		processors : {
 			"data-type" : function(el, value){
-				this.laya.wrappers[value](el);
+				if (this.laya.wrappers[value]){
+					this.laya.wrappers[value](el);
+				} else {
+					console.warn("Laya: no wrapper specified:", value, el);
+				}
 			},
 			"data-replace" : function(el, value, name, userData){
 				if (value instanceof Node){
@@ -21,6 +25,8 @@ define([
 					util.copyAttrs(el, value);
 					value = this.laya.process(value, userData);
 					el.parentNode.replaceChild(value, el);
+				} else {
+					console.warn("Laya: replacing data is not Node", value, el);
 				}
 			},
 			"data-on:*" : function(el, value, name){

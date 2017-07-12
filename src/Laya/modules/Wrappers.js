@@ -14,10 +14,6 @@ define(function(){
 				return node;
 			}
 		},
-		"list" : function(node){
-			node.addItem = this.methods.additem.bind(this, node);
-			return node;
-		}
 	};
 
 	return Wrappers;
