@@ -26,7 +26,10 @@ define(function(){
 
       return result;
 
-		}
+		},
+    addProcessor : function(name, command){
+      this.processors[name] = command;
+    }
   };
 
   return Processor;
