@@ -11,7 +11,7 @@ define(function(){
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
 
-			this.addProp(Node, "additem", {
+			this.addProp(Node, "addItem", {
 				value : function(data){
 					var itemData = this.getAttribute("data-item-layout");
 					var content = _this.laya.make("~" + itemData, data);
