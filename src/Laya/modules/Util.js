@@ -173,7 +173,7 @@ define(function(){
 		copyAttrs : function(source, target, exclude){
 			if (source.attributes){
 				for (var a = 0; a < source.attributes.length; a++){
-					if (exclude.indexOf(source.attributes[a].name < 0)){
+					if (exclude.indexOf(source.attributes[a].name) < 0){
 						target.setAttribute(source.attributes[a].name, source.attributes[a].value);
 					}
 				}

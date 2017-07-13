@@ -39,9 +39,7 @@ define([
 
 				util.copyAttrs(el, value, ["data-replace", "data-settings"]);
 
-				if (replaceSettings){
-					console.log(el, value, replaceSettings);
-				}
+				value = this.laya.process(value);
 
 				el.parentNode.replaceChild(value, el);
 			},
