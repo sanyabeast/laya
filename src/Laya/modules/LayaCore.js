@@ -54,7 +54,7 @@ define(function(){
 			},
 		},
 		make : function(data, userData){
-			var html = this.pickValue(data);
+			var html = this.pickValue(data, userData);
 
 			if (!html){
 				this.console.error("Laya: no layout-description specified", data, userData, html);
@@ -187,9 +187,22 @@ define(function(){
 			if (!name || !src){
 				this.console.warn("User`s value is not provided for `" + name + "`", src);
 				return null;
-			}
+			} else {
+				if (src instanceof window.Array){
+					var result;
 
-			return src[name];
+					for (var a = 0; a < src.length; a++){
+						if (src[a][name]){
+							result = src[a][name];
+						}
+					}
+
+					return result;
+
+				} else {
+					return src[name];
+				}
+			}
 		},
 		setAttribute : function(element, attr, userData){
 			var rawvalue;
@@ -202,27 +215,30 @@ define(function(){
 				rawvalue = this.Template.fast(rawvalue, userData, this._attrTplGetter);
 			}
 
-			/*picking*/
-			var type = this.typeof(rawvalue);
-			var value = rawvalue;
-
-			do {
-				value = this.pickValue(value, userData);
-				type = this.typeof(value);
-			} while (this.commands.indexOf(type) > -1)
-
 			var name  = attr.name;
+
 			var processorName  = this.attrProcessor.getProcessorName(name);
 
 			if (processorName){
-				this.attrProcessor.process(processorName, element, value, name, userData);
+				this.attrProcessor.process(processorName, element, rawvalue, name, userData);
 			} else {
-				element.setAttribute(name, value);
-			}
+				/*picking*/
+				var type = this.typeof(rawvalue);
+				var value = rawvalue;
 
-			if (type == "~" && attr._changeListener != true){
-				attr._changeListener = true;
-				base.on(rawvalue.split("~")[1], "change", this.setAttribute.bind(this, element, attr, userData));
+				do {
+					value = this.pickValue(value, userData);
+					type = this.typeof(value);
+				} while (this.commands.indexOf(type) > -1)
+
+				value = value || "";
+
+				element.setAttribute(name, value);
+
+				if (type == "~" && attr._changeListener != true){
+					attr._changeListener = true;
+					base.on(rawvalue.split("~")[1], "change", this.setAttribute.bind(this, element, attr, userData));
+				}
 			}
 
 			return element;

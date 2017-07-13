@@ -170,10 +170,12 @@ define(function(){
 		eachArr : function(arr, callback, context){
 
 		},
-		copyAttrs : function(source, target){
+		copyAttrs : function(source, target, exclude){
 			if (source.attributes){
 				for (var a = 0; a < source.attributes.length; a++){
-					target.setAttribute(source.attributes[a].name, source.attributes[a].value);
+					if (exclude.indexOf(source.attributes[a].name < 0)){
+						target.setAttribute(source.attributes[a].name, source.attributes[a].value);
+					}
 				}
 			}
 

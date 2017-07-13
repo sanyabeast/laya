@@ -12,29 +12,50 @@ define([
 
 	AttrProcessor.prototype = {
 		processors : {
-			"data-type" : function(el, value){
-				if (this.laya.wrappers[value]){
-					this.laya.wrappers[value](el);
-				} else {
-					console.warn("Laya: no wrapper specified:", value, el);
-				}
-			},
 			"data-replace" : function(el, value, name, userData){
-				if (value instanceof Node){
-					el.setAttribute("data-replace", "");
-					util.copyAttrs(el, value);
-					value = this.laya.process(value, userData);
-					el.parentNode.replaceChild(value, el);
+				var replaceSettings;
+
+				if (el.hasAttribute("data-settings")){
+					replaceSettings = el.getAttribute("data-settings");
+					replaceSettings = window.JSON.parse(replaceSettings);
 				}
+
+				if (replaceSettings){
+					var type = this.laya.typeof(value);
+
+					do {
+						value = this.laya.pickValue(value, [userData, replaceSettings]);
+						type = this.laya.typeof(value);
+					} while (this.laya.commands.indexOf(type) > -1)
+
+				} else {
+					var type = this.laya.typeof(value);
+
+					do {
+						value = this.laya.pickValue(value, userData);
+						type = this.laya.typeof(value);
+					} while (this.laya.commands.indexOf(type) > -1)
+				}
+
+				util.copyAttrs(el, value, ["data-replace", "data-settings"]);
+
+				if (replaceSettings){
+					console.log(el, value, replaceSettings);
+				}
+
+				el.parentNode.replaceChild(value, el);
 			},
-			"data-on:*" : function(el, value, name){
+			"data-on:*" : function(el, value, name, userData){
 				var eventName = name.replace("data-on:", "");
+				value = this.laya.pickValue(value, userData);
 				el.on({
 					eventName : eventName,
 					callback : value,
 				});
 			},
-			"data-on:clickoutside" : function(el, value, name){
+			"data-on:clickoutside" : function(el, value, name, userData){
+				value = this.laya.pickValue(value, userData);
+
 				if (typeof value != "function"){
 						console.warn("Laya: no callback specified", el, value, name);
 						return;
