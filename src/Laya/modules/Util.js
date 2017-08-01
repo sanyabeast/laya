@@ -197,6 +197,9 @@ define(function(){
 
 			return this;
 		},
+		isAncestor : function(parent, testNode){
+			return parent.contains(testNode);
+		},
 		keys : function(obj){
 			return Object.keys(obj);
 		},

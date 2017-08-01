@@ -62,29 +62,54 @@ define([
 			},
 			"data-on:*" : function(el, value, name, userData){
 				var eventName = name.replace("data-on:", "");
-				value = this.laya.pickValue(value, userData);
+
+				if (value == "script"){
+					var scriptNode = el.select("script[data-callback-script='" + name +  "']")[0];
+					var script = scriptNode.innerText;
+
+					value = function(){
+						this.laya.util.evalInContext(script, el);
+					}.bind(this)
+
+				} else {
+					value = this.laya.pickValue(value, userData);
+				}
+
 				el.on({
 					eventName : eventName,
 					callback : value,
 				});
+
 			},
 			"data-on:clickoutside" : function(el, value, name, userData){
 				value = this.laya.pickValue(value, userData);
 
-				if (typeof value != "function"){
-						//console.warn("Laya: no callback specified", el, value, name);
-						return;
+				if (typeof value == "function"){
+						value = value;
+				} else if (typeof value == "string" && value == "script"){
+						var scriptNode = el.select("script[data-callback-script='data-on:clickoutside']")[0];
+						var script = scriptNode.innerText;
+
+						value = function(){
+							this.laya.util.evalInContext(script, el)
+						}.bind(this);
+				}
+
+				if (!value){
+					this.laya.console.warn("Laya: attr-processor: data-on:clickoutside - no callback provided", arguments);
+					return;
 				}
 
 				document.on({
 					eventName : "mousedown",
-					callback : value
+					callback : function(evt){
+						console.log(evt);
+						if (!this.laya.util.isAncestor(el, evt.srcElement)){
+							value(evt);
+						}
+					}.bind(this)
 				});
 
-				el.on({
-					eventName : "mousedown",
-					callback : function(evt){evt.stopPropagation()}
-				});
 			},
 			"data-value-linked" : function(el, path){
 				el.on({
