@@ -36,11 +36,20 @@ define(function(){
 
 			this.addProp(Node, "addItem", {
 				value : function(data){
+					var itemsHolder = this;
+
+					if (this.hasAttribute("data-items-holder")){
+						var itemsHolderSelector = this.getAttribute("data-items-holder");
+						itemsHolder = this.select(itemsHolderSelector)[0];
+
+					}
+
 					var itemData = this.getAttribute("data-item-layout");
 					var content = _this.laya.make("~" + itemData, data);
-					this.appendChild(content);
+					itemsHolder.appendChild(content);
 					return this;
-				}
+				},
+				writable : true
 			});
 
 			this.addProp(Node, "setMultipleStyles", {
