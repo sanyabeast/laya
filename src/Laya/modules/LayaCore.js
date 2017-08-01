@@ -208,6 +208,10 @@ define(function(){
 			var rawvalue;
 			var _this = this;
 
+			if (attr.processed){
+				return;
+			}
+
 			if (attr.rawvalue){
 				rawvalue = attr.rawvalue;
 			} else {
@@ -237,9 +241,14 @@ define(function(){
 
 				if (type == "~" && attr._changeListener != true){
 					attr._changeListener = true;
-					base.on(rawvalue.split("~")[1], "change", this.setAttribute.bind(this, element, attr, userData));
+					base.on(rawvalue.split("~")[1], "change", function(){
+							attr.processed = false;
+							_this.setAttribute(element, attr, userData);
+					});
 				}
 			}
+
+			attr.processed = true;
 
 			return element;
 		},

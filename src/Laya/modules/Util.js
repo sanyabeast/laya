@@ -172,6 +172,9 @@ define(function(){
 		eachArr : function(arr, callback, context){
 
 		},
+		evalInContext : function(script, context){
+			return function() { return eval(script); }.call(context);
+		},
 		copyAttrs : function(source, target, exclude){
 			if (source.attributes){
 				for (var a = 0; a < source.attributes.length; a++){

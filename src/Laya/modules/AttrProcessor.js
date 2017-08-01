@@ -48,8 +48,8 @@ define([
 					var contentHolder = value.select(value.getAttribute("data-content-holder"))[0];
 
 					if (contentHolder){
-						console.log(contentHolder, el.innerHTML);
 						contentHolder.innerHTML = el.innerHTML;
+						el.innerHTML = "";
 					}
 
 				}
@@ -94,6 +94,14 @@ define([
 						base.set(path, value);
 					}
 				});
+			},
+			"data-element-script" : function(el, value, name, userData){
+				var script = el.innerText;
+				var context = el.parentNode;
+
+				if (context){
+					this.laya.util.evalInContext(script, context);
+				}
 			}
 		},
 	};

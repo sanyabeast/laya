@@ -13,7 +13,7 @@ define([
     processors : {
       "p" : function(){
         //console.log(arguments);
-      }
+      },
     },
   };
 
