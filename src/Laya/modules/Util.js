@@ -86,6 +86,10 @@ define(function(){
 					var name = options.name || _this.randString();
 					var capture = options.capture || false;
 
+					if (!callback){
+						return this;
+					}
+
 					if (context){
 						var handler = function(evt){
 							callback.apply(context, evt, _node);
@@ -95,8 +99,6 @@ define(function(){
 							callback(evt, _node);
 						};
 					}
-
-
 
 					this.addEventListener(eventName, handler, capture);
 
@@ -178,6 +180,17 @@ define(function(){
 					}
 				}
 			}
+
+			return this;
+		},
+		copyInnerContent : function(source, target){
+			var child;
+
+			while (source.childNodes.length > 0){
+				child = source.removeChild(source.childNodes[0]);
+				target.addChild(child);
+			}
+
 
 			return this;
 		},

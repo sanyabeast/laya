@@ -24,7 +24,7 @@ define([
 					var type = this.laya.typeof(value);
 
 					do {
-						value = this.laya.pickValue(value, [userData, replaceSettings]);
+						value = this.laya.pickValue(value, [userData || {}, replaceSettings]);
 						type = this.laya.typeof(value);
 					} while (this.laya.commands.indexOf(type) > -1)
 
@@ -37,7 +37,24 @@ define([
 					} while (this.laya.commands.indexOf(type) > -1)
 				}
 
+				if (!value){
+					console.warn("Laya: attr-processor: cannot replace node", value, el);
+					return;
+				}
+
 				util.copyAttrs(el, value, ["data-replace", "data-settings"]);
+
+				if (value.hasAttribute("data-content-holder")){
+					var contentHolder = value.select(value.getAttribute("data-content-holder"))[0];
+
+					if (contentHolder){
+						console.log(contentHolder, el.innerHTML);
+						contentHolder.innerHTML = el.innerHTML;
+					}
+
+				}
+
+				//util.copyInnerContent(el, value);
 
 				value = this.laya.process(value);
 
@@ -55,7 +72,7 @@ define([
 				value = this.laya.pickValue(value, userData);
 
 				if (typeof value != "function"){
-						console.warn("Laya: no callback specified", el, value, name);
+						//console.warn("Laya: no callback specified", el, value, name);
 						return;
 				}
 

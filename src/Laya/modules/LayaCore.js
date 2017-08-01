@@ -185,14 +185,14 @@ define(function(){
 		},
 		pickUserValue : function(name, src){
 			if (!name || !src){
-				this.console.warn("User`s value is not provided for `" + name + "`", src);
+				this.console.warn("Laya: core: user`s value is not provided for `" + name + "`", src);
 				return null;
 			} else {
 				if (src instanceof window.Array){
 					var result;
 
 					for (var a = 0; a < src.length; a++){
-						if (src[a][name]){
+						if (src[a] && src[a][name]){
 							result = src[a][name];
 						}
 					}
