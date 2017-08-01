@@ -177,9 +177,16 @@ define(function(){
 		},
 		copyAttrs : function(source, target, exclude){
 			if (source.attributes){
-				for (var a = 0; a < source.attributes.length; a++){
-					if (exclude.indexOf(source.attributes[a].name) < 0){
-						target.setAttribute(source.attributes[a].name, source.attributes[a].value);
+				for (var a = 0, mergedAttr, attr; a < source.attributes.length; a++){
+					attr = source.attributes[a];
+					if (exclude.indexOf(attr.name) < 0){
+						if (target.hasAttribute(attr.name)){
+							mergedAttr = target.getAttribute(attr.name) + " " + attr.value;
+							mergedAttr = this.superTrim(mergedAttr);
+							target.setAttribute(attr.name, mergedAttr);
+						} else {
+							target.setAttribute(attr.name, attr.value);
+						}
 					}
 				}
 			}
