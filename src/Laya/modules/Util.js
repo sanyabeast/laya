@@ -11,6 +11,25 @@ define(function(){
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
 
+			this.addProp(Node, "setCommand", {
+				value : function(name, command){
+					this.commands = this.commands || {};
+					this.commands[name] = command;
+				}
+			});
+
+			this.addProp(Node, "invokeCommand", {
+				value : function(name, data){
+					this.commands = this.commands || {};
+
+					if (this.commands[name]){
+						this.commands[name](data);
+					} else {
+						_this.laya.console.warn("Laya: commands - no command specified", this, name, data);
+					}
+				}
+			});
+
 			this.addProp(Node, "sortBy", {
 				value : function(comp, desc){
 					var buff = [];
@@ -213,8 +232,30 @@ define(function(){
 
 			return this;
 		},
-		isAncestor : function(parent, testNode){
+		isDescedant : function(parent, testNode){
 			return parent.contains(testNode);
+		},
+		mergeSettings : function(objA, objB){
+			var result = [];
+
+			if (window.Array.isArray(objA)){
+				for (var a = 0; a < objA.length; a++){
+					result.push(objA[a]);
+				}
+			} else {
+				result.push(objA);
+			}
+
+			if (window.Array.isArray(objB)){
+				for (var a = 0; a < objB.length; a++){
+					result.push(objB[a]);
+				}
+			} else {
+				result.push(objB);
+			}
+
+			return result;
+
 		},
 		keys : function(obj){
 			return Object.keys(obj);

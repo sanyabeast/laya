@@ -20,22 +20,19 @@ define([
 					replaceSettings = window.JSON.parse(replaceSettings);
 				}
 
+				/*merging settings*/
 				if (replaceSettings){
-					var type = this.laya.typeof(value);
-
-					do {
-						value = this.laya.pickValue(value, [userData || {}, replaceSettings]);
-						type = this.laya.typeof(value);
-					} while (this.laya.commands.indexOf(type) > -1)
-
-				} else {
-					var type = this.laya.typeof(value);
-
-					do {
-						value = this.laya.pickValue(value, userData);
-						type = this.laya.typeof(value);
-					} while (this.laya.commands.indexOf(type) > -1)
+					userData = this.laya.util.mergeSettings(userData, replaceSettings);
 				}
+
+				/*reaching value*/
+				var type = this.laya.typeof(value);
+
+				do {
+					value = this.laya.pickValue(value, userData);
+					type = this.laya.typeof(value);
+				} while (this.laya.commands.indexOf(type) > -1)
+
 
 				if (!value){
 					console.warn("Laya: attr-processor: cannot replace node", value, el);
@@ -56,7 +53,7 @@ define([
 
 				//util.copyInnerContent(el, value);
 
-				value = this.laya.process(value);
+				value = this.laya.process(value, userData);
 
 				el.parentNode.replaceChild(value, el);
 			},
@@ -65,6 +62,11 @@ define([
 
 				if (value == "script"){
 					var scriptNode = el.select("script[data-callback-script='" + name +  "']")[0];
+
+					if (!scriptNode){
+						this.laya.warn("Laya: attr-processor: data-on:* - no callback script", el, value, name);
+					}
+
 					var script = scriptNode.innerText;
 
 					value = function(){
@@ -74,6 +76,8 @@ define([
 				} else {
 					value = this.laya.pickValue(value, userData);
 				}
+
+				el.setCommand(eventName, value);
 
 				el.on({
 					eventName : eventName,
@@ -100,11 +104,12 @@ define([
 					return;
 				}
 
+				el.setCommand("clickoutside", value);
+
 				document.on({
 					eventName : "mousedown",
 					callback : function(evt){
-						console.log(evt);
-						if (!this.laya.util.isAncestor(el, evt.srcElement)){
+						if (!this.laya.util.isDescedant(el, evt.srcElement)){
 							value(evt);
 						}
 					}.bind(this)
@@ -127,6 +132,27 @@ define([
 				if (context){
 					this.laya.util.evalInContext(script, context);
 				}
+			},
+			"data-command:*" : function(el, value, name, userData){
+				var callback = value;
+
+				while (this.laya.typeof(callback) != null){
+					callback = this.laya.pickValue(callback, userData)
+				}
+
+				el.setCommand(name.split("data-command:")[1], callback);
+			},
+			"data-items-list-settings" : function(el, value, name, userData){
+				var listSettings = value;
+
+				while (this.laya.typeof(listSettings) != null){
+					listSettings = this.laya.pickValue(listSettings, userData);
+				}
+
+				for (var a = 0; a < listSettings.length; a++){
+					el.addItem(listSettings[a]);
+				}
+
 			}
 		},
 	};

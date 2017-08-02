@@ -151,7 +151,7 @@ define(function(){
 		},
 		typeof : function(data){
 			if (typeof data != "string"){
-				return  data;
+				return  null;
 			}
 
 			var lead = data[0];
