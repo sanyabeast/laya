@@ -74,9 +74,11 @@ define([
 					}.bind(this)
 
 				} else {
-					value = this.laya.pickValue(value, userData);
+					while (this.laya.typeof(value) != null){
+						value = this.laya.pickValue(value, userData);
+					}
 				}
-
+				
 				el.setCommand(eventName, value);
 
 				el.on({
@@ -150,7 +152,7 @@ define([
 				}
 
 				for (var a = 0; a < listSettings.length; a++){
-					el.addItem(listSettings[a]);
+					el.addItem(this.laya.util.mergeSettings(userData, listSettings[a]));
 				}
 
 			}
