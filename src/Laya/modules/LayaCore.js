@@ -125,10 +125,19 @@ define(function(){
 							dom.replaceChild(text, children[a]);
 						} else {
 							//console.log(text, children[a].nodeValue, linked);
-							children[a].nodeValue = text;
+
 							if (linked){
-								base.on(linked.split("~")[1], "change", this._onTextNodeValueChanged.bind(children[a]))
+								this.util.setTextNodeValue(children[a], text, linked.split("~")[1]);
+							} else {
+								this.util.setTextNodeValue(children[a], text);
 							}
+
+
+
+							// children[a].nodeValue = text;
+							// if (linked){
+							// 	var subID = base.on(linked.split("~")[1], "change", this._onTextNodeValueChanged.bind(children[a]));
+							// }
 						}
 
 					} else if (children[a].nodeType == 1){

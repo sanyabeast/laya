@@ -6,10 +6,44 @@ define(function(){
 	};
 
 	Util.prototype = {
+		copyTextNodeValue : function(sourceNode, targetNode){
+			if (sourceNode instanceof window.Node && sourceNode instanceof window.Text){
+				sourceNode = sourceNode;
+			} else {
+				sourceNode.innerText = sourceNode.innerText || " ";
+				sourceNode = sourceNode.childNodes[0];
+			}
+
+
+			console.log(sourceNode, targetNode);
+		},
+		setTextNodeValue : function(node, text, linked){
+			node.linked = node.linked || {};
+
+			if (node.linked.subID && node.linked.path){
+				this.laya.base.off(node.linked.path, "change", node.linked.subID);
+			}
+
+			delete node.linked.subID;
+			delete node.linked.path;
+
+			node.nodeValue = text;
+
+			if (linked){
+				var subID = base.on(linked, "change", this.laya._onTextNodeValueChanged.bind(node));
+				node.linked.subID = subID;
+				node.linked.path = linked;
+			}
+
+		},
 		patchNative : function(){
 			var _this = this;
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
+
+			this.addProp(Node, "laya", {
+				value : this.laya
+			});
 
 			this.addProp(Node, "setCommand", {
 				value : function(name, command){
