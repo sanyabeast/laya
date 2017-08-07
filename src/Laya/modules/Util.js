@@ -14,8 +14,18 @@ define(function(){
 				sourceNode = sourceNode.childNodes[0];
 			}
 
+			if (targetNode instanceof window.Node && targetNode instanceof window.Text){
+				targetNode = targetNode;
+			} else {
+				targetNode.innerText = targetNode.innerText || " ";
+				targetNode = targetNode.childNodes[0];
+			}
 
-			console.log(sourceNode, targetNode);
+			if (sourceNode.linked){
+				this.setTextNodeValue(targetNode, sourceNode.nodeValue, sourceNode.linked.path);
+			} else {
+				this.setTextNodeValue(targetNode, sourceNode.nodeValue);
+			}
 		},
 		setTextNodeValue : function(node, text, linked){
 			node.linked = node.linked || {};
@@ -24,8 +34,8 @@ define(function(){
 				this.laya.base.off(node.linked.path, "change", node.linked.subID);
 			}
 
-			delete node.linked.subID;
-			delete node.linked.path;
+			// delete node.linked.subID;
+			// delete node.linked.path;
 
 			node.nodeValue = text;
 
