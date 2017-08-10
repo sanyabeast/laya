@@ -57,7 +57,7 @@ define(function(){
 
 			this.addProp(Node, "bounds", {
 				get : function(){
-					var rect = this.view.getBoundingClientRect();
+					var rect = this.getBoundingClientRect();
 
 					var result = {
 						x : rect.left,
