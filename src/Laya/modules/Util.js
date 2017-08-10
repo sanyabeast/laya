@@ -55,6 +55,33 @@ define(function(){
 				value : this.laya
 			});
 
+			this.addProp(Node, "bounds", {
+				get : function(){
+					var rect = this.view.getBoundingClientRect();
+
+					var result = {
+						x : rect.left,
+						y : rect.top,
+						tnx : window.innerWidth - rect.left - rect.width,
+						tny : window.innerHeight - rect.top - rect.height,
+						nx : window.innerWidth - rect.left,
+						ny : window.innerHeight - rect.top,
+						ix : rect.right,
+						iy : rect.bottom,
+						get cx(){
+							return this.x + this.w / 2
+						},
+						get cy(){
+							return this.y + this.h / 2;
+						},
+						w : rect.width,
+						h : rect.height
+					};
+
+					return result;
+				}
+			});
+
 			this.addProp(Node, "setCommand", {
 				value : function(name, command){
 					this.commands = this.commands || {};
