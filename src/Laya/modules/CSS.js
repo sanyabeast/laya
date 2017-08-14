@@ -37,7 +37,7 @@ define(function(){
 				var value = _this.laya.pickValue(data, userData);
 
 				if (type == "~"){
-					this.laya.base.on(data.split(type)[1], "change", _this.update);
+					_this.laya.base.on(data.split(type)[1], "change", _this.update);
 				}
 
 				return value;
