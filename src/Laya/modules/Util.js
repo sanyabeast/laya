@@ -52,45 +52,52 @@ define(function(){
 			var NodeList = window.NodeList.prototype;
 			var transformMatrix = [1, 0, 0, 1, 0, 0];
 
+			this.addProp(Node, "transformMatrix", {
+				get : function(){
+					if (!this._transformMatrix){
+						if (this.style.transform.indexOf("matrix") > -1){
+							this._transformMatrix = this.style.transform.replace("matrix(", "").replace(")", "").split(",");
+						} else {
+							this._transformMatrix = transformMatrix.slice();
+							this.transformMatrix = this.transformMatrix;
+						}
+					} 
+
+					return this._transformMatrix;
+				},
+				set : function(matrix){
+					this._transformMatrix = matrix;
+					this.style.transform = "matrix(" +  matrix.join(",") + ")";
+				}
+			});
+
 			this.addProp(Node, "scale", {
 				get : function(){
-					var matrix = this.transformMatrix || transformMatrix.slice();
-					this.transformMatrix = matrix;
-					return matrix[0];
+					return this.transformMatrix[0];
 				},
 				set : function(value){
-					var matrix =  this.transformMatrix || transformMatrix.slice();
-					matrix[0] = matrix[3] = value;
-					this.transformMatrix = matrix;
-					this.style.transform = "matrix(" +  matrix.join(",") + ")";
+					this.transformMatrix[0] = this.transformMatrix[3] = value;
+					this.transformMatrix = this.transformMatrix;
 				}
 			});
 
 			this.addProp(Node, "x", {
 				get : function(){
-					var matrix = this.transformMatrix || transformMatrix.slice();
-					this.transformMatrix = matrix;
-					return matrix[4];
+					return this.transformMatrix[4];
 				},
 				set : function(value){
-					var matrix =  this.transformMatrix || transformMatrix.slice();
-					matrix[4] = value;
-					this.transformMatrix = matrix;
-					this.style.transform = "matrix(" +  matrix.join(",") + ")";
+					this.transformMatrix[4] = value;
+					this.transformMatrix = this.transformMatrix;
 				}
 			});
 
 			this.addProp(Node, "y", {
 				get : function(){
-					var matrix = this.transformMatrix || transformMatrix.slice();
-					this.transformMatrix = matrix;
-					return matrix[5];
+					return this.transformMatrix[5];
 				},
 				set : function(value){
-					var matrix =  this.transformMatrix || transformMatrix.slice();
-					matrix[5] = value;
-					this.transformMatrix = matrix;
-					this.style.transform = "matrix(" +  matrix.join(",") + ")";
+					this.transformMatrix[5] = value;
+					this.transformMatrix = this.transformMatrix;
 				}
 			});
 

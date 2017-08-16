@@ -1,5 +1,5 @@
 {
-    "version": "0.1.19-a",
+    "version": "0.1.20-a",
     "name": "laya",
     "scripts": {
         "watchres": "node node_modules/dirwatch/watch.js \"res/layouts, res/skins, res/l18n\" \"npm run reslist\"",
