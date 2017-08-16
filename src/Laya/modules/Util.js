@@ -50,6 +50,49 @@ define(function(){
 			var _this = this;
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
+			var transformMatrix = [1, 0, 0, 1, 0, 0];
+
+			this.addProp(Node, "scale", {
+				get : function(){
+					var matrix = this.transformMatrix || transformMatrix.slice();
+					this.transformMatrix = matrix;
+					return matrix[0];
+				},
+				set : function(value){
+					var matrix =  this.transformMatrix || transformMatrix.slice();
+					matrix[0] = matrix[3] = value;
+					this.transformMatrix = matrix;
+					this.style.transform = "matrix(" +  matrix.join(",") + ")";
+				}
+			});
+
+			this.addProp(Node, "x", {
+				get : function(){
+					var matrix = this.transformMatrix || transformMatrix.slice();
+					this.transformMatrix = matrix;
+					return matrix[4];
+				},
+				set : function(value){
+					var matrix =  this.transformMatrix || transformMatrix.slice();
+					matrix[4] = value;
+					this.transformMatrix = matrix;
+					this.style.transform = "matrix(" +  matrix.join(",") + ")";
+				}
+			});
+
+			this.addProp(Node, "y", {
+				get : function(){
+					var matrix = this.transformMatrix || transformMatrix.slice();
+					this.transformMatrix = matrix;
+					return matrix[5];
+				},
+				set : function(value){
+					var matrix =  this.transformMatrix || transformMatrix.slice();
+					matrix[5] = value;
+					this.transformMatrix = matrix;
+					this.style.transform = "matrix(" +  matrix.join(",") + ")";
+				}
+			});
 
 			this.addProp(Node, "laya", {
 				value : this.laya
