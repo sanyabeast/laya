@@ -101,7 +101,7 @@ define(function(){
 				}
 			});
 
-			this.addProp(Node, "y", {
+			this.addProp(Node, "opacity", {
 				get : function(){
 					if (typeof this._opacity != "number"){
 						if (this.style.opacity){
