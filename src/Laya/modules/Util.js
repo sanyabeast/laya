@@ -101,6 +101,24 @@ define(function(){
 				}
 			});
 
+			this.addProp(Node, "y", {
+				get : function(){
+					if (typeof this._opacity != "number"){
+						if (this.style.opacity){
+							this._opacity = Number(this.style.opacity);
+						} else {
+							this._opacity = 1;
+						}
+					} 
+
+					return this._opacity
+				},
+				set : function(value){
+					this._opacity = value;
+					this.style.opacity = value;
+				}
+			});
+
 			this.addProp(Node, "laya", {
 				value : this.laya
 			});
