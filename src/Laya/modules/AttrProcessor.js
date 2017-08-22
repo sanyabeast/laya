@@ -69,9 +69,15 @@ define([
 
 					var script = scriptNode.innerText;
 
-					value = function(){
-						this.laya.util.evalInContext(script, el);
-					}.bind(this)
+					script = this.laya.util.wrapScript(script);
+
+					value = eval(script);
+
+					value = value.bind(el, this.laya._scriptExtensions);
+
+					// value = function(){
+					// 	this.laya.util.evalInContext(script, el);
+					// }.bind(this)
 
 				} else {
 					while (this.laya.typeof(value) != null){
@@ -96,9 +102,15 @@ define([
 						var scriptNode = el.select("script[data-callback-script='data-on:clickoutside']")[0];
 						var script = scriptNode.innerText;
 
-						value = function(){
-							this.laya.util.evalInContext(script, el)
-						}.bind(this);
+						script = this.laya.util.wrapScript(script);
+
+						value = eval(script);
+
+						value = value.bind(el, this.laya._scriptExtensions);
+
+						// value = function(){
+						// 	this.laya.util.evalInContext(script, el)
+						// }.bind(this);
 				}
 
 				if (!value){

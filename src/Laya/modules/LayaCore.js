@@ -20,6 +20,9 @@ define(function(){
 	};
 
 	Laya.prototype = {
+		setScriptsExtensions : function(data){
+			this._scriptExtensions = data;
+		},
 		setBase : function(base){
 			this.base = base;
 			this.init();

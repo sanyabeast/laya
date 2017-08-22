@@ -422,6 +422,11 @@ define(function(){
 
 
 		},
+		wrapScript : function(script){
+			return this.laya.Template.fast("(function(extensions){ {{script}} })", {
+				script : script
+			});
+		},
 		sortBy : function(arr, comp, desc){
 			var shuffles = 0;
 			var length = arr.length;
