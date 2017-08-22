@@ -241,7 +241,26 @@ define(function(){
 			});
 
 			this.addProp(Node, "addChild", {
-				value : function(child){ this.appendChild(child); }
+				value : function(name, child){ 
+					if (typeof child == "undefined"){
+						child = name;
+					}
+
+					if (!(child instanceof window.Element) && child.view instanceof window.Element){
+						child = child.view;
+					}
+
+					this.appendChild(child); 
+				}
+			});
+
+			this.addProp(Node, "addListener", {
+				value : function(eventName, callback, prop){
+					var _this = this;
+					this.addEventListener(eventName, function(evt){
+						callback(evt, _this);
+					}, prop);
+				}
 			});
 
 			this.addProp(Node, "on", {
@@ -275,6 +294,24 @@ define(function(){
 				}
 			});
 
+			this.addProp(Node, "view", {
+				get : function(){
+					return this;
+				}
+			});
+
+			this.addProp(Node, "show", {
+				value : function(){
+					this.classes.remove("hidden");
+				}
+			});
+
+			this.addProp(Node, "hide", {
+				value : function(){
+					this.classes.add("hidden");
+				}
+			});
+
 			this.addProp(Node, "off", {
 				value : function(options){
 					var eventName = options.eventName;
@@ -287,6 +324,12 @@ define(function(){
 
 			this.addProp(Node, "select", {
 				value : function(selector, noCache, callback, context){
+					if (typeof noCache == "function"){
+						context = callback;
+						callback = noCache;
+						noCache = false;
+					}
+
 					this.selectorCache = this.selectorCache || {};
 					var result = this.selectorCache[selector];
 
@@ -302,6 +345,77 @@ define(function(){
 					}
 
 					return result;
+				}
+			});
+
+			this.addProp(Node, "selectId", {
+				value : function(selector, noCache, callback, context){
+					if (typeof noCache == "function"){
+						context = callback;
+						callback = noCache;
+						noCache = false;
+					}
+
+
+					selector = "#" + selector;
+
+					this.selectorCache = this.selectorCache || {};
+					var result = this.selectorCache[selector];
+
+					if (noCache === true || !result){
+
+						
+						result = this.querySelector(selector);
+						if (result.length) result = result[0];
+						this.selectorCache[selector] = result;
+					}
+
+					if (result.length) result = result[0];
+
+					if (callback){
+						callback.call(context, result);
+					}
+
+
+					return result;
+				}
+			});
+
+			this.addProp(Node, "selectClass", {
+				value : function(selector, noCache, callback, context){
+					if (typeof noCache == "function"){
+						context = callback;
+						callback = noCache;
+						noCache = false;
+					}
+
+					this.selectorCache = this.selectorCache || {};
+					var result = this.selectorCache[selector];
+
+					if (noCache === true || !result){
+						result = this.getElementsByClassName(selector);
+						this.selectorCache[selector] = result;
+					}
+
+					if (callback){
+						for (var a = 0, l = result.length; a < l; a++){
+							callback.call(context, result[a]);
+						}
+					}
+
+					return result;
+				}
+			});
+
+			this.addProp(Node, "selectQuery", {
+				value : function(selector, noCache, callback, context){
+					if (typeof noCache == "function"){
+						context = callback;
+						callback = noCache;
+						noCache = false;
+					}
+
+					return this.select(selector, noCache, callback, context);
 				}
 			});
 
