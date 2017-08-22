@@ -28,6 +28,14 @@ define(function(){
 			}
 		},
 		setTextNodeValue : function(node, text, linked){
+			if (node instanceof window.Node && node instanceof window.Text){
+				node = node;
+			} else {
+				node.innerText = node.innerText || " ";
+				node = node.childNodes[0];
+			}
+
+
 			node.linked = node.linked || {};
 
 			if (node.linked.subID && node.linked.path){
@@ -40,6 +48,7 @@ define(function(){
 			node.nodeValue = text;
 
 			if (linked){
+				node.nodeValue = base(linked);
 				var subID = base.on(linked, "change", this.laya._onTextNodeValueChanged.bind(node));
 				node.linked.subID = subID;
 				node.linked.path = linked;
@@ -423,7 +432,7 @@ define(function(){
 
 		},
 		wrapScript : function(script){
-			return this.laya.Template.fast("(function(extensions){ {{script}} })", {
+			return this.laya.Template.fast("(function(extensions, common){'use strict'; {{script}} })", {
 				script : script
 			});
 		},

@@ -73,7 +73,7 @@ define([
 
 					value = eval(script);
 
-					value = value.bind(el, this.laya._scriptExtensions);
+					value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
 
 					// value = function(){
 					// 	this.laya.util.evalInContext(script, el);
@@ -106,7 +106,7 @@ define([
 
 						value = eval(script);
 
-						value = value.bind(el, this.laya._scriptExtensions);
+						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
 
 						// value = function(){
 						// 	this.laya.util.evalInContext(script, el)
@@ -149,7 +149,7 @@ define([
 				var context = el.parentNode;
 
 				if (context){
-					script.call(context, this.laya._scriptExtensions);
+					script.call(context, this.laya._scriptExtensions, this.laya.scriptGlobal);
 				}
 			},
 			"data-command:*" : function(el, value, name, userData){

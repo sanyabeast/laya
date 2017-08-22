@@ -20,6 +20,13 @@ define(function(){
 	};
 
 	Laya.prototype = {
+		get scriptGlobal(){
+			if (!this._scriptGlobal) this._scriptGlobal = {
+				laya : this
+			}
+
+			return this._scriptGlobal;
+		},
 		setScriptsExtensions : function(data){
 			this._scriptExtensions = data;
 		},
@@ -138,10 +145,10 @@ define(function(){
 
 
 
-							children[a].nodeValue = text;
-							if (linked){
-								var subID = base.on(linked.split("~")[1], "change", this._onTextNodeValueChanged.bind(children[a]));
-							}
+							// children[a].nodeValue = text;
+							// if (linked){
+							// 	var subID = base.on(linked.split("~")[1], "change", this._onTextNodeValueChanged.bind(children[a]));
+							// }
 						}
 
 					} else if (children[a].nodeType == 1){
