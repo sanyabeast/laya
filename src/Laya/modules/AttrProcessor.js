@@ -141,10 +141,15 @@ define([
 			},
 			"data-element-script" : function(el, value, name, userData){
 				var script = el.innerText;
+
+				script = this.laya.util.wrapScript(script);
+
+				script = eval(script);
+
 				var context = el.parentNode;
 
 				if (context){
-					this.laya.util.evalInContext(script, context);
+					script.call(context, this.laya._scriptExtensions);
 				}
 			},
 			"data-command:*" : function(el, value, name, userData){
