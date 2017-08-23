@@ -116,6 +116,10 @@ define(function(){
 				}
 
 				for (var a = 0; a < children.length; a++){
+					if (children[a].processed){
+						continue;
+					}
+					
 					if (children[a].nodeType == 3){
 						text = this.util.superTrim(children[a].nodeValue);
 
@@ -137,6 +141,9 @@ define(function(){
 							//console.log(text, children[a].nodeValue, linked);
 
 							children[a].nodeValue = text;
+
+							children[a].processed = true;
+
 							if (linked){
 								this.util.setTextNodeValue(children[a], text, linked.split("~")[1]);
 							} else {

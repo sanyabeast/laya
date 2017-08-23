@@ -32,6 +32,7 @@ define(function(){
 				node = node;
 			} else {
 				node.innerText = node.innerText || " ";
+				node.childNodes[0].skip = true;
 				node = node.childNodes[0];
 			}
 
@@ -42,8 +43,9 @@ define(function(){
 				this.laya.base.off(node.linked.path, "change", node.linked.subID);
 			}
 
-			// delete node.linked.subID;
-			// delete node.linked.path;
+			if (text == "Resend"){
+				console.log(node, text, linked);
+			}
 
 			node.nodeValue = text;
 
