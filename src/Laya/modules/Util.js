@@ -27,7 +27,8 @@ define(function(){
 				this.setTextNodeValue(targetNode, sourceNode.nodeValue);
 			}
 		},
-		setTextNodeValue : function(node, text, linked){
+		setTextNodeValue : function(node, text, linked, templateSettings){
+
 			if (node instanceof window.Node && node instanceof window.Text){
 				node = node;
 			} else {
@@ -43,15 +44,16 @@ define(function(){
 				this.laya.base.off(node.linked.path, "change", node.linked.subID);
 			}
 
-			if (text == "Resend"){
-				console.log(node, text, linked);
+			if (templateSettings){
+				console.log(templateSettings);
 			}
+			
 
 			node.nodeValue = text;
 
 			if (linked){
-				node.nodeValue = base(linked);
-				var subID = base.on(linked, "change", this.laya._onTextNodeValueChanged.bind(node));
+				node.nodeValue = this.laya.base(linked);
+				var subID = this.laya.base.on(linked, "change", this.laya._onTextNodeValueChanged.bind(node));
 				node.linked.subID = subID;
 				node.linked.path = linked;
 			}

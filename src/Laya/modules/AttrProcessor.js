@@ -75,6 +75,8 @@ define([
 
 					value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
 
+					scriptNode.innerText = "";
+
 					// value = function(){
 					// 	this.laya.util.evalInContext(script, el);
 					// }.bind(this)
@@ -107,6 +109,8 @@ define([
 						value = eval(script);
 
 						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
+
+						scriptNode.innerText = "";
 
 						// value = function(){
 						// 	this.laya.util.evalInContext(script, el)
@@ -172,7 +176,7 @@ define([
 					el.addItem(this.laya.util.mergeSettings(userData, listSettings[a]));
 				}
 
-			}
+			},
 		},
 	};
 

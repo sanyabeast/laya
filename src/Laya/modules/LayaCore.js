@@ -100,6 +100,7 @@ define(function(){
 			var linked = false;
 			var tagProcessor;
 			var tagName = dom.tagName ? dom.tagName.toLowerCase() : null;
+			var textNodeTemplateSettings;
 
 			/*attributes processing*/
 			if (attrs){
@@ -123,6 +124,11 @@ define(function(){
 					if (children[a].nodeType == 3){
 						text = this.util.superTrim(children[a].nodeValue);
 
+						if (text.indexOf("~~~") > -1){
+							textNodeTemplateSettings = JSON.parse(text.split("~~~")[1]);
+							text = text.split("~~~")[0];
+						}
+
 						type = this.typeof(text);
 
 
@@ -144,10 +150,11 @@ define(function(){
 
 							children[a].processed = true;
 
+
 							if (linked){
-								this.util.setTextNodeValue(children[a], text, linked.split("~")[1]);
+								this.util.setTextNodeValue(children[a], text, linked.split("~")[1], textNodeTemplateSettings);
 							} else {
-								this.util.setTextNodeValue(children[a], text);
+								this.util.setTextNodeValue(children[a], text, null, textNodeTemplateSettings);
 							}
 
 
