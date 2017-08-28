@@ -59,11 +59,29 @@ define(function(){
 			}
 
 		},
+		removeHTMLTags : function(data){
+			return data.replace(/(<([^>]+)>)/ig, "");
+		},
 		patchNative : function(){
 			var _this = this;
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
 			var transformMatrix = [1, 0, 0, 1, 0, 0];
+
+			this.addProp(Node, "filterChildren", {
+				value : function(selector, comparator){
+					var children = this.querySelectorAll(selector);
+
+					for (var a = 0; a < children.length; a++){
+						if (comparator && comparator(children[a], _this.removeHTMLTags(children[a].innerHTML))){
+							children[a].classes.remove("hidden");
+						} else {
+							children[a].classes.add("hidden");
+						}
+					}
+
+				}
+			});
 
 			this.addProp(Node, "transformMatrix", {
 				get : function(){
