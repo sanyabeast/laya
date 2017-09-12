@@ -74,8 +74,7 @@ define(function(){
 				return null;
 			}
 
-			var dom = this.util.HTML2DOM(html);
-
+			var dom = this.util.HTML2DOM(html, true);
 
 			for (var a = 0, l = dom.childNodes.length; a < l; a++){
 				dom.replaceChild(this.process(dom.childNodes[a], userData), dom.childNodes[a]);

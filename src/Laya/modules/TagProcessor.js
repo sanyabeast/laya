@@ -17,7 +17,7 @@ define([
     },
   };
 
-  util.extend(Processor, TagProcessor);
+  util.inheritClass(Processor, TagProcessor);
 
   return TagProcessor;
 

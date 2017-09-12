@@ -1,6 +1,46 @@
 "use strict";
 define(function(){
 
+	var Collection = function(options){
+		options = options || { array : true };
+		this.isArray = (options.array === true) || (options.Object === false);
+		this._content = this.isArray ? [] : {};
+
+		if (options.content){
+			this.addMultiple(options.content);
+		}
+		
+	};
+
+	Collection.prototype = {
+		get content(){
+			return this._content;
+		},
+		addMultiple : function(data){
+			this._iterate(data, this.isArray, function(value, index){
+				this._content[index] = value;
+			});
+		},
+		_iterate : function(target, isArray, callback, context){
+			context = context || this;
+
+			if (isArray){
+				for (var a = 0, l = target.length; a < l; a++){
+					callback.call(context, target[a], a);
+				}
+			} else {
+				for (var k in target){
+					callback.call(context, target[k]);
+				}
+			}
+
+			return this;
+		},
+		iterate : function(callback, context){
+			this._iterate(this.content, this.isArray, callback, context);
+		}
+	};
+
 	var Util = function(laya){
 		this.laya = laya;
 
@@ -30,19 +70,8 @@ define(function(){
 
 		},
 		copyTextNodeValue : function(sourceNode, targetNode){
-			if (sourceNode instanceof window.Node && sourceNode instanceof window.Text){
-				sourceNode = sourceNode;
-			} else {
-				sourceNode.innerText = sourceNode.innerText || " ";
-				sourceNode = sourceNode.childNodes[0];
-			}
-
-			if (targetNode instanceof window.Node && targetNode instanceof window.Text){
-				targetNode = targetNode;
-			} else {
-				targetNode.innerText = targetNode.innerText || " ";
-				targetNode = targetNode.childNodes[0];
-			}
+			sourceNode = sourceNode.extractTextNode();
+			targetNode = targetNode.extractTextNode();
 
 			if (sourceNode.linked){
 				this.setTextNodeValue(targetNode, sourceNode.nodeValue, sourceNode.linked.path);
@@ -52,13 +81,8 @@ define(function(){
 		},
 		setTextNodeValue : function(node, text, linked, templateSettings){
 
-			if (node instanceof window.Node && node instanceof window.Text){
-				node = node;
-			} else {
-				node.innerText = node.innerText || " ";
-				node.childNodes[0].skip = true;
-				node = node.childNodes[0];
-			}
+			node = node.extractTextNode();
+			node.skip = true;
 
 
 			node.linked = node.linked || {};
@@ -489,6 +513,21 @@ define(function(){
 
 						return this.select(selector, noCache, callback, context);
 					}
+				},
+				"extractTextNode" : {
+					value : function(){
+						if (this instanceof window.Node && this instanceof window.Text){
+							return this;
+						} else if (this instanceof window.Node && !(this instanceof window.Text)){
+							if (this.childNodes.length){
+								return this.childNodes[0];
+							} else {
+								this.innerHTML = " ";
+								this.childNodes[0].thisValue = "";
+								return this.childNodes[0];
+							}
+						}
+					}
 				}
 			});
 
@@ -644,7 +683,7 @@ define(function(){
 		assign : function(a, b){
 			return Object.assign(a, b);
 		},
-		extend : function(Dad, Son){
+		inheritClass : function(Dad, Son){
 			var Result = function(){
 				Dad.apply(this, arguments);
 				Son.apply(this.arguments);
@@ -652,8 +691,11 @@ define(function(){
 
 			Result = this.assign(Son.prototype, Dad.prototype);
 			return Result;
-		}
+		},
+		Collection : Collection
 	};
+
+	
 
 	return Util;
 

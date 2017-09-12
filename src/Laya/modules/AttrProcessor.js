@@ -180,7 +180,7 @@ define([
 		},
 	};
 
-	util.extend(Processor, AttrProcessor);
+	util.inheritClass(Processor, AttrProcessor);
 
 	return AttrProcessor;
 
