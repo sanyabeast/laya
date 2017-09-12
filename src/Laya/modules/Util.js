@@ -116,8 +116,8 @@ define(function(){
 			sourceNode = sourceNode.extractTextNode();
 			targetNode = targetNode.extractTextNode();
 
-			if (sourceNode.linked){
-				targetNode.bindValue(sourceNode.linked.path, sourceNode.textNodeTemplate);
+			if (sourceNode.linked.contains("path")){
+				targetNode.bindValue(sourceNode.linked.get("path"), sourceNode.textNodeTemplate);
 			} else {
 				targetNode.text = sourceNode.nodeValue;
 			}
@@ -405,18 +405,23 @@ define(function(){
 				"bindValue" : {
 					value : function(path, templateSettings){
 						var node = this.extractTextNode();
-						
-						node.linked = node.linked || {};
+						var linked = node.linked;
 
-						if (node.linked.subID && node.linked.path){
-							this.laya.base.off(node.linked.path, "change", node.linked.subID);
-						}
-						
+						node.templateSettings = templateSettings;
+					
 
-						node.nodeValue = this.laya.Template.fast(this.laya.base.get(path), templateSettings);
-						var subID = this.laya.base.on(path, "change", this.laya._onTextNodeValueChanged.bind(this, node, templateSettings));
-						node.linked.subID = subID;
-						node.linked.path = path;
+						_this.laya.base.off(linked.get("subID"));
+
+						node.nodeValue = _this.laya.Template.fast(this.laya.base.get(path), templateSettings);
+
+						node.linked.update("subID", _this.laya.base.on(path, "change", this._onBoundValueChanged.bind(this)));
+						node.linked.update("path" , path);
+					}
+				},
+				"_onBoundValueChanged" : {
+					value : function(value){
+						var node = this.extractTextNode();
+						node.nodeValue = _this.laya.Template.fast(value, node.templateSettings);
 					}
 				},
 				"text" : {
@@ -540,16 +545,16 @@ define(function(){
 						}
 					}
 				},
-				// "linked" : {
-				// 	get : function(){
-				// 		if (!this._linked) this._linked = new Collection({
-				// 			object : true,
-				// 			content : []
-				// 		});
+				"linked" : {
+					get : function(){
+						if (!this._linked) this._linked = new Collection({
+							object : true,
+							content : []
+						});
 
-				// 		return this.linked
-				// 	},
-				// }
+						return this._linked
+					},
+				}
 			});
 
 			this.defineProperties(window.NodeList.prototype, {
