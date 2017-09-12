@@ -3,7 +3,7 @@ define(function(){
 
 	var Collection = function(options){
 		options = options || { array : true };
-		this.isArray = (options.array === true) || (options.Object === false);
+		this.isArray = (options.array === true) || (options.object === false);
 		this._content = this.isArray ? [] : {};
 
 		if (options.content){
@@ -71,6 +71,16 @@ define(function(){
 			} else {
 				delete this._content[key];
 			}
+		},
+		update : function(key, value){
+			if (this.isArray){
+
+			} else {
+				this._content[key] = value;
+			}
+		},
+		get : function(index){
+			return this._content[index];
 		}
 	};
 
@@ -107,33 +117,10 @@ define(function(){
 			targetNode = targetNode.extractTextNode();
 
 			if (sourceNode.linked){
-				this.setTextNodeValue(targetNode, sourceNode.nodeValue, sourceNode.linked.path);
+				targetNode.bindValue(sourceNode.linked.path, sourceNode.textNodeTemplate);
 			} else {
-				this.setTextNodeValue(targetNode, sourceNode.nodeValue);
+				targetNode.text = sourceNode.nodeValue;
 			}
-		},
-		setTextNodeValue : function(node, text, linked, templateSettings){
-
-			node = node.extractTextNode();
-			node.skip = true;
-
-
-			node.linked = node.linked || {};
-
-			if (node.linked.subID && node.linked.path){
-				this.laya.base.off(node.linked.path, "change", node.linked.subID);
-			}
-
-
-			node.nodeValue = text;
-
-			if (linked){
-				node.nodeValue = this.laya.Template.fast(this.laya.base(linked), templateSettings);
-				var subID = this.laya.base.on(linked, "change", this.laya._onTextNodeValueChanged.bind(this, node, templateSettings));
-				node.linked.subID = subID;
-				node.linked.path = linked;
-			}
-
 		},
 		removeHTMLTags : function(data){
 			return data.replace(/(<([^>]+)>)/ig, "");
@@ -417,17 +404,8 @@ define(function(){
 				},
 				"bindValue" : {
 					value : function(path, templateSettings){
-						var node = this;
-
-						if (node instanceof window.Node && node instanceof window.Text){
-							node = node;
-						} else {
-							node.innerText = node.innerText || " ";
-							node.childNodes[0].skip = true;
-							node = node.childNodes[0];
-						}
-
-
+						var node = this.extractTextNode();
+						
 						node.linked = node.linked || {};
 
 						if (node.linked.subID && node.linked.path){
@@ -443,10 +421,10 @@ define(function(){
 				},
 				"text" : {
 					set : function(value){
-						this.innerHTML = value;
+						this.extractTextNode().nodeValue = value;
 					},
 					get : function(){
-						return this.innerHTML;
+						return this.extractTextNode().nodeValue;
 					}
 				},
 				"translatePos" : {
@@ -561,7 +539,17 @@ define(function(){
 							}
 						}
 					}
-				}
+				},
+				// "linked" : {
+				// 	get : function(){
+				// 		if (!this._linked) this._linked = new Collection({
+				// 			object : true,
+				// 			content : []
+				// 		});
+
+				// 		return this.linked
+				// 	},
+				// }
 			});
 
 			this.defineProperties(window.NodeList.prototype, {

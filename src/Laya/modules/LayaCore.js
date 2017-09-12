@@ -155,17 +155,10 @@ define(function(){
 
 
 							if (linked){
-								this.util.setTextNodeValue(children[a], text, linked.split("~")[1], textNodeTemplateSettings);
+								children[a].bindValue(linked.split("~")[1], textNodeTemplateSettings);
 							} else {
-								this.util.setTextNodeValue(children[a], text, null, textNodeTemplateSettings);
+								children[a].text = this.Template.fast(text, textNodeTemplateSettings);
 							}
-
-
-
-							// children[a].nodeValue = text;
-							// if (linked){
-							// 	var subID = base.on(linked.split("~")[1], "change", this._onTextNodeValueChanged.bind(children[a]));
-							// }
 						}
 
 					} else if (children[a].nodeType == 1){
