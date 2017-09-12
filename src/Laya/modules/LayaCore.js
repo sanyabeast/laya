@@ -20,6 +20,9 @@ define(function(){
 	};
 
 	Laya.prototype = {
+		LINKED_SIGN : "~",
+		LAYOUT_SIGN : "#",
+		USER_VALUE_SIGN : "@",
 		get scriptGlobal(){
 			if (!this._scriptGlobal) this._scriptGlobal = {
 				laya : this
@@ -42,7 +45,10 @@ define(function(){
 			this.attrProcessor = new this.AttrProcessor(this);
 			this.tagProcessor = new this.TagProcessor(this);
 		},
-		commands : ["#", "~", "@"],
+		get commands(){
+			if (!this._commands) this._commands = [this.LINKED_SIGN, this.LAYOUT_SIGN, this.USER_VALUE_SIGN];
+			return this._commands;
+		},
 		_rootElement : document,
 		get rootElement(){
 			return this._rootElement;
@@ -171,14 +177,14 @@ define(function(){
 			var type = this.typeof(data);
 
 			switch(type){
-				case "~":
+				case this.LINKED_SIGN:
 					return this.pickValueByLink(data.split(type)[1]);
 				break;
-				case "@":
+				case this.USER_VALUE_SIGN:
 					return this.pickUserValue(data.split(type)[1], userData);
 				break;
-				case "#":
-					return this.make("~" + data.split(type)[1], userData);
+				case this.LAYOUT_SIGN:
+					return this.make(this.LINKED_SIGN + data.split(type)[1], userData);
 				break;
 				default:
 					return data;
@@ -191,7 +197,7 @@ define(function(){
 			var linked = null;
 
 			do {
-				if (type == "~") linked = value.split("~")[1];
+				if (type == this.LINKED_SIGN) linked = value.split(this.LINKED_SIGN)[1];
 
 				if (this.commands.indexOf(type) > -1){
 					smartType = type;
@@ -258,9 +264,9 @@ define(function(){
 
 				element.setAttribute(name, data.value);
 
-				if (data.type == "~" && attr._changeListener != true){
+				if (data.type == this.LINKED_SIGN && attr._changeListener != true){
 					attr._changeListener = true;
-					base.on(rawvalue.split("~")[1], "change", function(){
+					base.on(rawvalue.split(this.LINKED_SIGN)[1], "change", function(){
 							attr.processed = false;
 							_this.setAttribute(element, attr, userData);
 					});
