@@ -25,6 +25,11 @@ define(function(){
 		LINKED_SIGN : "~",
 		LAYOUT_SIGN : "#",
 		USER_VALUE_SIGN : "@",
+		updateAllBoundValues : function(){
+			this.bindedValues.iterate(function(basePath, layaID){
+				this.layaNodes.get(layaID).extractTextNode().updateBoundValue();
+			}, this)
+		},
 		get scriptGlobal(){
 			if (!this._scriptGlobal) this._scriptGlobal = {
 				laya : this
@@ -47,6 +52,10 @@ define(function(){
 			this.tagProcessor = new this.TagProcessor(this);
 
 			this.bindedValues = new this.util.Collection({
+				array : false
+			});
+
+			this.layaNodes = new this.util.Collection({
 				array : false
 			});
 		},

@@ -33,7 +33,7 @@ define(function(){
 				}
 			} else {
 				for (var k in target){
-					callback.call(context, target[k]);
+					callback.call(context, target[k], k);
 				}
 			}
 
@@ -187,9 +187,12 @@ define(function(){
 
 
 			this.defineProperties(window.Node.prototype, {
-				layaID : {
+				"layaID" : {
 					get : function(){
-						if (!this._layaID) this._layaID = _this.generateRandString(32);
+						if (!this._layaID) {
+							this._layaID = _this.generateRandString(32);
+							_this.laya.layaNodes.add(this._layaID, this);
+						}
 						return this._layaID;
 					}
 				},
@@ -493,19 +496,30 @@ define(function(){
 
 						_this.laya.base.off(linked.get("subID"));
 
-						node.nodeValue = _this.laya.Template.fast(this.laya.base.get(path), templateSettings);
 
 						node.linked.update("templateSettings", templateSettings || null);
 						node.linked.update("path" , path);
-						node.linked.update("subID", _this.laya.base.on(path, "change", this._onBoundValueChanged.bind(this)));
+						_this.laya.bindedValues.update(node.layaID, path);
 
-						_this.laya.bindedValues.update()
+						if (typeof path == "string"){
+							node.linked.update("subID", _this.laya.base.on(path, "change", this.updateBoundValue.bind(this)));
+
+						} 
+
+						this.updateBoundValue();
+						
 					}
 				},
-				"_onBoundValueChanged" : {
+				"updateBoundValue" : {
 					value : function(value){
 						var node = this.extractTextNode();
-						node.nodeValue = _this.laya.Template.fast(value, node.linked.get("templateSettings"), _this.laya.templateGetterFromUserData.bind(_this.laya));
+
+						if (typeof node.linked.get("path") == "function"){
+							node.nodeValue = node.linked.get("path")(node.linked.get("templateSettings"));
+						} else if (typeof node.linked.get("path") == "string"){
+							node.nodeValue = this.laya.Template.fast(value || this.laya.base.get(node.linked.get("path")), node.linked.get("templateSettings"), this.laya.templateGetterFromUserData.bind(this.laya));
+						}
+
 					}
 				},
 				"text" : {
