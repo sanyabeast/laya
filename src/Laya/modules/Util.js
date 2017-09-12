@@ -3,10 +3,30 @@ define(function(){
 
 	var Util = function(laya){
 		this.laya = laya;
+
+		window.laya = laya;
 	};
 
 	Util.prototype = {
-		parseInlineTemplate : function(){
+		parseInlineTemplate : function(tpl){
+			var result = {};
+			var splitted = tpl.split("##");
+
+			for (var a = 0, key, value; a < splitted.length; a++){
+				if (splitted[a].length < 3){
+					continue;
+				} else {
+					key = splitted[a].split("=")[0];
+					value = splitted[a].split("=")[1];
+
+					result[key] = value;
+
+				}
+			}
+
+			console.log(result);
+
+			return result;
 
 		},
 		copyTextNodeValue : function(sourceNode, targetNode){
@@ -47,10 +67,6 @@ define(function(){
 				this.laya.base.off(node.linked.path, "change", node.linked.subID);
 			}
 
-			if (templateSettings){
-				console.log(templateSettings);
-			}
-			
 
 			node.nodeValue = text;
 

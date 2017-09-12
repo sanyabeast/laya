@@ -127,9 +127,13 @@ define(function(){
 					if (children[a].nodeType == 3){
 						text = this.util.superTrim(children[a].nodeValue);
 
-						if (text.indexOf("~~~") > -1){
-							textNodeTemplateSettings = JSON.parse(text.split("~~~")[1]);
-							text = text.split("~~~")[0];
+						if (text.indexOf("##") > -1){
+							textNodeTemplateSettings = this.util.parseInlineTemplate(text.split("##")[1]);
+							text = text.split("##")[0];
+						}
+
+						if (textNodeTemplateSettings){
+							console.log(textNodeTemplateSettings);
 						}
 
 						type = this.typeof(text);

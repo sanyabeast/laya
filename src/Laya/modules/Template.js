@@ -4,6 +4,7 @@ define(["laya/modules/Util"], function(Util){
 	var util = new Util();
 
 	var Template = function(tplString){
+		tplString = tplString || "";
 		this.string = util.superTrim(tplString);	
 	};
 
@@ -33,6 +34,10 @@ define(["laya/modules/Util"], function(Util){
 			this._vars = vars;
 		},
 		make : function(settings, /*func*/getter){
+			if (!settings){
+				return this.tplString;
+			}
+			
 			var string = this._string;
 			var vars = this._vars;
 
