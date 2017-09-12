@@ -91,6 +91,50 @@ define(function(){
 	};
 
 	Util.prototype = {
+		extractCallbackFromScriptElement : function(scriptNode, context){
+			if (!scriptNode){
+				this.laya.warn("Laya: attr-processor: data-on:* - no callback script", el, callback, name);
+				return false;
+			}
+
+			if (scriptNode.extractedCallback){
+				return script.extractedCallback;
+			}
+
+			var script = scriptNode.innerText;
+			var callback;
+
+			script = this.laya.util.wrapScript(script);
+
+			callback = eval(script);
+			if (context) callback = callback.bind(context);
+
+			scriptNode.innerText = "";
+			scriptNode.extractedCallback = callback;
+
+			return callback;
+		},
+		extractJSONFromAttribute : function(node, attrName){
+			var result = null;
+
+			if (node.hasAttribute(attrName)){
+				result = node.getAttribute(attrName);
+				result = this.strReplaceAll(result, "'", "\"");
+			}
+
+			try {
+				result = JSON.parse(result);
+			} catch (err){
+				this.laya.console.warn("failed to extract JSON from attribute", err);
+				result = null;
+			}
+
+			return result;
+
+		},
+		strReplaceAll : function(string, a, b){
+			return string.replace(new RegExp(a, "g"), b);
+		},
 		parseInlineTemplate : function(tpl){
 			var result = {};
 			var splitted = tpl.split("##");
@@ -405,21 +449,21 @@ define(function(){
 						var node = this.extractTextNode();
 						var linked = node.linked;
 
-						node.templateSettings = templateSettings;
 					
 
 						_this.laya.base.off(linked.get("subID"));
 
 						node.nodeValue = _this.laya.Template.fast(this.laya.base.get(path), templateSettings);
 
-						node.linked.update("subID", _this.laya.base.on(path, "change", this._onBoundValueChanged.bind(this)));
+						node.linked.update("templateSettings", templateSettings || null);
 						node.linked.update("path" , path);
+						node.linked.update("subID", _this.laya.base.on(path, "change", this._onBoundValueChanged.bind(this)));
 					}
 				},
 				"_onBoundValueChanged" : {
 					value : function(value){
 						var node = this.extractTextNode();
-						node.nodeValue = _this.laya.Template.fast(value, node.templateSettings);
+						node.nodeValue = _this.laya.Template.fast(value, node.linked.get("templateSettings"), _this.laya.templateGetterFromUserData.bind(_this.laya));
 					}
 				},
 				"text" : {

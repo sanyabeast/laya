@@ -13,12 +13,7 @@ define([
 	AttrProcessor.prototype = {
 		processors : {
 			"data-replace" : function(el, value, name, userData){
-				var replaceSettings;
-
-				if (el.hasAttribute("data-settings")){
-					replaceSettings = el.getAttribute("data-settings");
-					replaceSettings = window.JSON.parse(replaceSettings);
-				}
+				var replaceSettings = util.extractJSONFromAttribute(el, "data-settings");
 
 				/*merging settings*/
 				if (replaceSettings){
@@ -51,8 +46,6 @@ define([
 
 				}
 
-				//util.copyInnerContent(el, value);
-
 				value = this.laya.process(value, userData);
 
 				el.parentNode.replaceChild(value, el);
@@ -61,26 +54,12 @@ define([
 				var eventName = name.replace("data-on:", "");
 
 				if (value == "script"){
-					var scriptNode = el.select("script[data-callback-script='" + name +  "']")[0];
-
-					if (!scriptNode){
-						this.laya.warn("Laya: attr-processor: data-on:* - no callback script", el, value, name);
+					value = this.laya.util.extractCallbackFromScriptElement(el.selectByAttr("data-callback-script", name).first, el);
+					if (!value){
+						return;
+					} else {
+						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
 					}
-
-					var script = scriptNode.innerText;
-
-					script = this.laya.util.wrapScript(script);
-
-					value = eval(script);
-
-					value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
-
-					scriptNode.innerText = "";
-
-					// value = function(){
-					// 	this.laya.util.evalInContext(script, el);
-					// }.bind(this)
-
 				} else {
 					while (this.laya.typeof(value) != null){
 						value = this.laya.pickValue(value, userData);

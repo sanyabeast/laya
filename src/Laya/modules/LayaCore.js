@@ -129,7 +129,6 @@ define(function(){
 							children[a].processed = true;
 
 							if (valueData.linked){
-								console.log(valueData);
 								children[a].bindValue(valueData.linked, textNodeTemplateSettings);
 							} else {
 								children[a].text = this.Template.fast(valueData.value, textNodeTemplateSettings);
@@ -245,9 +244,7 @@ define(function(){
 				rawvalue = attr.rawvalue;
 			} else {
 				rawvalue = attr.value;
-				rawvalue = this.Template.fast(rawvalue, userData, function(data, userData){
-					return this.reachValueData(data, userData).value;
-				}.bind(this));
+				rawvalue = this.Template.fast(rawvalue, userData, this.templateGetterFromUserData.bind(this));
 			}
 
 			var name  = attr.name;
@@ -274,6 +271,9 @@ define(function(){
 
 			return element;
 		},
+		templateGetterFromUserData : function(data, userData){
+			return this.reachValueData(data, userData).value;
+		}
 	};
 
 	Object.assign(Laya, Laya.prototype);
