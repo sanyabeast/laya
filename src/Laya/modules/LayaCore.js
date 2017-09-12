@@ -36,7 +36,7 @@ define(function(){
 		},
 		init : function(){
 			this.util = new this.Util(this);
-			this.util.patchNative();
+			this.util.applyPrototypePatches();
 			this.wrappers = new this.Wrappers(this);
 			this.css = new this.CSS(this);
 			this.attrProcessor = new this.AttrProcessor(this);
