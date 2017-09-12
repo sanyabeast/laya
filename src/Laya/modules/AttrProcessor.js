@@ -21,13 +21,8 @@ define([
 				}
 
 				/*reaching value*/
-				var type = this.laya.typeof(value);
-
-				do {
-					value = this.laya.pickValue(value, userData);
-					type = this.laya.typeof(value);
-				} while (this.laya.commands.indexOf(type) > -1)
-
+				var valueData = this.laya.reachValueData(value, userData);
+				var value = valueData.value;
 
 				if (!value){
 					console.warn("Laya: attr-processor: cannot replace node", value, el);
@@ -52,6 +47,7 @@ define([
 			},
 			"data-on:*" : function(el, value, name, userData){
 				var eventName = name.replace("data-on:", "");
+				var valueData;
 
 				if (value == "script"){
 					value = this.laya.util.extractCallbackFromScriptElement(el.selectByAttr("data-callback-script", name).first, el);
@@ -61,9 +57,8 @@ define([
 						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
 					}
 				} else {
-					while (this.laya.typeof(value) != null){
-						value = this.laya.pickValue(value, userData);
-					}
+					valueData = this.laya.reachValueData(value, userData);
+					value = valueData.value;
 				}
 				
 				el.setCommand(eventName, value);
@@ -136,20 +131,18 @@ define([
 				}
 			},
 			"data-command:*" : function(el, value, name, userData){
-				var callback = value;
+				var valueData = this.laya.reachValueData(value, userData);
+				var callback = valueData.value;
 
-				while (this.laya.typeof(callback) != null){
-					callback = this.laya.pickValue(callback, userData)
+				if (!callback){
+					this.laya.console.warn("cannot set command", arguments);
 				}
 
 				el.setCommand(name.split("data-command:")[1], callback);
 			},
 			"data-items-list-settings" : function(el, value, name, userData){
-				var listSettings = value;
-
-				while (this.laya.typeof(listSettings) != null){
-					listSettings = this.laya.pickValue(listSettings, userData);
-				}
+				var valueData = this.laya.reachValueData(value, userData);
+				var listSettings = valueData.value;
 
 				for (var a = 0; a < listSettings.length; a++){
 					el.addItem(this.laya.util.mergeSettings(userData, listSettings[a]));
