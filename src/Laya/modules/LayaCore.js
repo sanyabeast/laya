@@ -41,8 +41,6 @@ define(function(){
 			this.css = new this.CSS(this);
 			this.attrProcessor = new this.AttrProcessor(this);
 			this.tagProcessor = new this.TagProcessor(this);
-
-			this._attrTplGetter = this._attrTplGetter.bind(this);
 		},
 		commands : ["#", "~", "@"],
 		_rootElement : document,
@@ -97,8 +95,7 @@ define(function(){
 		processIteration : function(dom, userData){
 			var attrs = dom.attributes;
 			var name;
-			var text;
-			var type;
+			var valueData;
 			var linked = false;
 			var tagProcessor;
 			var tagName = dom.tagName ? dom.tagName.toLowerCase() : null;
@@ -124,41 +121,20 @@ define(function(){
 					}
 					
 					if (children[a].nodeType == 3){
-						text = this.util.superTrim(children[a].nodeValue);
+						valueData = this.reachValueData(this.util.superTrim(children[a].nodeValue), userData);
 
-
-						type = this.typeof(text);
-
-						do {
-							if (type == "~"){
-								linked = text;
-							}
-
-							if (text.indexOf("##") > 0){
-								textNodeTemplateSettings = this.util.parseInlineTemplate(text.split("##")[1]);
-								text = text.split("##")[0];
-							}
-
-
-							text = this.pickValue(text, userData);
-							type = this.typeof(text);
-						} while (this.commands.indexOf(type) > -1)
-
-						if (text instanceof window.Node){
-							dom.replaceChild(text, children[a]);
+						if (valueData.value instanceof window.Node){
+							dom.replaceChild(valueData.value, children[a]);
 						} else {
-							//console.log(text, children[a].nodeValue, linked);
-
-							children[a].nodeValue = text;
-
 							children[a].processed = true;
 
-
-							if (linked){
-								children[a].bindValue(linked.split("~")[1], textNodeTemplateSettings);
+							if (valueData.linked){
+								console.log(valueData);
+								children[a].bindValue(valueData.linked, textNodeTemplateSettings);
 							} else {
-								children[a].text = this.Template.fast(text, textNodeTemplateSettings);
+								children[a].text = this.Template.fast(valueData.value, textNodeTemplateSettings);
 							}
+
 						}
 
 					} else if (children[a].nodeType == 1){
@@ -213,22 +189,23 @@ define(function(){
 		reachValueData : function(value, userData){
 			var type = this.typeof(value);
 			var smartType;
+			var linked = null;
 
 			do {
-				value = this.pickValue(value, userData);
+				if (type == "~") linked = value.split("~")[1];
 
 				if (this.commands.indexOf(type) > -1){
 					smartType = type;
 				}
 
+				value = this.pickValue(value, userData);	 				
 				type = this.typeof(value);
-
-
 			} while (this.commands.indexOf(type) > -1)
 
 			return {
 				type : smartType,
-				value : value
+				value : value,
+				linked : linked
 			}
 
 		},
@@ -268,7 +245,9 @@ define(function(){
 				rawvalue = attr.rawvalue;
 			} else {
 				rawvalue = attr.value;
-				rawvalue = this.Template.fast(rawvalue, userData, this._attrTplGetter);
+				rawvalue = this.Template.fast(rawvalue, userData, function(data, userData){
+					return this.reachValueData(data, userData).value;
+				}.bind(this));
 			}
 
 			var name  = attr.name;
@@ -295,22 +274,6 @@ define(function(){
 
 			return element;
 		},
-		_attrTplGetter : function(data, userData){
-			var type = this.typeof(data);
-			var result = data;
-
-			do {
-				result = this.pickValue(result, userData);
-				type = this.typeof(result);
-			} while (this.commands.indexOf(type) > -1)
-
-			return result || "";
-
-		},
-		_onTextNodeValueChanged : function(node, templateSettings, value){
-			console.log(templateSettings, value);
-			node.nodeValue = this.laya.Template.fast(value, templateSettings);
-		}
 	};
 
 	Object.assign(Laya, Laya.prototype);
