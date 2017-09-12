@@ -7,7 +7,7 @@ define(function(){
 
 	Wrappers.prototype = {
 		methods : {
-			additem : function(node, data){
+			addItem : function(node, data){
 				var itemData = node.getAttribute("data-item-layout");
 				var content = this.laya.make(itemData, data);
 				node.appendChild(content);

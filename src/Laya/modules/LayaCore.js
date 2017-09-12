@@ -17,6 +17,8 @@ define(function(){
 		this.Util = Util;
 		this.Wrappers = Wrappers;
 		this.TagProcessor = TagProcessor;
+
+		
 	};
 
 	Laya.prototype = {
@@ -26,8 +28,7 @@ define(function(){
 		get scriptGlobal(){
 			if (!this._scriptGlobal) this._scriptGlobal = {
 				laya : this
-			}
-
+			};
 			return this._scriptGlobal;
 		},
 		setScriptsExtensions : function(data){
@@ -44,6 +45,10 @@ define(function(){
 			this.css = new this.CSS(this);
 			this.attrProcessor = new this.AttrProcessor(this);
 			this.tagProcessor = new this.TagProcessor(this);
+
+			this.bindedValues = new this.util.Collection({
+				array : false
+			});
 		},
 		get commands(){
 			if (!this._commands) this._commands = [this.LINKED_SIGN, this.LAYOUT_SIGN, this.USER_VALUE_SIGN];
@@ -100,9 +105,7 @@ define(function(){
 		},
 		processIteration : function(dom, userData){
 			var attrs = dom.attributes;
-			var name;
 			var valueData;
-			var linked = false;
 			var tagProcessor;
 			var tagName = dom.tagName ? dom.tagName.toLowerCase() : null;
 			var textNodeTemplateSettings;
@@ -205,13 +208,13 @@ define(function(){
 
 				value = this.pickValue(value, userData);	 				
 				type = this.typeof(value);
-			} while (this.commands.indexOf(type) > -1)
+			} while (this.commands.indexOf(type) > -1);
 
 			return {
 				type : smartType,
 				value : value,
 				linked : linked
-			}
+			};
 
 		},
 		pickValueByLink : function(path){

@@ -91,6 +91,18 @@ define(function(){
 	};
 
 	Util.prototype = {
+		generateRandString : function(length){
+			var result = "";
+
+			while (result.length < length){
+				result = result + (Math.random().toString(32).substring(3, 16).replace(/[0-9]/g, ""));
+			}
+
+			result = result.substring(0, length);
+
+			return result;
+
+		},
 		extractCallbackFromScriptElement : function(scriptNode, context){
 			if (!scriptNode){
 				this.laya.warn("Laya: attr-processor: data-on:* - no callback script", el, callback, name);
@@ -175,6 +187,12 @@ define(function(){
 
 
 			this.defineProperties(window.Node.prototype, {
+				layaID : {
+					get : function(){
+						if (!this._layaID) this._layaID = _this.generateRandString(32);
+						return this._layaID;
+					}
+				},
 				"filterChildren" : {
 					value : function(selector, comparator){
 						var children = this.querySelectorAll(selector);
@@ -361,7 +379,31 @@ define(function(){
 				},
 				"classes" : {
 					get : function(){
-						return this.classList;
+						var _this = this;
+
+						if (!this._classes){
+							this._classes = {
+								remove : function(value){
+									return _this.classList.remove(value);
+								},
+								add : function(value, onAnimationEnd, context){
+									if (onAnimationEnd){
+
+										var callback = function(evt){
+											onAnimationEnd.call(context || null, evt);
+										};
+
+										_this.addEventListener("webkitAnimationEnd", callback, false)
+									};
+
+									_this.classList.add(value);
+								},
+								contains : function(value){
+									return _this.classList.contains(value);
+								}
+							}
+						}
+						return this._classes;
 					}
 				},
 				"addChild" : {
@@ -449,8 +491,6 @@ define(function(){
 						var node = this.extractTextNode();
 						var linked = node.linked;
 
-					
-
 						_this.laya.base.off(linked.get("subID"));
 
 						node.nodeValue = _this.laya.Template.fast(this.laya.base.get(path), templateSettings);
@@ -458,6 +498,8 @@ define(function(){
 						node.linked.update("templateSettings", templateSettings || null);
 						node.linked.update("path" , path);
 						node.linked.update("subID", _this.laya.base.on(path, "change", this._onBoundValueChanged.bind(this)));
+
+						_this.laya.bindedValues.update()
 					}
 				},
 				"_onBoundValueChanged" : {
