@@ -6,6 +6,9 @@ define(function(){
 	};
 
 	Util.prototype = {
+		parseInlineTemplate : function(){
+
+		},
 		copyTextNodeValue : function(sourceNode, targetNode){
 			if (sourceNode instanceof window.Node && sourceNode instanceof window.Text){
 				sourceNode = sourceNode;
@@ -350,6 +353,45 @@ define(function(){
 
 					this.removeEventListener(eventName, this.eventHandlers[eventName][name]);
 					delete this.eventHandlers[eventName][name];
+				}
+			});
+
+			this.addProp(Node, "selectByAttr", {
+				value : function(attrName, attrValue, noCache, callback, context){
+					return this.select("[" + attrName + "='" + attrValue + "']", noCache, callback, context);
+				}
+			});
+
+			this.addProp(Node, "bindValue", {
+				value : function(path){
+					var node = this;
+
+					if (node instanceof window.Node && node instanceof window.Text){
+						node = node;
+					} else {
+						node.innerText = node.innerText || " ";
+						node.childNodes[0].skip = true;
+						node = node.childNodes[0];
+					}
+
+
+					node.linked = node.linked || {};
+
+					if (node.linked.subID && node.linked.path){
+						this.laya.base.off(node.linked.path, "change", node.linked.subID);
+					}
+					
+
+					node.nodeValue = this.laya.base.get(path);
+					var subID = this.laya.base.on(path, "change", this.laya._onTextNodeValueChanged.bind(node));
+					node.linked.subID = subID;
+					node.linked.path = path;
+				}
+			});
+
+			this.addProp(Node, "translatePos", {
+				value : function(x, y){
+					this.style.transform = "translateX(" + x + ") translateY(" + y + ")";
 				}
 			});
 

@@ -53,7 +53,10 @@ define(function(){
 			this._rootElement = document.querySelector(selector);
 		},
 		select : function(selector, noCache, callback, context){
-			this.rootElement.select(selector, noCache, callback, context);
+			return this.rootElement.select(selector, noCache, callback, context);
+		},
+		selectByAttr : function(attrName, attrValue, noCache, callback, context){
+			return this.rootElement.selectByAttr(attrName, attrValue, noCache, callback, context);
 		},
 		console : {
 			warn : function(){
