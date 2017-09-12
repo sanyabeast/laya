@@ -71,8 +71,8 @@ define(function(){
 			node.nodeValue = text;
 
 			if (linked){
-				node.nodeValue = this.laya.base(linked);
-				var subID = this.laya.base.on(linked, "change", this.laya._onTextNodeValueChanged.bind(node));
+				node.nodeValue = this.laya.Template(this.laya.base(linked), templateSettings);
+				var subID = this.laya.base.on(linked, "change", this.laya._onTextNodeValueChanged.bind(this, node, templateSettings));
 				node.linked.subID = subID;
 				node.linked.path = linked;
 			}
@@ -379,7 +379,7 @@ define(function(){
 			});
 
 			this.addProp(Node, "bindValue", {
-				value : function(path){
+				value : function(path, templateSettings){
 					var node = this;
 
 					if (node instanceof window.Node && node instanceof window.Text){
@@ -398,8 +398,8 @@ define(function(){
 					}
 					
 
-					node.nodeValue = this.laya.base.get(path);
-					var subID = this.laya.base.on(path, "change", this.laya._onTextNodeValueChanged.bind(node));
+					node.nodeValue = this.laya.Template.fast(this.laya.base.get(path), templateSettings);
+					var subID = this.laya.base.on(path, "change", this.laya._onTextNodeValueChanged.bind(this, node, templateSettings));
 					node.linked.subID = subID;
 					node.linked.path = path;
 				}

@@ -34,10 +34,8 @@ define(["laya/modules/Util"], function(Util){
 			this._vars = vars;
 		},
 		make : function(settings, /*func*/getter){
-			if (!settings){
-				return this.tplString;
-			}
-			
+			settings = settings || {};
+
 			var string = this._string;
 			var vars = this._vars;
 

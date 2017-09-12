@@ -127,22 +127,19 @@ define(function(){
 					if (children[a].nodeType == 3){
 						text = this.util.superTrim(children[a].nodeValue);
 
-						if (text.indexOf("##") > -1){
-							textNodeTemplateSettings = this.util.parseInlineTemplate(text.split("##")[1]);
-							text = text.split("##")[0];
-						}
-
-						if (textNodeTemplateSettings){
-							console.log(textNodeTemplateSettings);
-						}
 
 						type = this.typeof(text);
-
 
 						do {
 							if (type == "~"){
 								linked = text;
 							}
+
+							if (text.indexOf("##") > 0){
+								textNodeTemplateSettings = this.util.parseInlineTemplate(text.split("##")[1]);
+								text = text.split("##")[0];
+							}
+
 
 							text = this.pickValue(text, userData);
 							type = this.typeof(text);
@@ -305,8 +302,8 @@ define(function(){
 			return result || "";
 
 		},
-		_onTextNodeValueChanged : function(value){
-			this.nodeValue = value;
+		_onTextNodeValueChanged : function(node, templateSettings, value){
+			node.nodeValue = this.laya.Template.fast(value, templateSettings);
 		}
 	};
 
