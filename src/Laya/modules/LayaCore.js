@@ -210,6 +210,28 @@ define(function(){
 				break;
 			}
 		},
+		reachValueData : function(value, userData){
+			var type = this.typeof(value);
+			var smartType;
+
+			do {
+				value = this.pickValue(value, userData);
+
+				if (this.commands.indexOf(type) > -1){
+					smartType = type;
+				}
+
+				type = this.typeof(value);
+
+
+			} while (this.commands.indexOf(type) > -1)
+
+			return {
+				type : smartType,
+				value : value
+			}
+
+		},
 		pickValueByLink : function(path){
 			return this.base.get(path);
 		},
@@ -250,26 +272,17 @@ define(function(){
 			}
 
 			var name  = attr.name;
-
 			var processorName  = this.attrProcessor.getProcessorName(name);
 
 			if (processorName){
 				this.attrProcessor.process(processorName, element, rawvalue, name, userData);
 			} else {
 				/*picking*/
-				var type = this.typeof(rawvalue);
-				var value = rawvalue;
+				var data = this.reachValueData(rawvalue, userData);
 
-				do {
-					value = this.pickValue(value, userData);
-					type = this.typeof(value);
-				} while (this.commands.indexOf(type) > -1)
+				element.setAttribute(name, data.value);
 
-				value = value || "";
-
-				element.setAttribute(name, value);
-
-				if (type == "~" && attr._changeListener != true){
+				if (data.type == "~" && attr._changeListener != true){
 					attr._changeListener = true;
 					base.on(rawvalue.split("~")[1], "change", function(){
 							attr.processed = false;

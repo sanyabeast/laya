@@ -107,8 +107,6 @@ define(function(){
 				}
 			}
 
-			console.log(result);
-
 			return result;
 
 		},
@@ -605,9 +603,6 @@ define(function(){
 			arr[i1] = arr[i2];
 			arr[i2] = buff;
 			return arr;
-		},
-		eachArr : function(arr, callback, context){
-
 		},
 		evalInContext : function(script, context){
 			return function() { return eval(script); }.call(context);
