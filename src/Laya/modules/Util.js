@@ -389,6 +389,15 @@ define(function(){
 				}
 			});
 
+			this.addProp(Node, "text", {
+				set : function(value){
+					this.innerHTML = value;
+				},
+				get : function(){
+					return this.innerHTML;
+				}
+			});
+
 			this.addProp(Node, "translatePos", {
 				value : function(x, y){
 					this.style.transform = "translateX(" + x + ") translateY(" + y + ")";
