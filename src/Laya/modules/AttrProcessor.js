@@ -70,25 +70,20 @@ define([
 
 			},
 			"data-on:clickoutside" : function(el, value, name, userData){
+				var valueData;
+
 				value = this.laya.pickValue(value, userData);
 
-				if (typeof value == "function"){
-						value = value;
-				} else if (typeof value == "string" && value == "script"){
-						var scriptNode = el.select("script[data-callback-script='data-on:clickoutside']")[0];
-						var script = scriptNode.innerText;
-
-						script = this.laya.util.wrapScript(script);
-
-						value = eval(script);
-
+				if (value == "script"){
+					value = this.laya.util.extractCallbackFromScriptElement(el.selectByAttr("data-callback-script", "data-on:clickoutside").first, el);
+					if (!value){
+						return;
+					} else {
 						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
-
-						scriptNode.innerText = "";
-
-						// value = function(){
-						// 	this.laya.util.evalInContext(script, el)
-						// }.bind(this);
+					}
+				} else {
+					valueData = this.laya.reachValueData(value, userData);
+					value = valueData.value;
 				}
 
 				if (!value){
@@ -118,17 +113,8 @@ define([
 				});
 			},
 			"data-element-script" : function(el, value, name, userData){
-				var script = el.innerText;
-
-				script = this.laya.util.wrapScript(script);
-
-				script = eval(script);
-
-				var context = el.parentNode;
-
-				if (context){
-					script.call(context, this.laya._scriptExtensions, this.laya.scriptGlobal);
-				}
+				var callback = this.laya.util.extractCallbackFromScriptElement(el, el.parentNode)
+				callback.call(el.parentNode, this.laya._scriptExtensions, this.laya.scriptGlobal);
 			},
 			"data-command:*" : function(el, value, name, userData){
 				var valueData = this.laya.reachValueData(value, userData);
