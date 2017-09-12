@@ -564,6 +564,21 @@ define(function(){
 				}
 			});
 
+			this.defineProperties(window.NodeList.prototype, {
+				"first" : {
+					get : function(){
+						return this[0];
+					}
+				},
+				"select" : {
+					value : function(selector, noCache, callback, context){
+						for (var a = 0; a < this.length; a++){
+							this[a].select.apply(this[a], arguments);
+						}
+					}
+				},
+			});			
+
 		},
 		wrapScript : function(script){
 			return this.laya.Template.fast("(function(extensions, common){'use strict'; {{script}} })", {
