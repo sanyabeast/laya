@@ -71,7 +71,7 @@ define(function(){
 			node.nodeValue = text;
 
 			if (linked){
-				node.nodeValue = this.laya.Template(this.laya.base(linked), templateSettings);
+				node.nodeValue = this.laya.Template.fast(this.laya.base(linked), templateSettings);
 				var subID = this.laya.base.on(linked, "change", this.laya._onTextNodeValueChanged.bind(this, node, templateSettings));
 				node.linked.subID = subID;
 				node.linked.path = linked;

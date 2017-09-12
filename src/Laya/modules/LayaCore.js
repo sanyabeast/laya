@@ -303,6 +303,7 @@ define(function(){
 
 		},
 		_onTextNodeValueChanged : function(node, templateSettings, value){
+			console.log(templateSettings, value);
 			node.nodeValue = this.laya.Template.fast(value, templateSettings);
 		}
 	};
