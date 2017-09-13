@@ -145,6 +145,11 @@ define(function(){
 
 						if (valueData.value instanceof window.Node){
 							dom.replaceChild(valueData.value, children[a]);
+						} else if (typeof valueData.value == "function"){
+							children[a].processed = true;
+
+							children[a].bindValue(valueData.value);
+
 						} else {
 							children[a].processed = true;
 
@@ -153,7 +158,6 @@ define(function(){
 							} else {
 								children[a].text = this.Template.fast(valueData.value, textNodeTemplateSettings);
 							}
-
 						}
 
 					} else if (children[a].nodeType == 1){
