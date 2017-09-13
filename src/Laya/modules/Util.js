@@ -149,17 +149,22 @@ define(function(){
 		},
 		parseInlineTemplate : function(tpl){
 			var result = {};
-			var splitted = tpl.split("##");
+			
+			if (tpl.indexOf("{") == 0){
+				result = JSON.parse(this.strReplaceAll(tpl, "'", "\""));
+			} else {
+				var splitted = tpl.split("##");
 
-			for (var a = 0, key, value; a < splitted.length; a++){
-				if (splitted[a].length < 3){
-					continue;
-				} else {
-					key = splitted[a].split("=")[0];
-					value = splitted[a].split("=")[1];
+				for (var a = 0, key, value; a < splitted.length; a++){
+					if (splitted[a].length < 3){
+						continue;
+					} else {
+						key = splitted[a].split("=")[0];
+						value = splitted[a].split("=")[1];
 
-					result[key] = value;
+						result[key] = value;
 
+					}
 				}
 			}
 
