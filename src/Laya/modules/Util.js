@@ -655,6 +655,15 @@ define(function(){
 
 						return this._linked
 					},
+				},
+				"attr" : {
+					value : function(name, value){
+						if (!value){
+							return this.getAttribute(name);
+						} else {
+							this.setAttribute(name, value);
+						}
+					}
 				}
 			});
 
