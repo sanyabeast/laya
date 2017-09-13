@@ -496,6 +496,9 @@ define(function(){
 
 						_this.laya.base.off(linked.get("subID"));
 
+						if (templateSettings){
+							console.log(path, templateSettings);
+						}
 
 						node.linked.update("templateSettings", templateSettings || null);
 						node.linked.update("path" , path);

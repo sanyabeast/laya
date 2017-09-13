@@ -141,6 +141,8 @@ define(function(){
 					if (children[a].nodeType == 3){
 						valueData = this.reachValueData(this.util.superTrim(children[a].nodeValue), userData);
 
+						if (valueData.templateData) textNodeTemplateSettings = this.util.parseInlineTemplate(valueData.templateData);
+
 						if (valueData.value instanceof window.Node){
 							dom.replaceChild(valueData.value, children[a]);
 						} else {
@@ -207,8 +209,14 @@ define(function(){
 			var type = this.typeof(value);
 			var smartType;
 			var linked = null;
+			var templateData = null;
 
 			do {
+				if (typeof value == "string" && value.indexOf("##") > -1){
+					templateData = value.split("##")[1];
+					value = value.split("##")[0];
+				}
+
 				if (type == this.LINKED_SIGN) linked = value.split(this.LINKED_SIGN)[1];
 
 				if (this.commands.indexOf(type) > -1){
@@ -222,7 +230,8 @@ define(function(){
 			return {
 				type : smartType,
 				value : value,
-				linked : linked
+				linked : linked,
+				templateData : templateData
 			};
 
 		},
