@@ -260,6 +260,14 @@ define(function(){
 						this.transformMatrix = this.transformMatrix;
 					}
 				},
+				"numWidth" : {
+					set : function(value){
+						this.style.width = value + (this.style.width.replace(/[0-9]/g, "") || "px");
+					},
+					get : function(){
+						return window.parseInt(this.style.width) || (this.bounds.w);
+					}
+				},	
 				"opacity" : {
 					get : function(){
 						if (typeof this._opacity != "number"){
@@ -500,10 +508,6 @@ define(function(){
 						var linked = node.linked;
 
 						_this.laya.base.off(linked.get("subID"));
-
-						if (templateSettings){
-							console.log(path, templateSettings);
-						}
 
 						node.linked.update("templateSettings", templateSettings || null);
 						node.linked.update("path" , path);

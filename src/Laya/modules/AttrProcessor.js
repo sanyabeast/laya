@@ -25,7 +25,7 @@ define([
 				var value = valueData.value;
 
 				if (!value){
-					console.warn("Laya: attr-processor: cannot replace node", value, el);
+					//console.warn("Laya: attr-processor: cannot replace node", value, el);
 					return;
 				}
 
