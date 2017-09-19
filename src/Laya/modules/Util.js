@@ -712,6 +712,11 @@ define(function(){
 							this.setAttribute(name, value);
 						}
 					}
+				},
+				"scrollTo" : {
+					value : function(position){
+						this.scrollTop = position;
+					}
 				}
 			});
 
