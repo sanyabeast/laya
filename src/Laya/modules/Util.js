@@ -91,6 +91,9 @@ define(function(){
 	};
 
 	Util.prototype = {
+		selectorIsEqual : function(selectorA, selectorB){
+			return document.querySelector(selectorA).matches(selectorB);
+		},
 		generateRandString : function(length){
 			var result = "";
 
@@ -287,6 +290,11 @@ define(function(){
 				},
 				"laya" : {
 					value : this.laya
+				},
+				"resetStyles" : {
+					value : function(){
+						this.removeAttribute("style");
+					}
 				},
 				"bounds" : {
 					get : function(){
@@ -502,6 +510,37 @@ define(function(){
 						return this.select("[" + attrName + "='" + attrValue + "']", noCache, callback, context);
 					}
 				},
+				"selectByAttrs" : {
+					value : function(description, noCache, callback, context){
+						var attrSelector = "";
+
+						for (var k in description){
+							attrSelector = attrSelector + "[" + k + "=" + "\"" + description[k] + "\"]" 
+						}
+
+						return this.select(attrSelector, noCache, callback, context);
+
+					}
+				},
+				"disconnectNode" : {
+					value : function(){
+						if (this.parentNode){
+							this._parentNode = this.parentNode;
+							this._parentNode.disconnectedNodes = this._parentNode.disconnectedNodes || {};
+							this.parentNode.removeChild(this);
+							this._parentNode.disconnectedNodes[this.layaID] = this;
+						}
+					}
+				},	
+				"connectNode" : {
+					value : function(){
+						if (this._parentNode){
+							this._parentNode.addChild(this);
+							this._parentNode.disconnectedNodes = this._parentNode.disconnectedNodes || {};
+							delete this._parentNode.disconnectedNodes[this.layaID];
+						}
+					}
+				},
 				"bindValue" : {
 					value : function(path, templateSettings){
 						var node = this.extractTextNode();
@@ -689,6 +728,13 @@ define(function(){
 						}
 					}
 				},
+				iterate : {
+					value : function(callback, context){
+						for (var a = 0, l = this.length; a < l; a++){
+							callback.call(context || null, this[a], a);
+						}
+					}
+				}
 			});			
 
 		},
@@ -792,6 +838,10 @@ define(function(){
 			return C;
 		},
 		superTrim : function(input){
+			if (typeof input == "number"){
+				input = input.toString();
+			}
+
 			input = input.replace(/\s\s+/g, " ");
 			input = input.replace(/(\r\n|\n|\r)/gm,"");
 			input = input.trim();
