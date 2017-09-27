@@ -30,6 +30,7 @@ define([
 				}
 
 				util.copyAttrs(el, value, ["data-replace", "data-settings"]);
+				util.copyInnerContent(el, value);
 
 				if (value.hasAttribute("data-content-holder")){
 					var contentHolder = value.select(value.getAttribute("data-content-holder"))[0];

@@ -113,7 +113,7 @@ define(function(){
 			}
 
 			if (scriptNode.extractedCallback){
-				return script.extractedCallback;
+				return scriptNode.extractedCallback;
 			}
 
 			var script = scriptNode.innerText;
@@ -541,12 +541,19 @@ define(function(){
 						}
 					}
 				},
+				"unbindValue" : {
+					value : function(){
+						var node = this.extractTextNode();
+						// console.log(node);
+						_this.laya.base.off(node.linked.get("subID"));
+					}
+				},
 				"bindValue" : {
 					value : function(path, templateSettings){
 						var node = this.extractTextNode();
 						var linked = node.linked;
 
-						_this.laya.base.off(linked.get("subID"));
+						this.unbindValue();
 
 						node.linked.update("templateSettings", templateSettings || null);
 						node.linked.update("path" , path);
@@ -575,6 +582,7 @@ define(function(){
 				},
 				"text" : {
 					set : function(value){
+						this.unbindValue();
 						this.extractTextNode().nodeValue = value;
 					},
 					get : function(){
@@ -713,7 +721,7 @@ define(function(){
 						}
 					}
 				},
-				"scrollTo" : {
+				"scrollToPos" : {
 					value : function(position){
 						this.scrollTop = position;
 					}
@@ -893,7 +901,9 @@ define(function(){
 			return (prefix||"") + Math.random().toString(36).substring(7) + (postfix||"");
 		},
 		assign : function(a, b){
-			return Object.assign(a, b);
+			for (var k in b){
+				a[k] = b[k]
+			}
 		},
 		inheritClass : function(Dad, Son){
 			var Result = function(){

@@ -25,6 +25,7 @@ define(function(){
 		LINKED_SIGN : "~",
 		LAYOUT_SIGN : "#",
 		USER_VALUE_SIGN : "@",
+		STRING_SIGN : "?",
 		updateAllBoundValues : function(){
 			this.bindedValues.iterate(function(basePath, layaID){
 				this.layaNodes.get(layaID).extractTextNode().updateBoundValue();
@@ -60,7 +61,7 @@ define(function(){
 			});
 		},
 		get commands(){
-			if (!this._commands) this._commands = [this.LINKED_SIGN, this.LAYOUT_SIGN, this.USER_VALUE_SIGN];
+			if (!this._commands) this._commands = [this.LINKED_SIGN, this.LAYOUT_SIGN, this.USER_VALUE_SIGN, this.STRING_SIGN];
 			return this._commands;
 		},
 		_rootElement : document,
@@ -204,6 +205,9 @@ define(function(){
 				case this.LAYOUT_SIGN:
 					return this.make(this.LINKED_SIGN + data.split(type)[1], userData);
 				break;
+				case this.STRING_SIGN:
+					return data.split(type)[1];				
+				break;
 				default:
 					return data;
 				break;
@@ -222,6 +226,10 @@ define(function(){
 				}
 
 				if (type == this.LINKED_SIGN) linked = value.split(this.LINKED_SIGN)[1];
+				if (type == this.STRING_SIGN) {
+					value = value.split(this.STRING_SIGN)[1];
+					break;
+				}
 
 				if (this.commands.indexOf(type) > -1){
 					smartType = type;
@@ -307,7 +315,10 @@ define(function(){
 		}
 	};
 
-	Object.assign(Laya, Laya.prototype);
+	for (var k in Laya.prototype){
+		Laya[k] = Laya.prototype[k];
+	}
+
 
 	/*---------------------------------------------------------------*/
 	return Laya;
