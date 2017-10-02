@@ -209,7 +209,7 @@ define(function(){
 					return data.split(type)[1];				
 				break;
 				default:
-					return data;
+					return data || "";
 				break;
 			}
 		},
@@ -264,10 +264,10 @@ define(function(){
 						}
 					}
 
-					return result;
+					return result || "";
 
 				} else {
-					return src[name];
+					return src[name] || "";
 				}
 			}
 		},

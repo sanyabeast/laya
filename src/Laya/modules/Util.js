@@ -725,6 +725,24 @@ define(function(){
 					value : function(position){
 						this.scrollTop = position;
 					}
+				},
+				"scrollToElement" : {
+					value : function(element){
+						if (typeof element == "string"){
+							element = this.select(element).first;
+						}
+
+
+						if (element){
+							this.scrollTop = element.offsetTop;
+							// console.dir(this);
+							// console.log(element);
+							// console.dir(element)
+							
+						}
+
+
+					}
 				}
 			});
 

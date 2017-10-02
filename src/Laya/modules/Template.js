@@ -41,7 +41,7 @@ define(["laya/modules/Util"], function(Util){
 
 			if (getter){
 				for (var a = 0, l = vars.length; a < l; a++){
-					string = string.replace(new RegExp("\\{{" + vars[a] + "}}", "g"), (getter(vars[a], settings)));
+					string = string.replace(new RegExp("\\{{" + vars[a] + "}}", "g"), (getter(vars[a], settings)) || "");
 				}
 
 			} else {
