@@ -299,7 +299,7 @@ define(function(){
 
 				if (data.type == this.LINKED_SIGN && attr._changeListener != true){
 					attr._changeListener = true;
-					base.on(rawvalue.split(this.LINKED_SIGN)[1], "change", function(){
+					this.base.on(rawvalue.split(this.LINKED_SIGN)[1], "change", function(){
 							attr.processed = false;
 							_this.setAttribute(element, attr, userData);
 					});

@@ -372,7 +372,7 @@ define(function(){
 						}
 
 						var itemData = this.getAttribute("data-item-layout");
-						var content = _this.laya.make(base.get(itemData), data);
+						var content = _this.laya.make(_this.laya.base.get(itemData), data);
 						itemsHolder.appendChild(content);
 						return this;
 					},
