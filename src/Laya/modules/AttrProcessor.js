@@ -93,7 +93,7 @@ define([
 				}
 
 				if (!value){
-					this.laya.console.warn("Laya: attr-processor: data-on:clickoutside - no callback provided", arguments);
+					//this.laya.console.warn("Laya: attr-processor: data-on:clickoutside - no callback provided", arguments);
 					return;
 				}
 
