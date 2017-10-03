@@ -714,7 +714,7 @@ define(function(){
 				},
 				"attr" : {
 					value : function(name, value){
-						if (!value){
+						if (!value || value == ""){
 							return this.getAttribute(name);
 						} else {
 							this.setAttribute(name, value);
