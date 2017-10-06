@@ -109,6 +109,9 @@ define([
 				});
 
 			},
+			// "data-on:click" : function(){
+				
+			// },
 			"data-value-linked" : function(el, path){
 				el.on({
 					eventName : "input",

@@ -6,6 +6,8 @@ define(function(){
 		this.template = null;
 		this.settings = null;
 
+		this.prevUpdateTime = 0;
+
 		this.update = this.update.bind(this);
 	};
 
@@ -31,6 +33,14 @@ define(function(){
 		 	this.update();
 		},
 		update : function(){
+
+			if (+new Date() - this.prevUpdateTime < 1000){
+				return;
+			}
+
+
+			this.prevUpdateTime = +new Date();
+
 			var _this = this;
 			this.put(this.template.make(this.settings, function(data, userData){
 				var type  = _this.laya.typeof(data);
