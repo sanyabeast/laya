@@ -17,7 +17,11 @@ define([
 
 				/*merging settings*/
 				if (replaceSettings){
-					userData = this.laya.util.mergeSettings(replaceSettings, userData);
+					if (replaceSettings.important){
+						userData = this.laya.util.mergeSettings(userData, replaceSettings);
+					} else {
+						userData = this.laya.util.mergeSettings(replaceSettings, userData);
+					}
 				}
 
 				/*reaching value*/

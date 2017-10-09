@@ -560,7 +560,7 @@ define(function(){
 						_this.laya.bindedValues.update(node.layaID, path);
 
 						if (typeof path == "string"){
-							node.linked.update("subID", _this.laya.base.on(path, "change", this.updateBoundValue.bind(this)));
+							node.linked.update("subID", _this.laya.base.on(path, "change", this.updateBoundValue.bind(this)), true);
 
 						} 
 
