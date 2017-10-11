@@ -7,9 +7,10 @@ define([
 		"laya/modules/Util",
 		"laya/modules/Wrappers",
 		"laya/modules/TagProcessor",
-	], function(LayaCore, AttrProcessor, CSS, Template, Util, Wrappers, TagProcessor){
+		"laya/modules/Mutator"
+	], function(LayaCore, AttrProcessor, CSS, Template, Util, Wrappers, TagProcessor, Mutator){
 
-	var laya = new LayaCore(LayaCore, AttrProcessor, CSS, Template, Util, Wrappers, TagProcessor);
+	var laya = new LayaCore(LayaCore, AttrProcessor, CSS, Template, Util, Wrappers, TagProcessor, Mutator);
 
 	return laya;
 });

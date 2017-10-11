@@ -3,7 +3,7 @@ define(function(){
 
 	var laya;
 
-	var Laya = function(Laya, AttrProcessor, CSS, Template, Util, Wrappers, TagProcessor){
+	var Laya = function(Laya, AttrProcessor, CSS, Template, Util, Wrappers, TagProcessor, Mutator){
 		if (laya){
 			return laya;
 		}
@@ -17,6 +17,7 @@ define(function(){
 		this.Util = Util;
 		this.Wrappers = Wrappers;
 		this.TagProcessor = TagProcessor;
+		this.Mutator = Mutator;
 
 		
 	};
@@ -70,6 +71,11 @@ define(function(){
 		},
 		set rootElement(selector){
 			this._rootElement = document.querySelector(selector);
+			this._rootElement.mutator = new this.Mutator(this._rootElement, this._onRootMutated.bind(this));
+		},
+		_onRootMutated : function(evt){
+			console.log(this.onRootMutated, this);
+			if (this.onRootMutated) this.onRootMutated(evt);
 		},
 		select : function(selector, noCache, callback, context){
 			return this.rootElement.select(selector, noCache, callback, context);

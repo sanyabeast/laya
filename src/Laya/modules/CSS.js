@@ -17,6 +17,7 @@ define(function(){
 			styleElement.innerText = css;
 		},
 		setup : function(css, settings){
+			css = css.replace(/root_element/g, "{{@rootElement}}")
 			this.settings = settings;
 			this.template = new this.laya.Template(css);
 
