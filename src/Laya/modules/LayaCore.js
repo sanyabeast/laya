@@ -74,7 +74,6 @@ define(function(){
 			this._rootElement.mutator = new this.Mutator(this._rootElement, this._onRootMutated.bind(this));
 		},
 		_onRootMutated : function(evt){
-			console.log(this.onRootMutated, this);
 			if (this.onRootMutated) this.onRootMutated(evt);
 		},
 		select : function(selector, noCache, callback, context){

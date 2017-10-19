@@ -192,9 +192,71 @@ define(function(){
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
 			var transformMatrix = [1, 0, 0, 1, 0, 0];
+			var addEventListener = Node.addEventListener;
+			var removeEventListener = Node.removeEventListener;
+			var allEventListeners = {
+				count : 0
+			};
 
 
 			this.defineProperties(window.Node.prototype, {
+				"allEventListeners" : {
+					get : function(){
+						return allEventListeners;
+					}
+				},
+				"eventListeners" : {
+					get : function(){
+						if (!this._eventListeners){
+							this._eventListeners = {};
+						}
+
+						return this._eventListeners;
+					}
+				},
+				"addEventListener" : {
+					value : function(eventName, callback, useCapture){
+						var eventListenerID = ("event-listener-") + _this.generateRandString(8);
+						var eventListeners = this.eventListeners;
+						var allEventListeners = this.allEventListeners;
+
+						eventListeners[eventName] = eventListeners[eventName] || {};
+						allEventListeners[eventName] = allEventListeners[eventName] || {};
+
+						eventListeners[eventName][eventListenerID] = allEventListeners[eventName][eventListenerID] = {
+							callback : callback,
+							useCapture : useCapture,
+							node : this
+						};
+
+						allEventListeners.count++;
+
+						addEventListener.call(this, eventName, callback, useCapture);
+					}
+				},
+				removeEventListener : {
+					value : function(eventName, callback, useCapture){
+						if (eventName && callback){
+							removeEventListener.call(this, eventName, callback, useCapture);
+						} else if (eventName){
+							var eventListeners = this.eventListeners;
+
+							if (eventListeners[eventName]){
+								for (var k in eventListeners[eventName]){
+									this.removeEventListener(eventName, eventListeners[eventName][k].callback, eventListeners[eventName][k].useCapture);
+									delete eventListeners[eventName][k];
+								}
+							}
+
+						} else {
+							var eventListeners = this.eventListeners; 
+
+							for (var k in eventListeners){
+								this.removeEventListener(k);
+							}
+						}
+					}
+				},
 				"layaID" : {
 					get : function(){
 						if (!this._layaID) {
@@ -489,12 +551,14 @@ define(function(){
 				"show" :  {
 					value : function(){
 						this.classes.remove("hidden");
-					}
+					},
+					writable : true
 				},
 				"hide" : {
 					value : function(){
 						this.classes.add("hidden");
-					}
+					},
+					writable : true
 				},
 				"off" : {
 					value : function(options){
