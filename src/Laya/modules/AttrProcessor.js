@@ -12,6 +12,21 @@ define([
 
 	AttrProcessor.prototype = {
 		processors : {
+			"data-placeholder" : function(el, value, name, userData){
+				var valueData = this.laya.reachValueData(value, userData);
+
+				el.attr("placeholder", valueData.value);
+
+				if (valueData.linked){
+					base.on(valueData.linked, "change", function(value){
+						el.attr("placeholder", value);
+					}, true);
+				}
+
+				// value = this.laya.reachValueData(value, userData);
+
+				// console.log(el, value, name, userData);
+			},
 			"data-replace" : function(el, value, name, userData){
 				var replaceSettings = util.extractJSONFromAttribute(el, "data-settings");
 
@@ -64,7 +79,7 @@ define([
 					if (!value){
 						return;
 					} else {
-						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
+						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal, userData);
 					}
 				} else {
 					valueData = this.laya.reachValueData(value, userData);
@@ -89,7 +104,7 @@ define([
 					if (!value){
 						return;
 					} else {
-						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal);
+						value = value.bind(el, this.laya._scriptExtensions, this.laya.scriptGlobal, userData);
 					}
 				} else {
 					valueData = this.laya.reachValueData(value, userData);
@@ -127,7 +142,7 @@ define([
 			},
 			"data-element-script" : function(el, value, name, userData){
 				var callback = this.laya.util.extractCallbackFromScriptElement(el, el.parentNode)
-				callback.call(el.parentNode, this.laya._scriptExtensions, this.laya.scriptGlobal);
+				callback.call(el.parentNode, this.laya._scriptExtensions, this.laya.scriptGlobal, userData);
 			},
 			"data-command:*" : function(el, value, name, userData){
 				var valueData = this.laya.reachValueData(value, userData);
