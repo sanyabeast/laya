@@ -100,13 +100,17 @@ define(function(){
 
 			var dom = this.util.HTML2DOM(html, true);
 
-			for (var a = 0, l = dom.childNodes.length; a < l; a++){
-				dom.replaceChild(this.process(dom.childNodes[a], userData), dom.childNodes[a]);
-			}
+			this.process(dom, userData);
+
+			// for (var a = 0, l = dom.childNodes.length; a < l; a++){
+			// 	dom.replaceChild(this.process(dom.childNodes[a], userData), dom.childNodes[a]);
+			// }
 
 			if (dom instanceof window.DocumentFragment && dom.childNodes.length == 1){
 				dom = dom.childNodes[0];
 			}
+
+
 
 			return dom;
 

@@ -1,88 +1,10 @@
 "use strict";
-define(function(){
+define([
+		"./Util/Colors",
+		"./Util/Collection"
+	], function(Colors, Collection){
 
-	var Collection = function(options){
-		options = options || { array : true };
-		this.isArray = (options.array === true) || (options.object === false);
-		this._content = this.isArray ? [] : {};
-
-		if (options.content){
-			this.addMultiple(options.content);
-		}
-		
-	};
-
-	Collection.prototype = {
-		get content(){
-			return this._content;
-		},
-		addMultiple : function(data){
-			this._iterate(data, this.isArray, function(value, index){
-				this._content[index] = value;
-			});
-		},
-		_iterate : function(target, isArray, callback, context){
-			context = context || this;
-
-			if (isArray){
-				for (var a = 0, l = target.length; a < l; a++){
-					callback.call(context, target[a], a);
-					if (l != target.length){
-						return this._iterate.apply(this, arguments);
-					}
-				}
-			} else {
-				for (var k in target){
-					callback.call(context, target[k], k);
-				}
-			}
-
-			return this;
-		},
-		iterate : function(callback, context){
-			this._iterate(this.content, this.isArray, callback, context);
-		},
-		contains : function(checkValue){
-			var result = false;
-
-			this.iterate(function(value){
-				if (value === checkValue){
-					result = true;
-				}
-			}, this);
-
-			return result;
-
-		},
-		add : function(key, value){
-			if (this.isArray){
-				this._content.push(key);
-			} else {
-				this._content[key] = value;
-			}
-		},
-		remove : function(key){
-			if (this.isArray){
-				this.iterate(function(value, index){
-					if (value === key){
-						this._content.splice(index, 1);
-					}
-				});
-			} else {
-				delete this._content[key];
-			}
-		},
-		update : function(key, value){
-			if (this.isArray){
-
-			} else {
-				this._content[key] = value;
-			}
-		},
-		get : function(index){
-			return this._content[index];
-		}
-	};
+	
 
 	var Util = function(laya){
 		this.laya = laya;
@@ -91,6 +13,7 @@ define(function(){
 	};
 
 	Util.prototype = {
+		colors : new Colors(),
 		selectorIsEqual : function(selectorA, selectorB){
 			return document.querySelector(selectorA).matches(selectorB);
 		},
@@ -106,6 +29,7 @@ define(function(){
 			return result;
 
 		},
+		extractedCallbacksCache : {},
 		extractCallbackFromScriptElement : function(scriptNode, context){
 			if (!scriptNode){
 				this.laya.warn("Laya: attr-processor: data-on:* - no callback script", el, callback, name);
@@ -117,6 +41,12 @@ define(function(){
 			}
 
 			var script = scriptNode.innerText;
+
+
+			if (this.extractedCallbacksCache[script]){
+				return this.extractedCallbacksCache[script];
+			}
+
 			var callback;
 
 			script = this.laya.util.wrapScript(script);
@@ -126,6 +56,8 @@ define(function(){
 
 			scriptNode.innerText = "";
 			scriptNode.extractedCallback = callback;
+
+			this.extractedCallbacksCache[script] = callback;
 
 			return callback;
 		},
@@ -356,6 +288,18 @@ define(function(){
 				"resetStyles" : {
 					value : function(){
 						this.removeAttribute("style");
+					}
+				},
+				"contentFilter" : {
+					value : function(selector, value, onMatch, onDismatch){
+
+						this.select(selector, function(node){
+							if (node.innerHTML.match(value)){
+								onMatch(node);
+							} else {
+								onDismatch(node);
+							}
+						}, this);
 					}
 				},
 				"bounds" : {
@@ -834,7 +778,7 @@ define(function(){
 
 		},
 		wrapScript : function(script){
-			return this.laya.Template.fast("(function(extensions, common){'use strict'; {{script}} })", {
+			return this.laya.Template.fast("(function(extensions, common, userData){'use strict'; {{script}} })", {
 				script : script
 			});
 		},
