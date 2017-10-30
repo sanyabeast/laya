@@ -7,6 +7,7 @@ define(function(){
 		this.settings = null;
 
 		this.prevUpdateTime = 0;
+		this.updateTimeoutID;
 
 		this.update = this.update.bind(this);
 	};
@@ -35,10 +36,12 @@ define(function(){
 		},
 		update : function(){
 
-			if (+new Date() - this.prevUpdateTime < 1000){
+			if (+new Date() - this.prevUpdateTime < 300){
+				this.updateTimeoutID = setTimeout(this.update, 300);
 				return;
 			}
 
+			clearTimeout(this.updateTimeoutID);
 
 			this.prevUpdateTime = +new Date();
 
