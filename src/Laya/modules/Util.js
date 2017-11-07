@@ -63,6 +63,7 @@ define([
 		},
 		extractJSONFromAttribute : function(node, attrName){
 			var result = null;
+			var _this = this;
 
 			if (node.hasAttribute(attrName)){
 				result = node.getAttribute(attrName);
@@ -72,7 +73,10 @@ define([
 			try {
 				result = JSON.parse(result);
 			} catch (err){
-				this.laya.console.warn("failed to extract JSON from attribute", err);
+				console.log(_this);
+				if (_this.laya){
+					_this.laya.console.warn("failed to extract JSON from attribute", err);
+				}
 				result = null;
 			}
 
