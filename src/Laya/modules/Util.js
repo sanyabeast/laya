@@ -565,6 +565,13 @@ define([
 						var node = this.extractTextNode();
 						var linked = node.linked;
 
+						if (this.setAttribute){
+							this.setAttribute("data-bound-value", path);
+						} else if (this.parentNode && this.parentNode.setAttribute){
+							this.parentNode.setAttribute("data-bound-value", path);
+
+						}
+
 						this.unbindValue();
 
 						node.linked.update("templateSettings", templateSettings || null);

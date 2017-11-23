@@ -37,6 +37,7 @@ define([
 					} else {
 						userData = this.laya.util.mergeSettings(replaceSettings, userData);
 					}
+
 				}
 
 				/*reaching value*/
