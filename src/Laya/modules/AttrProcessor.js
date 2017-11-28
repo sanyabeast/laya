@@ -12,6 +12,18 @@ define([
 
 	AttrProcessor.prototype = {
 		processors : {
+			"data-behaviour-patterns" : function(el, value, name, userData){
+				var patternNames = value.split(" ");
+
+				util.loopArray(patternNames, function(name, index){
+					var patternFabric = this.laya._bPatters[name];
+
+					if (patternFabric){
+						patternFabric.call(el, this.laya._scriptExtensions, this.laya.scriptGlobal, userData);
+					}
+				}, this);
+
+			},
 			"data-placeholder" : function(el, value, name, userData){
 				var valueData = this.laya.reachValueData(value, userData);
 
@@ -165,6 +177,7 @@ define([
 
 			},
 		},
+		deffered : ["data-behaviour-patterns"]
 	};
 
 	util.inheritClass(Processor, AttrProcessor);

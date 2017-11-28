@@ -155,7 +155,6 @@ define([
 						}
 
 						for (var a = 0; a < this.childNodes.length; a++){
-							console.log(this.childNodes[a]);
 							this.childNodes[a].remove();
 						}
 
@@ -167,7 +166,6 @@ define([
 			this.defineProperties(window.Node.prototype, {
 				"remove" : {
 					value : function(){
-						console.log(this);
 						nativeRemove.call(this);
 					}
 				},
@@ -985,6 +983,11 @@ define([
 
 			Result = this.assign(Son.prototype, Dad.prototype);
 			return Result;
+		},
+		loopArray : function(arr, callback, ctx){
+			for (var a = 0, l = arr.length; a < l; a++){
+				callback.call(ctx, arr[a], a, arr);
+			}
 		},
 		Collection : Collection
 	};

@@ -8,6 +8,8 @@ define(function(){
 			return laya;
 		}
 
+		this._bPatters = {};
+
 		laya = this;
 
 		this.Laya = Laya;
@@ -37,6 +39,9 @@ define(function(){
 				laya : this
 			};
 			return this._scriptGlobal;
+		},
+		setBehaviourPattern : function(name, fabric){
+			this._bPatters[name] = fabric;
 		},
 		setScriptsExtensions : function(data){
 			this._scriptExtensions = data;
@@ -131,8 +136,9 @@ define(function(){
 
 			/*attributes processing*/
 			if (attrs){
-				for (var a = 0, l = attrs.length; a < l; a++){
-					this.setAttribute(dom, attrs[a], userData);
+				for (var a = 0, l = attrs.length, deffered; a < l; a++){
+					deffered = this.attrProcessor.deffered.indexOf(attrs[a].name) > -1;
+					if (!deffered) this.setAttribute(dom, attrs[a], userData);
 				}
 			}
 
@@ -182,6 +188,13 @@ define(function(){
 				tagProcessor = this.tagProcessor.getProcessorName(tagName);
 				if (tagProcessor){
 					this.tagProcessor.process(tagProcessor, dom, tagName);
+				}
+			}
+
+			if (attrs){
+				for (var a = 0, l = attrs.length, deffered; a < l; a++){
+					deffered = this.attrProcessor.deffered.indexOf(attrs[a].name) > -1;
+					if (deffered) this.setAttribute(dom, attrs[a], userData);
 				}
 			}
 
