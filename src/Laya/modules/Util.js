@@ -127,15 +127,50 @@ define([
 			var _this = this;
 			var Node = window.Node.prototype;
 			var NodeList = window.NodeList.prototype;
+			var Element = window.Element.prototype;
 			var transformMatrix = [1, 0, 0, 1, 0, 0];
 			var addEventListener = Node.addEventListener;
 			var removeEventListener = Node.removeEventListener;
+			var nativeRemove = Element.remove;
 			var allEventListeners = {
 				count : 0
 			};
 
 
+			this.defineProperties(window.Element.prototype, {
+				"onRemove" : {
+					get : function(){
+						var onRemove = this._onRemove;
+						if (!onRemove) onRemove = [];
+						this._onRemove = onRemove;
+						return onRemove;
+					}
+				},
+				"remove" : {
+					value : function(){
+						var onRemove = this.onRemove;
+
+						for (var a = 0; a < onRemove.length; a++){
+							onRemove[a](this);
+						}
+
+						for (var a = 0; a < this.childNodes.length; a++){
+							console.log(this.childNodes[a]);
+							this.childNodes[a].remove();
+						}
+
+						nativeRemove.call(this);
+					}
+				},
+			});
+
 			this.defineProperties(window.Node.prototype, {
+				"remove" : {
+					value : function(){
+						console.log(this);
+						nativeRemove.call(this);
+					}
+				},
 				"allEventListeners" : {
 					get : function(){
 						return allEventListeners;
@@ -384,7 +419,7 @@ define([
 						var itemData = this.getAttribute("data-item-layout");
 						var content = _this.laya.make(_this.laya.base.get(itemData), data);
 						itemsHolder.appendChild(content);
-						return this;
+						return content;
 					},
 					writable : true
 				},
