@@ -30,7 +30,7 @@ define([
 				el.attr("placeholder", valueData.value);
 
 				if (valueData.linked){
-					base.on(valueData.linked, "change", function(value){
+					this.laya.base.on(valueData.linked, "change", function(value){
 						el.attr("placeholder", value);
 					}, true);
 				}
@@ -149,8 +149,8 @@ define([
 					eventName : "input",
 					callback : function(){
 						var value = el.value;
-						base.set(path, value);
-					}
+						this.laya.base.set(path, value);
+					}.bind(this)
 				});
 			},
 			"data-element-script" : function(el, value, name, userData){

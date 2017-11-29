@@ -16,10 +16,6 @@
 		"examples/GoodRead",
 		"../res/index"
 	], function(base, laya, Player, Match3, GoodRead, resData){
-
-		window.base = base;
-		window.laya = laya;
-
 		switch(window.example){
 			case "goodread":
 				window.goodread = new GoodRead(resData);
