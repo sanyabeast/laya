@@ -405,13 +405,17 @@ define([
 					}
 				},
 				"addItem" : {
-					value : function(data){
+					value : function(data, userData){
 						var itemsHolder = this;
 
 						if (this.hasAttribute("data-items-holder")){
 							var itemsHolderSelector = this.getAttribute("data-items-holder");
 							itemsHolder = this.select(itemsHolderSelector)[0];
 
+						}
+
+						if (userData){
+							data = this.laya.util.mergeSettings(data, userData);
 						}
 
 						var itemData = this.getAttribute("data-item-layout");
