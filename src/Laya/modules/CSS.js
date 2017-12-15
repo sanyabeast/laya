@@ -24,7 +24,7 @@ define(["less"], function(less){
 		},
 		unless : function(css, callback){
 			// console.log(css);
-			less.render(css, {}, function(err, output){
+			less.render(css, { compress : true }, function(err, output){
 				if (err){
 					if (err.extract){
 						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.column, err.column + 100));
