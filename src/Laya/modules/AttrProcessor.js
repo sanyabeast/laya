@@ -12,6 +12,23 @@ define([
 
 	AttrProcessor.prototype = {
 		processors : {
+			"src" : function(el, value, name, userData){
+				var valueData = this.laya.reachValueData(value, userData);
+
+				el.classes.add("_image");
+
+				if (valueData.value){
+					var url = valueData.value;
+					var isSVG = url.indexOf(".svg") > -1;
+
+					el.src = url;
+					if (isSVG) {
+						this.laya.util.processSVG(el);
+						el.attr("data-svg-image", "");
+					}
+					
+				}
+			},
 			"data-behaviour-patterns" : function(el, value, name, userData){
 				var patternNames = value.split(" ");
 
