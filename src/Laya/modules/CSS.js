@@ -1,5 +1,7 @@
 "use strict";
-define(function(){
+define(["less"], function(less){
+
+	window.less = less;
 
 	var CSS = function(laya){
 		this.laya = laya;
@@ -14,8 +16,25 @@ define(function(){
 
 	CSS.prototype = {
 		put : function(css){
-			var styleElement = document.getElementById("laya-styles");
-			styleElement.innerText = css;
+
+			this.unless(css, function(result){
+				this.styleElement.innerText = result;
+			}.bind(this));
+
+		},
+		unless : function(css, callback){
+			// console.log(css);
+			less.render(css, {}, function(err, output){
+				if (err){
+					if (err.extract){
+						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.column, err.column + 100));
+						
+					}
+				} else {
+					console.log(output);
+					callback(output.css);
+				}
+			}.bind(this));
 		},
 		setup : function(css, settings){
 			css = css.replace(/root_element/g, "{{@rootElement}}")
@@ -26,6 +45,8 @@ define(function(){
 			styleElement.id = "laya-styles";
 		  	styleElement.type = "text/css";
 
+		  	this.styleElement = styleElement;
+
 		 	var head = document.getElementsByTagName("head");
 
 		 	if (head && head[0]){
@@ -35,13 +56,17 @@ define(function(){
 		 	this.update();
 		},
 		update : function(){
+			clearTimeout(this.updateTimeoutID);
+
+			if (!this.template){
+				return;
+			}
 
 			if (+new Date() - this.prevUpdateTime < 300){
 				this.updateTimeoutID = setTimeout(this.update, 300);
 				return;
 			}
 
-			clearTimeout(this.updateTimeoutID);
 
 			this.prevUpdateTime = +new Date();
 
@@ -50,9 +75,9 @@ define(function(){
 				var type  = _this.laya.typeof(data);
 				var value = _this.laya.pickValue(data, userData);
 
-				if (type == "~"){
-					_this.laya.base.on(data.split(type)[1], "change", _this.update);
-				}
+				// if (type == "~"){
+				// 	_this.laya.base.on(data.split(type)[1], "change", _this.update);
+				// }
 
 				return value;
 
