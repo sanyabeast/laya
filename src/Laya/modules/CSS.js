@@ -23,16 +23,22 @@ define(["less"], function(less){
 
 		},
 		unless : function(css, callback){
+			// callback(css);
 			// console.log(css);
-			less.render(css, {}, function(err, output){
+			less.render(css, {
+			}, function(err, output){
 				if (err){
 					if (err.extract){
-						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.column, err.column + 100));
+						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.column, err.column + 300), err);
 						
+					} else {
+						this.laya.console.warn("cannot unless css", err);
+
 					}
 				} else {
-					console.log(output);
-					callback(output.css);
+					var css = this.laya.util.superTrim(output.css);
+					window.css = css;
+					callback(css);
 				}
 			}.bind(this));
 		},
