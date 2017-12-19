@@ -23,9 +23,8 @@ define(["less"], function(less){
 
 		},
 		unless : function(css, callback){
-			// callback(css);
-			// console.log(css);
 			less.render(css, {
+				compress : true
 			}, function(err, output){
 				if (err){
 					if (err.extract){
