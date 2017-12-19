@@ -1,7 +1,8 @@
 "use strict";
 define([
 		"./Util/Colors",
-		"./Util/Collection"
+		"./Util/Collection",
+		"./Util/fetch-pf"
 	], function(Colors, Collection){
 
 	

@@ -27,8 +27,8 @@ define(["less"], function(less){
 				compress : true
 			}, function(err, output){
 				if (err){
-					if (err.extract){
-						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.column, err.column + 300), err);
+					if (typeof err.extract != "undefined"){
+						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.index, err.index + 500), err);
 						
 					} else {
 						this.laya.console.warn("cannot unless css", err);
