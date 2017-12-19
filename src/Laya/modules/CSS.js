@@ -1,7 +1,10 @@
 "use strict";
-define(["less"], function(less){
+define([
+	"less",
+	"prefixfree"
+	], function(less, prefixfree){
 
-	window.less = less;
+	console.log(prefixfree);
 
 	var CSS = function(laya){
 		this.laya = laya;
@@ -28,7 +31,7 @@ define(["less"], function(less){
 			}, function(err, output){
 				if (err){
 					if (typeof err.extract != "undefined"){
-						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.index, err.index + 500), err);
+						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.index - 20, err.index + 500), err);
 						
 					} else {
 						this.laya.console.warn("cannot unless css", err);
@@ -36,7 +39,9 @@ define(["less"], function(less){
 					}
 				} else {
 					var css = this.laya.util.superTrim(output.css);
-					window.css = css;
+					
+					css = window.PrefixFree.prefixCSS(css, true);
+
 					callback(css);
 				}
 			}.bind(this));
