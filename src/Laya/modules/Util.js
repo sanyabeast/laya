@@ -717,6 +717,7 @@ define([
 							noCache = false;
 						}
 
+
 						this.selectorCache = this.selectorCache || {};
 						var result = this.selectorCache[selector];
 
@@ -726,9 +727,9 @@ define([
 						}
 
 						if (callback){
-							for (var a = 0, l = result.length; a < l; a++){
-								callback.call(context, result[a]);
-							}
+							_this.loopArray(result, function(node){
+								callback.call(context, node);
+							}, this);
 						}
 
 						return result;
