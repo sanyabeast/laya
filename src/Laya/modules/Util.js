@@ -179,6 +179,23 @@ define([
 
 
 			this.defineProperties(window.Element.prototype, {
+				"runOnRemoveCallbacks" : {
+					value : function(onComplete){
+						_this.loopArray(this.onRemove, function(callback){
+							callback(this);
+						}, this);
+
+						if (this.childNodes){
+							_this.loopArray(this.children, function(child){
+								child.runOnRemoveCallbacks();
+							});
+						}
+
+						if (onComplete){
+							onComplete(this);
+						}
+					}
+				},
 				"onRemove" : {
 					get : function(){
 						var onRemove = this._onRemove;
@@ -189,17 +206,9 @@ define([
 				},
 				"remove" : {
 					value : function(){
-						var onRemove = this.onRemove;
-
-						for (var a = 0; a < onRemove.length; a++){
-							onRemove[a](this);
-						}
-
-						for (var a = 0; a < this.childNodes.length; a++){
-							this.childNodes[a].remove();
-						}
-
-						nativeRemove.call(this);
+						this.runOnRemoveCallbacks(function(element){
+							nativeRemove.call(element);
+						});
 					}
 				},
 			});

@@ -17,15 +17,23 @@ define([
 
 				el.classes.add("_image");
 
+
 				if (valueData.value){
 					var url = valueData.value;
 					var isSVG = url.indexOf(".svg") > -1;
 					var planeSVG = el.hasAttribute("data-plane-svg");
 
-					el.src = url;
+					
 					if (isSVG && !planeSVG) {
+						el.src = url;
 						this.laya.util.processSVG(el);
 						el.attr("data-svg-image", "");
+					} else {
+						el.classes.add("__image-loading")
+						el.onload = function(){
+							el.classes.remove("__image-loading")
+						}
+						el.src = url;
 					}
 					
 				}
