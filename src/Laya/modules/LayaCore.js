@@ -29,6 +29,9 @@ define(function(){
 		LAYOUT_SIGN : "#",
 		USER_VALUE_SIGN : "@",
 		STRING_SIGN : "?",
+		config : {
+			onlyPlaneSVG : false
+		},
 		updateAllBoundValues : function(){
 			this.bindedValues.iterate(function(basePath, layaID){
 				this.layaNodes.get(layaID).extractTextNode().updateBoundValue();

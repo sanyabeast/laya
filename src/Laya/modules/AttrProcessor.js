@@ -15,13 +15,19 @@ define([
 			"src" : function(el, value, name, userData){
 				var valueData = this.laya.reachValueData(value, userData);
 
+
 				el.classes.add("_image");
 
-
 				if (valueData.value){
+
 					var url = valueData.value;
+
+					if (this.laya.config.resBaseUR && this.laya.config.resBaseURL.length){
+						url = this.laya.config.resBaseURL + "\\" + url;
+					}
+
 					var isSVG = url.indexOf(".svg") > -1;
-					var planeSVG = el.hasAttribute("data-plane-svg");
+					var planeSVG = this.laya.config.onlyPlaneSVG || el.hasAttribute("data-plane-svg");
 
 					
 					if (isSVG && !planeSVG) {
@@ -37,6 +43,9 @@ define([
 					}
 					
 				}
+
+
+
 			},
 			"data-behaviour-patterns" : function(el, value, name, userData){
 				var patternNames = value.split(" ");
