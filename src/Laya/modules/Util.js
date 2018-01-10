@@ -705,6 +705,12 @@ define([
 						_this.laya.base.off(node.linked.get("subID"));
 					}
 				},
+				"descedantsCache" : {
+					get : function(){
+						if (!this._descedantsCache) this._descedantsCache = {};
+						return this._descedantsCache;
+					},
+				},
 				"bindValue" : {
 					value : function(path, templateSettings){
 						var node = this.extractTextNode();
@@ -1000,7 +1006,8 @@ define([
 			return this;
 		},
 		isDescedant : function(parent, testNode){
-			return parent.contains(testNode);
+			parent.descedantsCache[testNode.layaID] = parent.contains(testNode);
+			return parent.descedantsCache[testNode.layaID];
 		},
 		mergeSettings : function(objA, objB){
 			var result = [];
@@ -1101,6 +1108,10 @@ define([
 			for (var a = 0, l = arr.length; a < l; a++){
 				callback.call(ctx, arr[a], a, arr);
 			}
+		},
+		resolveURL : function(){
+			var result = Array.prototype.join.call(arguments, "/");
+			return result;
 		},
 		Collection : Collection
 	};

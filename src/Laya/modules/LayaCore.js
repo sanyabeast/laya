@@ -32,6 +32,12 @@ define(function(){
 		config : {
 			onlyPlaneSVG : false
 		},
+		get outsideRootElement(){
+			return this._outsideRootElement || this.rootElement || document;
+		},
+		set outsideRootElement(el){
+			this._outsideRootElement = el;
+		},
 		updateAllBoundValues : function(){
 			this.bindedValues.iterate(function(basePath, layaID){
 				this.layaNodes.get(layaID).extractTextNode().updateBoundValue();

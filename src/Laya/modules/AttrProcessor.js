@@ -12,40 +12,50 @@ define([
 
 	AttrProcessor.prototype = {
 		processors : {
-			"src" : function(el, value, name, userData){
-				var valueData = this.laya.reachValueData(value, userData);
+			"data-laya-async-script" : function(el, value, name, userData){
+				var newScript = document.createElement("script");
+				
+				this.laya.util.loopArray(el.attributes, function(attr, index){
+					newScript.attr(attr.name, attr.value);
+				});
 
-
-				el.classes.add("_image");
-
-				if (valueData.value){
-
-					var url = valueData.value;
-
-					if (this.laya.config.resBaseUR && this.laya.config.resBaseURL.length){
-						url = this.laya.config.resBaseURL + "\\" + url;
-					}
-
-					var isSVG = url.indexOf(".svg") > -1;
-					var planeSVG = this.laya.config.onlyPlaneSVG || el.hasAttribute("data-plane-svg");
-
-					
-					if (isSVG && !planeSVG) {
-						el.src = url;
-						this.laya.util.processSVG(el);
-						el.attr("data-svg-image", "");
-					} else {
-						el.classes.add("__image-loading")
-						el.onload = function(){
-							el.classes.remove("__image-loading")
-						}
-						el.src = url;
-					}
-					
+				if (el.parentNode){
+					el.parentNode.replaceChild(newScript, el);
 				}
+			},
+			"src" : function(el, value, name, userData){
+				if (el.tagName == "IMG"){
+					var valueData = this.laya.reachValueData(value, userData);
+
+					el.classes.add("_image");
+					if (valueData.value){
+
+						var url = valueData.value;
 
 
+						if (this.laya.config.resBaseURL && this.laya.config.resBaseURL.length){
+							url = this.laya.util.resolveURL(this.laya.config.resBaseURL, url);
+						}
 
+						var isSVG = url.indexOf(".svg") > -1;
+						var planeSVG = this.laya.config.onlyPlaneSVG || el.hasAttribute("data-plane-svg");
+
+						
+						if (isSVG && !planeSVG) {
+							el.src = url;
+							this.laya.util.processSVG(el);
+							el.attr("data-svg-image", "");
+						} else {
+							el.classes.add("__image-loading")
+							el.onload = function(){
+								el.classes.remove("__image-loading")
+							}
+							el.src = url;
+						}
+						
+					}
+				}
+				
 			},
 			"data-behaviour-patterns" : function(el, value, name, userData){
 				var patternNames = value.split(" ");
@@ -166,10 +176,12 @@ define([
 
 				el.setCommand("clickoutside", value);
 
-				document.on({
+				var outsideRootElement = this.laya.outsideRootElement;
+
+				outsideRootElement.on({
 					eventName : "mousedown",
 					callback : function(evt){
-						if (!this.laya.util.isDescedant(el, evt.srcElement)){
+						if (!this.laya.util.isDescedant(el, evt.target)){
 							value(evt);
 						}
 					}.bind(this)
