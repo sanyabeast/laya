@@ -48,6 +48,7 @@ define([
 		},
 		setup : function(css, settings){
 			css = css.replace(/root_element/g, "{{@rootElement}}")
+			css = css.replace(/resBaseURL/g, this.laya.config.resBaseURL || "");
 			this.settings = settings;
 			this.template = new this.laya.Template(css);
 

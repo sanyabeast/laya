@@ -12,6 +12,13 @@ define([
 
 	AttrProcessor.prototype = {
 		processors : {
+			"data-attributes" : function(el, value, name, userData){
+				var valueData = this.laya.reachValueData(value, userData);
+
+				this.laya.util.loopList(valueData.value, function(value, key){
+					el.setAttribute(["data", key].join("-"), value);
+				}, this);
+			},
 			"data-laya-async-script" : function(el, value, name, userData){
 				var newScript = document.createElement("script");
 				

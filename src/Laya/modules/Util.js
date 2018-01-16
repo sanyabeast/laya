@@ -9,8 +9,6 @@ define([
 
 	var Util = function(laya){
 		this.laya = laya;
-
-		window.laya = laya;
 	};
 
 	Util.prototype = {
@@ -566,16 +564,7 @@ define([
 									return _this.classList.remove(value);
 								},
 								add : function(value, onAnimationEnd, context){
-									if (onAnimationEnd){
-
-										var callback = function(evt){
-											onAnimationEnd.call(context || null, evt);
-										};
-
-										_this.addEventListener("webkitAnimationEnd", callback, false)
-									};
-
-									_this.classList.add(value);
+									return _this.classList.add(value);
 								},
 								contains : function(value){
 									return _this.classList.contains(value);
@@ -701,8 +690,12 @@ define([
 				"unbindValue" : {
 					value : function(){
 						var node = this.extractTextNode();
-						// console.log(node);
-						_this.laya.base.off(node.linked.get("subID"));
+						if (node.linked.bound) {
+							_this.laya.base.off(node.linked.get("subID"));
+							node.linked.bound = false;
+						}
+						
+						return node;
 					}
 				},
 				"descedantsCache" : {
@@ -713,8 +706,8 @@ define([
 				},
 				"bindValue" : {
 					value : function(path, templateSettings){
-						var node = this.extractTextNode();
-						var linked = node.linked;
+						var node;
+						var linked;
 
 						if (this.setAttribute){
 							this.setAttribute("data-bound-value", path);
@@ -723,10 +716,12 @@ define([
 
 						}
 
-						this.unbindValue();
+						node = this.unbindValue();
+						linked = node.linked;
 
 						node.linked.update("templateSettings", templateSettings || null);
 						node.linked.update("path" , path);
+						node.linked.bound = true;
 						_this.laya.bindedValues.update(node.layaID, path);
 
 						if (typeof path == "string"){
@@ -752,8 +747,8 @@ define([
 				},
 				"text" : {
 					set : function(value){
-						this.unbindValue();
-						this.extractTextNode().nodeValue = value;
+						var node = this.unbindValue();
+						node.nodeValue = value;
 					},
 					get : function(){
 						return this.extractTextNode().nodeValue;
@@ -761,7 +756,8 @@ define([
 				},
 				"translatePos" : {
 					value : function(x, y){
-						this.style.transform = "translateX(" + x + ") translateY(" + y + ")";
+						this.style.transform = ["translate(", x, ",", y, ")"].join("");
+						// this.style.transform = "translateX(" + x + ") translateY(" + y + ")";
 					}
 				},
 				"select" : {
@@ -860,17 +856,26 @@ define([
 				},
 				"extractTextNode" : {
 					value : function(){
-						if (this instanceof window.Node && this instanceof window.Text){
-							return this;
-						} else if (this instanceof window.Node && !(this instanceof window.Text)){
-							if (this.childNodes.length){
-								return this.childNodes[0];
-							} else {
-								this.innerHTML = " ";
-								this.childNodes[0].thisValue = "";
-								return this.childNodes[0];
+						var result = this._textNode;
+
+						if (!result){
+							if (this instanceof window.Node && this instanceof window.Text){
+								result = this;
+							} else if (this instanceof window.Node && !(this instanceof window.Text)){
+								if (this.childNodes.length){
+									result = this.childNodes[0];
+								} else {
+									this.innerHTML = " ";
+									this.childNodes[0].thisValue = "";
+									result = this.childNodes[0];
+								}
 							}
+
+							this._textNode = result;
 						}
+
+						return result;
+						
 					}
 				},
 				"linked" : {
@@ -1109,8 +1114,15 @@ define([
 				callback.call(ctx, arr[a], a, arr);
 			}
 		},
+		loopList : function(list, callback, ctx){
+			for (var a in list){
+				callback.call(ctx, list[a], a, list);
+			}
+		},
 		resolveURL : function(){
 			var result = Array.prototype.join.call(arguments, "/");
+			result = result.replace(new RegExp("//", "g"), "/");
+			result = result.replace(new RegExp("\\\\", "g"), "\\");
 			return result;
 		},
 		Collection : Collection
