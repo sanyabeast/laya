@@ -11,9 +11,80 @@ define([
 		this.laya = laya;
 	};
 
+
+	/*-------*/
+	var ProcessedSVG = function(img, util){
+		this._src = img.src;
+		this.util = util;
+		this.node = img;
+		this.src = img.src;
+	};
+
+	ProcessedSVG.prototype = {
+		set src(src){
+
+			this._src = src;
+
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("GET", src, true);
+		    xhr.onreadystatechange = function(){
+		    	if (xhr.readyState != 4){
+		    		return;
+		    	}
+
+		    	var text = xhr.responseText;
+
+		    	var parser = new DOMParser();
+		        var xmlDoc = parser.parseFromString(text, "text/xml");
+
+		        // Get the SVG tag, ignore the rest
+		        var svg = xmlDoc.getElementsByTagName('svg')[0];
+
+		        // Remove any invalid XML tags as per http://validator.w3.org
+		        svg.removeAttribute('xmlns:a');
+
+		        // Check if the viewport is set, if the viewport is not set the SVG wont't scale.
+		        if(!svg.getAttribute('viewBox') && svg.getAttribute('height') && svg.getAttribute('width')) {
+		            svg.setAttribute('viewBox', '0 0 ' + svg.getAttribute('height') + ' ' + svg.getAttribute('width'))
+		        }
+
+		        if (this.node.hasAttribute("id")){
+		        	svg.setAttribute("id", this.node.getAttribute("id"));
+		        }
+
+		        if (this.node.hasAttribute("class")){
+		        	svg.setAttribute("class", this.node.getAttribute("class"));
+		        }
+
+		        svg.setAttribute("src", src);
+
+		        svg.wrapper = this;
+
+		        // this.util.copyAttrs(this.node, svg);
+
+		        if (this.node.parentNode){
+		        	this.node.parentNode.replaceChild(svg, this.node);
+		        }
+
+		        this.node = svg;
+
+		    }.bind(this);
+
+		    xhr.send();
+		},
+		get src(){
+			return this._src;
+		}
+	};
+
+
+	/*-------*/
 	Util.prototype = {
 		colors : new Colors(),
 		processSVG : function (img){
+			return new ProcessedSVG(img, this).node;
+
+
 		    var imgID = img.id;
 		    var imgClass = img.className;
 		    var imgURL = img.src;
@@ -985,7 +1056,7 @@ define([
 			if (source.attributes){
 				for (var a = 0, mergedAttr, attr; a < source.attributes.length; a++){
 					attr = source.attributes[a];
-					if (exclude.indexOf(attr.name) < 0){
+					if (!exclude || (exclude && exclude.indexOf(attr.name) < 0)){
 						if (target.hasAttribute(attr.name)){
 							mergedAttr = target.getAttribute(attr.name) + " " + attr.value;
 							mergedAttr = this.superTrim(mergedAttr);
@@ -1121,8 +1192,11 @@ define([
 		},
 		resolveURL : function(){
 			var result = Array.prototype.join.call(arguments, "/");
-			result = result.replace(new RegExp("//", "g"), "/");
+			// result = result.replace(new RegExp("//", "g"), "/");
 			result = result.replace(new RegExp("\\\\", "g"), "\\");
+
+			// console.log(result);
+
 			return result;
 		},
 		Collection : Collection

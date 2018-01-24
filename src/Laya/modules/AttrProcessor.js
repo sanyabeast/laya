@@ -45,7 +45,7 @@ define([
 						}
 
 						var isSVG = url.indexOf(".svg") > -1;
-						var planeSVG = this.laya.config.onlyPlaneSVG || el.hasAttribute("data-plane-svg");
+						var planeSVG = this.laya.config.onlyPlaneSVG || el.hasAttribute("data-plane-svg") || el.classes.contains("_plane-svg");
 
 						
 						if (isSVG && !planeSVG) {
