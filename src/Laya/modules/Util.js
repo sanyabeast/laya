@@ -40,8 +40,15 @@ define([
 		        // Get the SVG tag, ignore the rest
 		        var svg = xmlDoc.getElementsByTagName('svg')[0];
 
+		        window.svg = svg;
+
 		        // Remove any invalid XML tags as per http://validator.w3.org
 		        svg.removeAttribute('xmlns:a');
+
+		        svg.select("title", function(node){
+		        	node.text = "";
+		        	node.remove();
+		        });
 
 		        // Check if the viewport is set, if the viewport is not set the SVG wont't scale.
 		        if(!svg.getAttribute('viewBox') && svg.getAttribute('height') && svg.getAttribute('width')) {
@@ -288,6 +295,11 @@ define([
 
 
 			this.defineProperties(window.Element.prototype, {
+				"removeAllEventListeners" : {
+					value : function(){
+						
+					}
+				},
 				"runOnRemoveCallbacks" : {
 					value : function(onComplete){
 						_this.loopArray(this.onRemove, function(callback){
