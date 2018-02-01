@@ -20,67 +20,78 @@ define([
 		this.src = img.src;
 	};
 
+	ProcessedSVG.cache = {};
+
 	ProcessedSVG.prototype = {
 		set src(src){
 
 			this._src = src;
 
-		    var xhr = new XMLHttpRequest();
-		    xhr.open("GET", src, true);
-		    xhr.onreadystatechange = function(){
-		    	if (xhr.readyState != 4){
-		    		return;
-		    	}
+		    if (ProcessedSVG.cache[src]){
+		    	this.processResponse(ProcessedSVG.cache[src], src);
+		    } else {
+		    	var xhr = new XMLHttpRequest();
+			    xhr.open("GET", src, true);
+			    xhr.onreadystatechange = function(){
+			    	if (xhr.readyState != 4){
+			    		return;
+			    	}
 
-		    	var text = xhr.responseText;
+			    	var text = xhr.responseText;
 
-		    	var parser = new DOMParser();
-		        var xmlDoc = parser.parseFromString(text, "text/xml");
+			    	ProcessedSVG.cache[src] = text;
 
-		        // Get the SVG tag, ignore the rest
-		        var svg = xmlDoc.getElementsByTagName('svg')[0];
+			    	this.processResponse(text, src);
 
-		        window.svg = svg;
+			    }.bind(this);
 
-		        // Remove any invalid XML tags as per http://validator.w3.org
-		        svg.removeAttribute('xmlns:a');
-
-		        svg.select("title", function(node){
-		        	node.text = "";
-		        	node.remove();
-		        });
-
-		        // Check if the viewport is set, if the viewport is not set the SVG wont't scale.
-		        if(!svg.getAttribute('viewBox') && svg.getAttribute('height') && svg.getAttribute('width')) {
-		            svg.setAttribute('viewBox', '0 0 ' + svg.getAttribute('height') + ' ' + svg.getAttribute('width'))
-		        }
-
-		        if (this.node.hasAttribute("id")){
-		        	svg.setAttribute("id", this.node.getAttribute("id"));
-		        }
-
-		        if (this.node.hasAttribute("class")){
-		        	svg.setAttribute("class", this.node.getAttribute("class"));
-		        }
-
-		        svg.setAttribute("src", src);
-
-		        svg.wrapper = this;
-
-		        // this.util.copyAttrs(this.node, svg);
-
-		        if (this.node.parentNode){
-		        	this.node.parentNode.replaceChild(svg, this.node);
-		        }
-
-		        this.node = svg;
-
-		    }.bind(this);
-
-		    xhr.send();
+			    xhr.send();
+		    }		    
 		},
 		get src(){
 			return this._src;
+		},
+		processResponse : function(text, src){
+			var parser = new DOMParser();
+	        var xmlDoc = parser.parseFromString(text, "text/xml");
+
+	        // Get the SVG tag, ignore the rest
+	        var svg = xmlDoc.getElementsByTagName('svg')[0];
+
+	        window.svg = svg;
+
+	        // Remove any invalid XML tags as per http://validator.w3.org
+	        svg.removeAttribute('xmlns:a');
+
+	        svg.select("title", function(node){
+	        	node.text = "";
+	        	node.remove();
+	        });
+
+	        // Check if the viewport is set, if the viewport is not set the SVG wont't scale.
+	        if(!svg.getAttribute('viewBox') && svg.getAttribute('height') && svg.getAttribute('width')) {
+	            svg.setAttribute('viewBox', '0 0 ' + svg.getAttribute('height') + ' ' + svg.getAttribute('width'))
+	        }
+
+	        if (this.node.hasAttribute("id")){
+	        	svg.setAttribute("id", this.node.getAttribute("id"));
+	        }
+
+	        if (this.node.hasAttribute("class")){
+	        	svg.setAttribute("class", this.node.getAttribute("class"));
+	        }
+
+	        svg.setAttribute("src", src);
+
+	        svg.wrapper = this;
+
+	        // this.util.copyAttrs(this.node, svg);
+
+	        if (this.node.parentNode){
+	        	this.node.parentNode.replaceChild(svg, this.node);
+	        }
+
+	        this.node = svg;
 		}
 	};
 
