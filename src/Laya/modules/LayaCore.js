@@ -137,6 +137,11 @@ define(function(){
 			return this.processIteration(dom, userData);
 		},
 		processIteration : function(dom, userData){
+
+			if (typeof dom.hasAttribute == "function" && dom.hasAttribute("laya-no-process")){
+				return;
+			}
+
 			var attrs = dom.attributes;
 			var valueData;
 			var tagProcessor;

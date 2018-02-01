@@ -20,15 +20,15 @@ define([
 		this.src = img.src;
 	};
 
-	ProcessedSVG.cache = {};
+	ProcessedSVG.responseCache = {};
 
 	ProcessedSVG.prototype = {
 		set src(src){
 
 			this._src = src;
 
-		    if (ProcessedSVG.cache[src]){
-		    	this.processResponse(ProcessedSVG.cache[src], src);
+		    if (ProcessedSVG.responseCache[src]){
+		    	this.processResponse(ProcessedSVG.responseCache[src], src);
 		    } else {
 		    	var xhr = new XMLHttpRequest();
 			    xhr.open("GET", src, true);
@@ -39,7 +39,7 @@ define([
 
 			    	var text = xhr.responseText;
 
-			    	ProcessedSVG.cache[src] = text;
+			    	ProcessedSVG.responseCache[src] = text;
 
 			    	this.processResponse(text, src);
 
@@ -86,6 +86,9 @@ define([
 	        svg.wrapper = this;
 
 	        // this.util.copyAttrs(this.node, svg);
+
+
+	        svg.setAttribute("laya-no-process", "");
 
 	        if (this.node.parentNode){
 	        	this.node.parentNode.replaceChild(svg, this.node);
