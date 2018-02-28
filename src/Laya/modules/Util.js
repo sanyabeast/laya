@@ -311,11 +311,27 @@ define([
 			this.defineProperties(window.Element.prototype, {
 				"removeAllEventListeners" : {
 					value : function(){
-						
+						var eventListeners = this._eventListeners;
+						var allEventListeners = this.allEventListeners;
+
+						_.loopList(eventListeners, function(listeners, eventName){
+
+							_.loopList(listeners, function(listenerData, listenerID){
+								// console.log(listenerID);
+								this.removeEventListener(eventName, listenerData.callback, listenerData.useCapture);
+								delete eventListeners[eventName][listenerID];
+								delete allEventListeners[eventName][listenerID];
+								allEventListeners.count--;
+							}, this);
+
+						}, this);
+
+						delete this._eventListeners;
 					}
 				},
 				"runOnRemoveCallbacks" : {
 					value : function(onComplete){
+						this.removeAllEventListeners();
 						_this.loopArray(this.onRemove, function(callback){
 							callback(this);
 						}, this);
@@ -370,7 +386,7 @@ define([
 				},
 				"addEventListener" : {
 					value : function(eventName, callback, useCapture){
-						var eventListenerID = ("event-listener-") + _this.generateRandString(8);
+						var eventListenerID = ("event-listener-") + _this.generateRandString(16);
 						var eventListeners = this.eventListeners;
 						var allEventListeners = this.allEventListeners;
 
@@ -717,9 +733,9 @@ define([
 
 						this.addEventListener(eventName, handler, capture);
 
-						this.eventHandlers = this.eventHandlers || {};
-						this.eventHandlers[eventName] = this.eventHandlers[eventName] || {};
-						this.eventHandlers[eventName][name] = handler;
+						// this.eventHandlers = this.eventHandlers || {};
+						// this.eventHandlers[eventName] = this.eventHandlers[eventName] || {};
+						// this.eventHandlers[eventName][name] = handler;
 					}
 				},
 				"view" : {
