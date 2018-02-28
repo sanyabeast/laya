@@ -307,6 +307,25 @@ define([
 				count : 0
 			};
 
+			var globalSelectorCache = {};
+			Object.defineProperty(globalSelectorCache, "__count", {
+				get : function(){
+					var count = 0;
+					_this.loopList(this, function(elementToken, name){
+						if (name == "__count"){
+							return;
+						}
+						
+						_.loopList(elementToken, function(selector){
+							count++;
+						});
+					});
+
+					return count;
+				},
+				enumerable : false
+			})
+
 
 			this.defineProperties(window.Element.prototype, {
 				"removeAllEventListeners" : {
@@ -332,6 +351,8 @@ define([
 				"runOnRemoveCallbacks" : {
 					value : function(onComplete){
 						this.removeAllEventListeners();
+						delete this.selectorCache[this.layaID];
+
 						_this.loopArray(this.onRemove, function(callback){
 							callback(this);
 						}, this);
@@ -432,6 +453,11 @@ define([
 						if (!this._layaID) {
 							this._layaID = _this.generateRandString(32);
 							_this.laya.layaNodes.add(this._layaID, this);
+							
+							if (this.setAttribute){
+								this.setAttribute("data-laya-id", this._layaID);
+							}
+
 						}
 						return this._layaID;
 					}
@@ -873,8 +899,15 @@ define([
 						// this.style.transform = "translateX(" + x + ") translateY(" + y + ")";
 					}
 				},
+				"selectorCache" : {
+					get : function(){
+						return globalSelectorCache;
+					}
+				},
 				"select" : {
 					value : function(selector, noCache, callback, context){
+						var layaID = this.layaID;
+
 						if (typeof noCache == "function"){
 							context = callback;
 							callback = noCache;
@@ -882,12 +915,14 @@ define([
 						}
 
 
-						this.selectorCache = this.selectorCache || {};
-						var result = this.selectorCache[selector];
+						this.selectorCache[layaID] = this.selectorCache[layaID] || {};
+						var result = this.selectorCache[layaID][selector];
 
 						if (noCache === true || !result){
 							result = this.querySelectorAll(selector);
-							this.selectorCache[selector] = result;
+							if (noCache !== true){
+								this.selectorCache[layaID][selector] = result;
+							}
 						}
 
 						if (callback){
@@ -901,70 +936,17 @@ define([
 				},
 				"selectId" : {
 					value : function(selector, noCache, callback, context){
-						if (typeof noCache == "function"){
-							context = callback;
-							callback = noCache;
-							noCache = false;
-						}
-
-
-						selector = "#" + selector;
-
-						this.selectorCache = this.selectorCache || {};
-						var result = this.selectorCache[selector];
-
-						if (noCache === true || !result){
-
-							
-							result = this.querySelector(selector);
-							if (result.length) result = result[0];
-							this.selectorCache[selector] = result;
-						}
-
-						if (result.length) result = result[0];
-
-						if (callback){
-							callback.call(context, result);
-						}
-
-
-						return result;
+						return this.select.call(this, "#" + selector, noCache, callback, context);
 					}
 				},
 				"selectClass" : {
 					value : function(selector, noCache, callback, context){
-						if (typeof noCache == "function"){
-							context = callback;
-							callback = noCache;
-							noCache = false;
-						}
-
-						this.selectorCache = this.selectorCache || {};
-						var result = this.selectorCache[selector];
-
-						if (noCache === true || !result){
-							result = this.getElementsByClassName(selector);
-							this.selectorCache[selector] = result;
-						}
-
-						if (callback){
-							for (var a = 0, l = result.length; a < l; a++){
-								callback.call(context, result[a]);
-							}
-						}
-
-						return result;
+						return this.select.call("." + selector, noCache, callback, context);
 					}
 				},
 				"selectQuery" : {
 					value : function(selector, noCache, callback, context){
-						if (typeof noCache == "function"){
-							context = callback;
-							callback = noCache;
-							noCache = false;
-						}
-
-						return this.select(selector, noCache, callback, context);
+						return this.select.apply(this, arguments);
 					}
 				},
 				"extractTextNode" : {
