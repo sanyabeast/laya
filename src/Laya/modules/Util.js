@@ -63,7 +63,7 @@ define([
 	        // Remove any invalid XML tags as per http://validator.w3.org
 	        svg.removeAttribute('xmlns:a');
 
-	        svg.select("title", function(node){
+	        svg.select("title", true, function(node){
 	        	node.text = "";
 	        	node.remove();
 	        });
@@ -575,7 +575,7 @@ define([
 				"contentFilter" : {
 					value : function(selector, value, onMatch, onDismatch){
 
-						this.select(selector, function(node){
+						this.select(selector, true, function(node){
 							if (node.innerHTML.match(value)){
 								onMatch(node);
 							} else {
@@ -655,7 +655,7 @@ define([
 
 						if (this.hasAttribute("data-items-holder")){
 							var itemsHolderSelector = this.getAttribute("data-items-holder");
-							itemsHolder = this.select(itemsHolderSelector)[0];
+							itemsHolder = this.select(itemsHolderSelector, true).first;
 
 						}
 

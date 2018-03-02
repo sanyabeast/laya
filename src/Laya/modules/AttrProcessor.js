@@ -122,7 +122,7 @@ define([
 
 
 				if (value.hasAttribute("data-content-holder")){
-					var contentHolder = value.select(value.getAttribute("data-content-holder"))[0];
+					var contentHolder = value.select(value.getAttribute("data-content-holder"), true).first;
 
 					if (contentHolder){
 						contentHolder.innerHTML = el.innerHTML;
@@ -140,7 +140,7 @@ define([
 				var valueData;
 
 				if (value == "script"){
-					value = this.laya.util.extractCallbackFromScriptElement(el.selectByAttr("data-callback-script", name).first, el);
+					value = this.laya.util.extractCallbackFromScriptElement(el.selectByAttr("data-callback-script", name, true).first, el);
 					if (!value){
 						return;
 					} else {
@@ -165,7 +165,7 @@ define([
 				value = this.laya.pickValue(value, userData);
 
 				if (value == "script"){
-					value = this.laya.util.extractCallbackFromScriptElement(el.selectByAttr("data-callback-script", "data-on:clickoutside").first, el);
+					value = this.laya.util.extractCallbackFromScriptElement(el.selectByAttr("data-callback-script", "data-on:clickoutside", true).first, el);
 					if (!value){
 						return;
 					} else {
