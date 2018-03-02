@@ -899,6 +899,14 @@ define([
 						// this.style.transform = "translateX(" + x + ") translateY(" + y + ")";
 					}
 				},
+				"clearSelectorCache" : {
+					value : function(){
+						var selectorCache = this.selectorCache;
+						_this.loopList(selectorCache, function(value, id){
+							delete selectorCache[id];
+						}, this);
+					}
+				},
 				"selectorCache" : {
 					get : function(){
 						return globalSelectorCache;
