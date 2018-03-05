@@ -14,6 +14,7 @@ define([
 
 	/*-------*/
 	var ProcessedSVG = function(img, util){
+		this.waitForCache = this.waitForCache.bind(this);
 		this._src = img.src;
 		this.util = util;
 		this.node = img;
@@ -23,13 +24,21 @@ define([
 	ProcessedSVG.responseCache = {};
 
 	ProcessedSVG.prototype = {
+		waitForCache : function(){
+			this.src = this._src;
+		},
 		set src(src){
 
 			this._src = src;
 
 		    if (ProcessedSVG.responseCache[src]){
-		    	this.processResponse(ProcessedSVG.responseCache[src], src);
+		    	if (ProcessedSVG.responseCache[src] === true){
+		    		setTimeout(this.waitForCache, 2000);
+		    	} else {
+		    		this.processResponse(ProcessedSVG.responseCache[src], src);
+		    	}
 		    } else {
+		    	ProcessedSVG.responseCache[src] = true;
 		    	var xhr = new XMLHttpRequest();
 			    xhr.open("GET", src, true);
 			    xhr.onreadystatechange = function(){
