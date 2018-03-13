@@ -943,8 +943,8 @@ define([
 						}
 
 						if (callback){
-							_this.loopArray(result, function(node){
-								callback.call(context, node);
+							_this.loopArray(result, function(node, index){
+								callback.call(context, node, index);
 							}, this);
 						}
 
