@@ -1222,13 +1222,21 @@ define([
 			return Result;
 		},
 		loopArray : function(arr, callback, ctx){
+			var _break = false;
 			for (var a = 0, l = arr.length; a < l; a++){
-				callback.call(ctx, arr[a], a, arr);
+				_break = callback.call(ctx, arr[a], a, arr);
+				if (_break){
+					break;
+				}
 			}
 		},
 		loopList : function(list, callback, ctx){
+			var _break = false;
 			for (var a in list){
-				callback.call(ctx, list[a], a, list);
+				_break = callback.call(ctx, list[a], a, list);
+				if (_break){
+					break;
+				}
 			}
 		},
 		resolveURL : function(){
