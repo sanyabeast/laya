@@ -27,6 +27,7 @@ define([
 		waitForCache : function(){
 			this.src = this._src;
 		},
+
 		set src(src){
 
 			this._src = src;
@@ -111,6 +112,33 @@ define([
 	/*-------*/
 	Util.prototype = {
 		colors : new Colors(),
+		getInvisibleElementsMetrics : function(element, showCallback, hideCallback){
+			var zIndex = element.style.zIndex;
+			var transform = element.style.transform;
+			var transition = element.style.transition;
+
+			element.style.zIndex = "-1!important";
+			
+			if (showCallback){
+				showCallback(element);
+			}
+
+			var rect = element.getBoundingClientRect();
+
+			rect.width /= element.scaleX;
+			rect.height /= element.scaleY;
+			rect.x -= element.x;
+			rect.y -= element.y;
+			
+			if (hideCallback){
+				hideCallback(element);
+			}
+
+			element.style.zIndex = zIndex;
+
+			return rect;
+
+		},
 		processSVG : function (img){
 			return new ProcessedSVG(img, this).node;
 
@@ -675,6 +703,7 @@ define([
 						var itemData = this.getAttribute("data-item-layout");
 						var content = _this.laya.make(_this.laya.base.get(itemData), data);
 						itemsHolder.appendChild(content);
+						
 						return content;
 					},
 					writable : true
@@ -818,8 +847,9 @@ define([
 				},
 				"disconnectNode" : {
 					value : function(){
-						if (this.parentNode){
-							this._parentNode = this.parentNode;
+						if (this.parentNode && !this._disconnected){
+							this._disconnected = true;
+							this._parentNode = this.parentNode || this._parentNode;
 							this._parentNode.disconnectedNodes = this._parentNode.disconnectedNodes || {};
 							this.parentNode.removeChild(this);
 							this._parentNode.disconnectedNodes[this.layaID] = this;
@@ -828,7 +858,8 @@ define([
 				},	
 				"connectNode" : {
 					value : function(){
-						if (this._parentNode){
+						if (this._parentNode && this._disconnected){
+							this._disconnected = false;
 							this._parentNode.addChild(this);
 							this._parentNode.disconnectedNodes = this._parentNode.disconnectedNodes || {};
 							delete this._parentNode.disconnectedNodes[this.layaID];
