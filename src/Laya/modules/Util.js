@@ -125,10 +125,16 @@ define([
 
 			var rect = element.getBoundingClientRect();
 
-			rect.width /= element.scaleX;
-			rect.height /= element.scaleY;
-			rect.x -= element.x;
-			rect.y -= element.y;
+			element._rect = element._rect || {};
+
+			for (var k in rect){
+				element._rect[k] = rect[k];
+			}
+
+			element._rect.width /= element.scaleX;
+			element._rect.height /= element.scaleY;
+			element._rect.x -= element.x;
+			element._rect.y -= element.y;
 			
 			if (hideCallback){
 				hideCallback(element);
@@ -136,7 +142,7 @@ define([
 
 			element.style.zIndex = zIndex;
 
-			return rect;
+			return element._rect;
 
 		},
 		processSVG : function (img){
