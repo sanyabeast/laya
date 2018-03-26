@@ -631,26 +631,29 @@ define([
 					get : function(){
 						var rect = this.getBoundingClientRect();
 
-						var result = {
-							x : rect.left,
-							y : rect.top,
-							tnx : window.innerWidth - rect.left - rect.width,
-							tny : window.innerHeight - rect.top - rect.height,
-							nx : window.innerWidth - rect.left,
-							ny : window.innerHeight - rect.top,
-							ix : rect.right,
-							iy : rect.bottom,
+						this._boundsRect = this._boundsRect || {
 							get cx(){
 								return this.x + this.w / 2
 							},
 							get cy(){
 								return this.y + this.h / 2;
 							},
-							w : rect.width,
-							h : rect.height
 						};
 
-						return result;
+
+						this._boundsRect.x   = rect.left;
+						this._boundsRect.y   = rect.top;
+						this._boundsRect.tnx = window.innerWidth - rect.left - rect.width;
+						this._boundsRect.tny = window.innerHeight - rect.top - rect.height;
+						this._boundsRect.nx  = window.innerWidth - rect.left;
+						this._boundsRect.ny  = window.innerHeight - rect.top;
+						this._boundsRect.ix  = rect.right;
+						this._boundsRect.iy  = rect.bottom;
+						
+						this._boundsRect.w = rect.width;
+						this._boundsRect.h = rect.height;
+
+						return this._boundsRect;
 					}
 				},
 				"setCommand" : {
