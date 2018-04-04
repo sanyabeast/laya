@@ -12,6 +12,21 @@ define([
 
 	AttrProcessor.prototype = {
 		processors : {
+			"data-loop" : function(el, value, name, userData){
+				var valueData = this.laya.reachValueData(value, userData);
+				var docFragment = new DocumentFragment();
+				el.removeAttribute("data-loop");
+
+				if (typeof valueData.value == "object"){
+					this.laya.util.loopArray(valueData.value, function(arrayItem, index){
+						var clonedNode = el.cloneNode(true);
+						clonedNode = laya.process(clonedNode, this.laya.util.mergeSettings(userData, arrayItem));
+						docFragment.appendChild(clonedNode);				
+					}, this);
+				}
+
+				el.replaceWith(docFragment);
+			},
 			"data-attributes" : function(el, value, name, userData){
 				var valueData = this.laya.reachValueData(value, userData);
 
