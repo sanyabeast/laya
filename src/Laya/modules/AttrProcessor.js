@@ -20,7 +20,7 @@ define([
 				if (typeof valueData.value == "object"){
 					this.laya.util.loopArray(valueData.value, function(arrayItem, index){
 						var clonedNode = el.cloneNode(true);
-						clonedNode = laya.process(clonedNode, this.laya.util.mergeSettings(userData, arrayItem));
+						clonedNode = this.laya.process(clonedNode, this.laya.util.mergeSettings(userData, arrayItem));
 						docFragment.appendChild(clonedNode);				
 					}, this);
 				}
