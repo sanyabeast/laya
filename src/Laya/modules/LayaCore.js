@@ -40,7 +40,12 @@ define(function(){
 		},
 		updateAllBoundValues : function(){
 			this.bindedValues.iterate(function(basePath, layaID){
-				this.layaNodes.get(layaID).extractTextNode().updateBoundValue();
+				var node = this.layaNodes.get(layaID);
+
+				if (node){
+					node.extractTextNode().updateBoundValue();
+				}
+				
 			}, this)
 		},
 		get scriptGlobal(){
@@ -150,51 +155,57 @@ define(function(){
 
 			/*attributes processing*/
 			if (attrs){
-				for (var a = 0, l = attrs.length, deffered; a < l; a++){
-					deffered = this.attrProcessor.deffered.indexOf(attrs[a].name) > -1;
-					if (!deffered) this.setAttribute(dom, attrs[a], userData);
-				}
+				this.util.loopArray(attrs, function(attribute, index){
+					var deffered = this.attrProcessor.deffered.indexOf(attribute.name) > -1;
+					if (!deffered){
+						this.setAttribute(dom, attribute, userData);
+					}
+				}, this);
+
 			}
 
 			/*children iterating*/
 			if (dom.childNodes){
 
-				for (var b = 0, children = []; b < dom.childNodes.length; b++){
-					children[b] = dom.childNodes[b];
-				}
+				var children = [];
+				this.util.loopArray(dom.childNodes, function(child, index){
+					children[index] = child;
+				}, this);
 
-				for (var a = 0; a < children.length; a++){
-					if (children[a].processed){
-						continue;
+
+				this.util.loopArray(children, function(child, index){
+					if (child.processed){
+						return;
 					}
 					
-					if (children[a].nodeType == 3){
-						valueData = this.reachValueData(this.util.superTrim(children[a].nodeValue), userData);
+					if (child.nodeType == 3){
+						valueData = this.reachValueData(this.util.superTrim(child.nodeValue), userData);
 
-						if (valueData.templateData) textNodeTemplateSettings = this.util.parseInlineTemplate(valueData.templateData);
+						if (valueData.templateData){
+							textNodeTemplateSettings = this.util.parseInlineTemplate(valueData.templateData);
+						}
 
 						if (valueData.value instanceof window.Node){
-							dom.replaceChild(valueData.value, children[a]);
+							dom.replaceChild(valueData.value, child);
 						} else if (typeof valueData.value == "function"){
-							children[a].processed = true;
+							child.processed = true;
 
-							children[a].bindValue(valueData.value);
+							child.bindValue(valueData.value);
 
 						} else {
-							children[a].processed = true;
+							child.processed = true;
 
 							if (valueData.linked){
-								children[a].bindValue(valueData.linked, textNodeTemplateSettings);
+								child.bindValue(valueData.linked, textNodeTemplateSettings);
 							} else {
-								children[a].text = this.Template.fast(valueData.value, textNodeTemplateSettings);
+								child.text = this.Template.fast(valueData.value, textNodeTemplateSettings);
 							}
 						}
 
-					} else if (children[a].nodeType == 1){
-						this.processIteration(children[a], userData);
+					} else if (child.nodeType == 1){
+						this.processIteration(child, userData);
 					}
-
-				}
+				}, this);
 			}
 
 			/*tag processing*/
@@ -206,10 +217,13 @@ define(function(){
 			}
 
 			if (attrs){
-				for (var a = 0, l = attrs.length, deffered; a < l; a++){
-					deffered = this.attrProcessor.deffered.indexOf(attrs[a].name) > -1;
-					if (deffered) this.setAttribute(dom, attrs[a], userData);
-				}
+				this.util.loopArray(attrs, function(attribute, index){
+					var deffered = this.attrProcessor.deffered.indexOf(attribute.name) > -1;
+
+					if (deffered){
+						this.setAttribute(dom, attribute, userData);
+					}
+				}, this);
 			}
 
 			return dom;
@@ -294,11 +308,11 @@ define(function(){
 				if (src instanceof window.Array){
 					var result;
 
-					for (var a = 0; a < src.length; a++){
-						if (src[a] && src[a][name]){
-							result = src[a][name];
+					this.util.loopArray(src, function(token, index){
+						if (token && token[name]){
+							result = token[name];
 						}
-					}
+					}, this);
 
 					return result || "";
 

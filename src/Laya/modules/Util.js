@@ -193,40 +193,6 @@ define([
 
 		    xhr.send();
 
-		    // fetch(imgURL).then(function(response) {
-		    //     return response.text();
-		    // }).then(function(text){
-
-		    //     var parser = new DOMParser();
-		    //     var xmlDoc = parser.parseFromString(text, "text/xml");
-
-		    //     // Get the SVG tag, ignore the rest
-		    //     var svg = xmlDoc.getElementsByTagName('svg')[0];
-
-		    //     // Add replaced image's ID to the new SVG
-		    //     if(typeof imgID !== 'undefined') {
-		    //         svg.setAttribute('id', imgID);
-		    //     }
-		    //     // Add replaced image's classes to the new SVG
-		    //     if(typeof imgClass !== 'undefined') {
-		    //         svg.setAttribute('class', imgClass+' replaced-svg');
-		    //     }
-
-		    //     // Remove any invalid XML tags as per http://validator.w3.org
-		    //     svg.removeAttribute('xmlns:a');
-
-		    //     // Check if the viewport is set, if the viewport is not set the SVG wont't scale.
-		    //     if(!svg.getAttribute('viewBox') && svg.getAttribute('height') && svg.getAttribute('width')) {
-		    //         svg.setAttribute('viewBox', '0 0 ' + svg.getAttribute('height') + ' ' + svg.getAttribute('width'))
-		    //     }
-
-		    //     svg.setAttribute("src", imgURL);
-
-		    //     // Replace image with new SVG
-		    //     img.parentNode.replaceChild(svg, img);
-
-		    // });
-
 		},
 		selectorIsEqual : function(selectorA, selectorB){
 			return document.querySelector(selectorA).matches(selectorB);
@@ -395,6 +361,7 @@ define([
 					value : function(onComplete){
 						this.removeAllEventListeners();
 						delete this.selectorCache[this.layaID];
+						this.laya.layaNodes.remove(this.layaID);
 
 						_this.loopArray(this.onRemove, function(callback){
 							callback(this);
@@ -495,7 +462,7 @@ define([
 					get : function(){
 						if (!this._layaID) {
 							this._layaID = _this.generateRandString(32);
-							_this.laya.layaNodes.add(this._layaID, this);
+							// _this.laya.layaNodes.add(this._layaID, this);
 							
 							if (this.setAttribute){
 								this.setAttribute("data-laya-id", this._layaID);
@@ -882,6 +849,8 @@ define([
 							_this.laya.base.off(node.linked.get("subID"));
 							node.linked.bound = false;
 						}
+
+						this.laya.layaNodes.remove(node.layaID);
 						
 						return node;
 					}
@@ -906,6 +875,8 @@ define([
 
 						node = this.unbindValue();
 						linked = node.linked;
+
+						this.laya.layaNodes.add(node.layaID, node);
 
 						node.linked.update("templateSettings", templateSettings || null);
 						node.linked.update("path" , path);

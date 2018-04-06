@@ -16,6 +16,18 @@ define(function(){
 		get content(){
 			return this._content;
 		},
+		get length(){
+			var result = 0;
+			if (this.isArray){
+				return this._content.length;
+			} else {
+				for (var k in this._content){
+					result++;
+				}
+			}
+
+			return result;
+		},
 		addMultiple : function(data){
 			this._iterate(data, this.isArray, function(value, index){
 				this._content[index] = value;
