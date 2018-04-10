@@ -1,10 +1,7 @@
 "use strict";
 define([
-	"less",
-	"prefixfree"
-	], function(less, prefixfree){
-
-	console.log(prefixfree);
+		"prefixfree"
+	], function(prefixfree){
 
 	var CSS = function(laya){
 		this.laya = laya;
@@ -19,32 +16,7 @@ define([
 
 	CSS.prototype = {
 		put : function(css){
-
-			this.unless(css, function(result){
-				this.styleElement.innerText = result;
-			}.bind(this));
-
-		},
-		unless : function(css, callback){
-			less.render(css, {
-				compress : true
-			}, function(err, output){
-				if (err){
-					if (typeof err.extract != "undefined"){
-						this.laya.console.warn("cannot unless css", err.extract[1].substring(err.index - 20, err.index + 500), err);
-						
-					} else {
-						this.laya.console.warn("cannot unless css", err);
-
-					}
-				} else {
-					var css = this.laya.util.superTrim(output.css);
-					
-					css = window.PrefixFree.prefixCSS(css, true);
-
-					callback(css);
-				}
-			}.bind(this));
+			this.styleElement.innerText = css;
 		},
 		setup : function(css, settings){
 			css = css.replace(/root_element/g, "{{@rootElement}}")
