@@ -182,7 +182,7 @@ define([
 							return;
 						}
 						
-						_.loopList(elementToken, function(selector){
+						_this.loopList(elementToken, function(selector){
 							count++;
 						});
 					});
@@ -206,8 +206,8 @@ define([
 					var eventListeners = this._eventListeners;
 					var allEventListeners = this.allEventListeners;
 
-					_.loopList(eventListeners, function(listeners, eventName){
-						_.loopList(listeners, function(listenerData, listenerID){
+					_this.loopList(eventListeners, function(listeners, eventName){
+						_this.loopList(listeners, function(listenerData, listenerID){
 							// console.log(listenerID);
 							this.removeEventListener(eventName, listenerData.callback, listenerData.useCapture);
 							delete eventListeners[eventName][listenerID];
