@@ -1,21 +1,21 @@
 !(function(){
 
 	requirejs.config({
-		baseUrl : "src",
+		postalUrl : "src",
 		paths : {
-			"base" : "../node_modules/basejs/base",
+			"postal" : "../node_modules/postaljs/postal",
 			"file" : "../node_modules/requirejs-text/text",
 		}
 	});
 
 	requirejs([
-		"base",
+		"postal",
 		"Laya/Laya",
 		"examples/Player",
 		"examples/Match3",
 		"examples/GoodRead",
 		"../res/index"
-	], function(base, laya, Player, Match3, GoodRead, resData){
+	], function(postal, laya, Player, Match3, GoodRead, resData){
 		switch(window.example){
 			case "goodread":
 				window.goodread = new GoodRead(resData);

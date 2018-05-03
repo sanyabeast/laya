@@ -97,7 +97,7 @@ define([
 				el.attr("placeholder", valueData.value);
 
 				if (valueData.linked){
-					this.laya.base.on(valueData.linked, "change", function(value){
+					this.laya.postal.on(valueData.linked, "change", function(value){
 						el.attr("placeholder", value);
 					}, true);
 				}
@@ -218,7 +218,7 @@ define([
 					eventName : "input",
 					callback : function(){
 						var value = el.value;
-						this.laya.base.set(path, value);
+						this.laya.postal.set(path, value);
 					}.bind(this)
 				});
 			},

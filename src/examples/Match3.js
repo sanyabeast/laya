@@ -1,16 +1,16 @@
 "use strict";
 define([
 		"Laya/laya",
-		"base",
+		"postal",
 		"file!/res/layouts.css"
-	], function(laya, base, layoutsCSS){
+	], function(laya, postal, layoutsCSS){
 
 	function randFromArr(arr){
 		return arr[Math.floor(Math.random() * arr.length)];
 	};
 
 	var App = function(resData){
-		laya.setBase(base);
+		laya.setBase(postal);
 		this.loader.load(resData);
 		laya.css.setup(layoutsCSS);
 
@@ -49,7 +49,7 @@ define([
 			},
 			layouts : function(data){
 				for (var k in data){
-					base(k, data[k]);
+					postal(k, data[k]);
 				}
 			},
 			skins : function(data){
@@ -57,7 +57,7 @@ define([
 				for (var k in data){
 					keys = JSON.parse(data[k]);
 					for (var m in keys){
-						base(k + "::" + m, keys[m]);
+						postal(k + "::" + m, keys[m]);
 					}
 
 				}
@@ -67,23 +67,23 @@ define([
 				for (var k in data){
 					keys = JSON.parse(data[k]);
 					for (var m in keys){
-						base(k + "::" + m, keys[m]);
+						postal(k + "::" + m, keys[m]);
 					}
 
 				}
 			}
 		},
 		set skin(name){
-			var skinpath = base.path("res.skins." + name);
+			var skinpath = postal.path("res.skins." + name);
 			for (var k in skinpath){
-				base("res.skins.current::" + k, skinpath[k].value);
+				postal("res.skins.current::" + k, skinpath[k].value);
 			}
 		},
 		set lang(name){
-			var langpath = base.path("res.l18n." + name);
+			var langpath = postal.path("res.l18n." + name);
 
 			for (var k in langpath){
-				base("res.l18n.current::" + k, langpath[k].value);
+				postal("res.l18n.current::" + k, langpath[k].value);
 			}
 		}
 	};

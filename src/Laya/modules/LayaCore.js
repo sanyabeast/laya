@@ -39,7 +39,7 @@ define(function(){
 			this._outsideRootElement = el;
 		},
 		updateAllBoundValues : function(){
-			this.bindedValues.iterate(function(basePath, layaID){
+			this.bindedValues.iterate(function(postalPath, layaID){
 				var node = this.layaNodes.get(layaID);
 
 				if (node){
@@ -60,8 +60,8 @@ define(function(){
 		setScriptsExtensions : function(data){
 			this._scriptExtensions = data;
 		},
-		setBase : function(base){
-			this.base = base;
+		setBase : function(postal){
+			this.postal = postal;
 			this.init();
 		},
 		init : function(){
@@ -298,7 +298,7 @@ define(function(){
 
 		},
 		pickValueByLink : function(path){
-			return this.base.get(path);
+			return this.postal.get(path);
 		},
 		pickUserValue : function(name, src){
 			if (!name || !src){
@@ -349,7 +349,7 @@ define(function(){
 
 				if (data.type == this.LINKED_SIGN && attr._changeListener != true){
 					attr._changeListener = true;
-					this.base.on(rawvalue.split(this.LINKED_SIGN)[1], "change", function(){
+					this.postal.on(rawvalue.split(this.LINKED_SIGN)[1], "change", function(){
 							attr.processed = false;
 							_this.setAttribute(element, attr, userData);
 					});

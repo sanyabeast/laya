@@ -59,7 +59,7 @@ define([
 				var value = _this.laya.pickValue(data, userData);
 
 				// if (type == "~"){
-				// 	_this.laya.base.on(data.split(type)[1], "change", _this.update);
+				// 	_this.laya.postal.on(data.split(type)[1], "change", _this.update);
 				// }
 
 				return value;

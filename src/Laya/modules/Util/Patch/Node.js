@@ -337,7 +337,7 @@ define(function(){
 			}
 
 			var itemData = this.getAttribute("data-item-layout");
-			var content = util.laya.make(util.laya.base.get(itemData), data);
+			var content = util.laya.make(util.laya.postal.get(itemData), data);
 			itemsHolder.appendChild(content);
 			
 			return content;
@@ -475,7 +475,7 @@ define(function(){
 		"unbindValue" : function(){
 			var node = this.extractTextNode();
 			if (node.linked.bound) {
-				util.laya.base.off(node.linked.get("subID"));
+				util.laya.postal.off(node.linked.get("subID"));
 				node.linked.bound = false;
 			}
 
@@ -511,7 +511,7 @@ define(function(){
 			util.laya.bindedValues.update(node.layaID, path);
 
 			if (typeof path == "string"){
-				node.linked.update("subID", util.laya.base.on(path, "change", this.updateBoundValue.bind(this)), true);
+				node.linked.update("subID", util.laya.postal.on(path, "change", this.updateBoundValue.bind(this)), true);
 
 			} 
 
@@ -524,7 +524,7 @@ define(function(){
 			if (typeof node.linked.get("path") == "function"){
 				node.nodeValue = node.linked.get("path")(node.linked.get("templateSettings"));
 			} else if (typeof node.linked.get("path") == "string"){
-				node.nodeValue = this.laya.Template.fast(value || this.laya.base.get(node.linked.get("path")), node.linked.get("templateSettings"), this.laya.templateGetterFromUserData.bind(this.laya));
+				node.nodeValue = this.laya.Template.fast(value || this.laya.postal.get(node.linked.get("path")), node.linked.get("templateSettings"), this.laya.templateGetterFromUserData.bind(this.laya));
 			}
 
 		},
