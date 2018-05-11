@@ -198,6 +198,14 @@ define([
 						nativeRemove.call(element);
 					});
 				},
+				"nodeValue" : {
+					get : function(){
+						return this.innerHTML;
+					},
+					set : function(value){
+						this.innerHTML = value;
+					}
+				},
 			});
 
 
@@ -694,6 +702,7 @@ define([
 				},
 				"updateBoundValue" : function(value){
 					var node = this.extractTextNode();
+					var value;
 
 					if (typeof node.linked.get("path") == "function"){
 						node.nodeValue = node.linked.get("path")(node.linked.get("templateSettings"));
@@ -764,6 +773,12 @@ define([
 					return this.select.apply(this, arguments);
 				},
 				"extractTextNode" : function(){
+
+					if (this.attr("data-laya-binding") == "html" || (this.parentNode && this.parentNode.attr("data-laya-binding") == "html")){
+						var isElement = this instanceof window.Element;
+						return (isElement) ? this : this.parentNode;
+					}
+
 					var result = this._textNode;
 
 					if (!result){
@@ -797,9 +812,9 @@ define([
 				},
 				"attr" : function(name, value){
 					if (!value || value == ""){
-						return this.getAttribute(name);
+						return this.getAttribute && this.getAttribute(name);
 					} else {
-						this.setAttribute(name, value);
+						this.setAttribute && this.setAttribute(name, value);
 					}
 				},
 				"scrollToPos" : function(position){

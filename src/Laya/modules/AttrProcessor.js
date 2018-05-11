@@ -203,8 +203,8 @@ define([
 				outsideRootElement.on({
 					eventName : "mousedown",
 					callback : function(evt){
-						if (!this.laya.util.isDescedant(el, evt.target)){
-							value(evt);
+						if (!this.laya.util.isDescedant(el, evt.srcElement)){
+							value(evt, el, evt.srcElement);
 						}
 					}.bind(this)
 				});
