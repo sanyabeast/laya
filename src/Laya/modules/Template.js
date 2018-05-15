@@ -1,5 +1,7 @@
 "use strict";
-define(["laya/modules/Util"], function(Util){
+define([
+		"laya/modules/Util"
+	], function(Util){
 
 	var util = new Util();
 
@@ -12,6 +14,8 @@ define(["laya/modules/Util"], function(Util){
 		var t = new Template(string);
 		return t.make(settings, getter);
 	};
+
+	Template.preparsers = [];
 
 	Template.prototype = {
 		fast : Template.fast,
@@ -39,6 +43,10 @@ define(["laya/modules/Util"], function(Util){
 			var string = this._string;
 			var vars = this._vars;
 
+			for (var b = 0, l = Template.preparsers.length; b < l; b++){
+				string = Template.preparsers[b].make(string, settings, getter);
+			}
+
 			if (getter){
 				for (var a = 0, l = vars.length; a < l; a++){
 					string = string.replace(new RegExp("\\{{" + vars[a] + "}}", "g"), (getter(vars[a], settings)) || "");
@@ -48,7 +56,6 @@ define(["laya/modules/Util"], function(Util){
 				for (var a = 0, l = vars.length; a < l; a++){
 					string = string.replace(new RegExp("\\{{" + vars[a] + "}}", "g"), (typeof settings[vars[a]] == "undefined" ? "" : settings[vars[a]]));
 				}
-
 			}
 
 			
