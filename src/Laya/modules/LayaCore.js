@@ -109,7 +109,14 @@ define(function(){
 				console.error.apply(console, arguments);
 			},
 		},
-		make : function(data, userData){
+		__addExtraAttributes : function(dom, extraAttributes){
+			dom = dom instanceof window.DocumentFragment ? dom.children[0] : dom;
+
+			this.util.loopList(extraAttributes, function(attrValue, attrName){
+				dom.dataset[attrName] = attrValue;
+			}, this);
+		},
+		make : function(data, userData, attributes){
 			var html = this.pickValue(data, userData);
 
 			if (!html){
@@ -118,6 +125,10 @@ define(function(){
 			}
 
 			var dom = this.util.HTML2DOM(html, true);
+
+			if (typeof attributes == "object"){
+				this.__addExtraAttributes(dom, attributes);
+			}
 
 			this.process(dom, userData);
 
