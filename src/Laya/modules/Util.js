@@ -693,7 +693,7 @@ define([
 					_this.laya.bindedValues.update(node.layaID, path);
 
 					if (typeof path == "string"){
-						node.linked.update("subID", _this.laya.postal.on(path, "change", this.updateBoundValue.bind(this)), true);
+						node.linked.update("subID", _this.laya.postal.on(path, this.updateBoundValue.bind(this)), true);
 
 					} 
 

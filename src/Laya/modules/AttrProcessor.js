@@ -97,7 +97,7 @@ define([
 				el.attr("placeholder", valueData.value);
 
 				if (valueData.linked){
-					this.laya.postal.on(valueData.linked, "change", function(value){
+					this.laya.postal.on(valueData.linked, function(value){
 						el.attr("placeholder", value);
 					}, true);
 				}
@@ -230,7 +230,7 @@ define([
 											if (cacheExceptions){
 												el[key] = true;
 											}
-											
+
 											return true;
 										}
 									});

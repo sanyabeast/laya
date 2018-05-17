@@ -360,7 +360,7 @@ define(function(){
 
 				if (data.type == this.LINKED_SIGN && attr._changeListener != true){
 					attr._changeListener = true;
-					this.postal.on(rawvalue.split(this.LINKED_SIGN)[1], "change", function(){
+					this.postal.on(rawvalue.split(this.LINKED_SIGN)[1], function(){
 							attr.processed = false;
 							_this.setAttribute(element, attr, userData);
 					});
