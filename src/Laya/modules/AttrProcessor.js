@@ -178,6 +178,18 @@ define([
 				var valueData;
 
 				value = this.laya.pickValue(value, userData);
+				var exceptions = el.attr("data-сlickoutside-exceptions");
+				var cacheExceptions = el.attr("data-clickoutside-exceptions-cache");
+
+				if (cacheExceptions == "0"){
+					cacheExceptions = false;
+				} else {
+					cacheExceptions = true;
+				}
+
+				if (typeof exceptions == "string"){
+					exceptions = exceptions.split("|");
+				}
 
 				if (value == "script"){
 					value = this.laya.util.extractCallbackFromScriptElement(el.selectByAttr("data-callback-script", "data-on:clickoutside", true).first, el);
@@ -203,8 +215,31 @@ define([
 				outsideRootElement.on({
 					eventName : "mousedown",
 					callback : function(evt){
+						var isExcluded = false;
+						var key = ["clickoutside-excluded", evt.srcElement].join("-");
+
 						if (!this.laya.util.isDescedant(el, evt.srcElement)){
-							value(evt, el, evt.srcElement);
+
+							if (el[key]){
+								isExcluded = true;
+							} else {
+								if (exceptions){
+									this.laya.util.loopArray(exceptions, function(selector, index){
+										if (evt.srcElement.closest(selector)){
+											isExcluded = true;
+											if (cacheExceptions){
+												el[key] = true;
+											}
+											
+											return true;
+										}
+									});
+								}
+							}
+
+							
+
+							!isExcluded && value(evt, el, evt.srcElement);
 						}
 					}.bind(this)
 				});
