@@ -972,20 +972,32 @@ define([
 
 			return result;
 		},
-		HTML2DOM : function(html){
+		__cachedHTML2DOMData : {},
+		domParser : new DOMParser(),
+		HTML2DOM : function(html, noCache){
+			/*if (this.__cachedHTML2DOMData[html] && noCache !== true){
+				return this.__cachedHTML2DOMData[html].cloneNode(true);
+			}*/
+
 			html = this.superTrim(html);
-			var temp = document.createElement("div");
+			/*var temp = document.createElement("div");
 			var node;
-			temp.innerHTML = html;
+			temp.innerHTML = html;*/
+
+			var temp = this.domParser.parseFromString(html, "text/html");
+			var node;
 			var dom = document.createDocumentFragment();
 
-			while(temp.childNodes.length){
-				node = temp.childNodes[0];
-				temp.removeChild(node);
+			while(temp.body.childNodes.length){
+				node = temp.body.childNodes[0];
+				temp.body.removeChild(node);
 				dom.appendChild(node);
 			}
 
-			temp.remove();
+			temp.body.remove();
+
+			/*this.__cachedHTML2DOMData[html] = dom;*/
+
 			return dom;
 		},
 		defineProperties : function(target, props){
