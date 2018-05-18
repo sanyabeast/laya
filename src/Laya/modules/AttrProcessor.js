@@ -216,7 +216,7 @@ define([
 					eventName : "mousedown",
 					callback : function(evt){
 						var isExcluded = false;
-						var key = ["clickoutside-excluded", evt.srcElement].join("-");
+						var key = ["clickoutside-excluded", evt.srcElement.layaID].join("-");
 
 						if (!this.laya.util.isDescedant(el, evt.srcElement)){
 
