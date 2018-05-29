@@ -47,6 +47,7 @@ define([
 			},
 			"src" : function(el, value, name, userData){
 				if (el.tagName == "IMG"){
+
 					var valueData = this.laya.reachValueData(value, userData);
 
 					el.classes.add("_image");

@@ -192,6 +192,7 @@ define([
 				enumerable : false
 			})
 
+
 			this.defineProperties(window.Element.prototype, {
 				"remove" : function(){
 					this.runOnRemoveCallbacks(function(element){
@@ -210,6 +211,16 @@ define([
 
 
 			this.defineProperties(window.Node.prototype, {
+				"setSrc" : function(src){
+					var tagName = this.tagName.toLowerCase();
+
+					if (tagName == "svg" && this.wrapper instanceof ProcessedSVG){
+						this.wrapper.src = src;
+					} else if (tagName == "img"){
+						this.src = src;
+						_this.laya.attrProcessor.process("src", this, src, "src", null);
+					}
+				},
 				"removeAllEventListeners" : function(){
 					var eventListeners = this._eventListeners;
 					var allEventListeners = this.allEventListeners;

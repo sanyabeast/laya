@@ -8,6 +8,9 @@ define(function(){
 		this.util = util;
 		this.node = img;
 		this.src = img.src;
+
+		this.__currentTimeout = 2000;
+		this.__broken = false;
 	};
 
 	ProcessedSVG.responseCache = {};
@@ -19,11 +22,16 @@ define(function(){
 
 		set src(src){
 
+			if (this.__broken){
+				return;
+			}
+
 			this._src = src;
 
 		    if (ProcessedSVG.responseCache[src]){
 		    	if (ProcessedSVG.responseCache[src] === true){
-		    		setTimeout(this.waitForCache, 2000);
+		    		setTimeout(this.waitForCache, this.__currentTimeout);
+		    		this.__currentTimeout *= 2;
 		    	} else {
 		    		this.processResponse(ProcessedSVG.responseCache[src], src);
 		    	}
@@ -37,8 +45,6 @@ define(function(){
 			    	}
 
 			    	var text = xhr.responseText;
-
-			    	ProcessedSVG.responseCache[src] = text;
 
 			    	this.processResponse(text, src);
 
@@ -57,7 +63,13 @@ define(function(){
 	        // Get the SVG tag, ignore the rest
 	        var svg = xmlDoc.getElementsByTagName('svg')[0];
 
-	        window.svg = svg;
+	        if (!(svg instanceof window.Node)){
+	        	console.warn("There are some troubles with loading svg-image: " + src);
+	        	this.__broken = true;
+	        	return;
+	        }
+
+	        ProcessedSVG.responseCache[src] = text;
 
 	        // Remove any invalid XML tags as per http://validator.w3.org
 	        svg.removeAttribute('xmlns:a');
