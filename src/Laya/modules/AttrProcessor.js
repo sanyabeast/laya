@@ -51,18 +51,17 @@ define([
 					var valueData = this.laya.reachValueData(value, userData);
 
 					el.classes.add("_image");
+
 					if (valueData.value){
 
 						var url = valueData.value;
+						var isBase64 = url.indexOf("data:image") == 0;
+						var isSVG = !isBase64 && url.indexOf(".svg") == url.length - (".svg".length);
+						var planeSVG = !isBase64 && this.laya.config.onlyPlaneSVG || el.hasAttribute("data-plane-svg") || el.classes.contains("_plane-svg");
 
-
-						if (this.laya.config.resBaseURL && this.laya.config.resBaseURL.length){
+						if (!isBase64 && this.laya.config.resBaseURL && this.laya.config.resBaseURL.length){
 							url = this.laya.util.resolveURL(this.laya.config.resBaseURL, url);
 						}
-
-						var isSVG = url.indexOf(".svg") > -1;
-						var planeSVG = this.laya.config.onlyPlaneSVG || el.hasAttribute("data-plane-svg") || el.classes.contains("_plane-svg");
-
 						
 						if (isSVG && !planeSVG) {
 							el.src = url;
