@@ -7,7 +7,8 @@ define([
 
 	var Template = function(tplString){
 		tplString = tplString || "";
-		this.string = util.superTrim(tplString);	
+		this.string = tplString.toString();
+		//this.string = util.superTrim(tplString);	
 	};
 
 	Template.fast = function(string, settings, getter){
