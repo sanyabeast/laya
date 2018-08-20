@@ -117,10 +117,13 @@ define(function(){
 			}, this);
 		},
 		make : function(data, userData, attributes){
+			data = this.Template.fast(data, userData, this.templateGetterFromUserData.bind(this));
+
 			var html = this.pickValue(data, userData);
 
 			if (!html){
 				this.console.error("Laya: no layout-description specified", data, userData, html);
+				console.log(data, userData, attributes);
 				return null;
 			}
 
