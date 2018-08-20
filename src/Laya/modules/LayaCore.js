@@ -117,7 +117,7 @@ define(function(){
 			}, this);
 		},
 		make : function(data, userData, attributes){
-			if (data.indexOf("#") == 0){
+			if (data.indexOf("~") == 0){
 				data = this.Template.fast(data, userData, this.templateGetterFromUserData.bind(this));				
 			}
 
