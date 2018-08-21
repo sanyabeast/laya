@@ -487,13 +487,16 @@ define([
 					this.commands = this.commands || {};
 					this.commands[name] = command;
 				},
-				"invokeCommand" : function(name, data){
+				"invokeCommand" : function(){
+					var args = Array.prototype.slice.apply(arguments);
+					var name = args.shift();
+
 					this.commands = this.commands || {};
 
 					if (this.commands[name]){
-						this.commands[name](data);
+						this.commands[name].apply(this, args);
 					} else {
-						_this.laya.console.warn("Laya: commands - no command specified", this, name, data);
+						_this.laya.console.warn("Laya: commands - no command specified", this, name, args);
 					}
 				},
 				"sortBy" : function(comp, desc){
